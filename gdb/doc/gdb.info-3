@@ -7,7 +7,7 @@ END-INFO-DIR-ENTRY
 
    Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996,
 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010 Free Software Foundation, Inc.
+2010 2011, 2012 Free Software Foundation, Inc.
 
    Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -23,11 +23,11 @@ developing GNU and promoting software freedom."
    This file documents the GNU debugger GDB.
 
    This is the Tenth Edition, of `Debugging with GDB: the GNU
-Source-Level Debugger' for GDB (GDB) Version 7.4.1.
+Source-Level Debugger' for GDB (GDB) Version 7.5.
 
    Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996,
 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010 Free Software Foundation, Inc.
+2010 2011, 2012 Free Software Foundation, Inc.
 
    Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -39,6 +39,513 @@ with the Back-Cover Texts as in (a) below.
    (a) The FSF's Back-Cover Text is: "You are free to copy and modify
 this GNU Manual.  Buying copies from GNU Press supports the FSF in
 developing GNU and promoting software freedom."
+
+
+File: gdb.info,  Node: Symbol Errors,  Next: Data Files,  Prev: Index Files,  Up: GDB Files
+
+18.4 Errors Reading Symbol Files
+================================
+
+While reading a symbol file, GDB occasionally encounters problems, such
+as symbol types it does not recognize, or known bugs in compiler
+output.  By default, GDB does not notify you of such problems, since
+they are relatively common and primarily of interest to people
+debugging compilers.  If you are interested in seeing information about
+ill-constructed symbol tables, you can either ask GDB to print only one
+message about each such type of problem, no matter how many times the
+problem occurs; or you can ask GDB to print more messages, to see how
+many times the problems occur, with the `set complaints' command (*note
+Optional Warnings and Messages: Messages/Warnings.).
+
+   The messages currently printed, and their meanings, include:
+
+`inner block not inside outer block in SYMBOL'
+     The symbol information shows where symbol scopes begin and end
+     (such as at the start of a function or a block of statements).
+     This error indicates that an inner scope block is not fully
+     contained in its outer scope blocks.
+
+     GDB circumvents the problem by treating the inner block as if it
+     had the same scope as the outer block.  In the error message,
+     SYMBOL may be shown as "`(don't know)'" if the outer block is not a
+     function.
+
+`block at ADDRESS out of order'
+     The symbol information for symbol scope blocks should occur in
+     order of increasing addresses.  This error indicates that it does
+     not do so.
+
+     GDB does not circumvent this problem, and has trouble locating
+     symbols in the source file whose symbols it is reading.  (You can
+     often determine what source file is affected by specifying `set
+     verbose on'.  *Note Optional Warnings and Messages:
+     Messages/Warnings.)
+
+`bad block start address patched'
+     The symbol information for a symbol scope block has a start address
+     smaller than the address of the preceding source line.  This is
+     known to occur in the SunOS 4.1.1 (and earlier) C compiler.
+
+     GDB circumvents the problem by treating the symbol scope block as
+     starting on the previous source line.
+
+`bad string table offset in symbol N'
+     Symbol number N contains a pointer into the string table which is
+     larger than the size of the string table.
+
+     GDB circumvents the problem by considering the symbol to have the
+     name `foo', which may cause other problems if many symbols end up
+     with this name.
+
+`unknown symbol type `0xNN''
+     The symbol information contains new data types that GDB does not
+     yet know how to read.  `0xNN' is the symbol type of the
+     uncomprehended information, in hexadecimal.
+
+     GDB circumvents the error by ignoring this symbol information.
+     This usually allows you to debug your program, though certain
+     symbols are not accessible.  If you encounter such a problem and
+     feel like debugging it, you can debug `gdb' with itself, breakpoint
+     on `complain', then go up to the function `read_dbx_symtab' and
+     examine `*bufp' to see the symbol.
+
+`stub type has NULL name'
+     GDB could not find the full definition for a struct or class.
+
+`const/volatile indicator missing (ok if using g++ v1.x), got...'
+     The symbol information for a C++ member function is missing some
+     information that recent versions of the compiler should have
+     output for it.
+
+`info mismatch between compiler and debugger'
+     GDB could not parse a type specification output by the compiler.
+
+
+
+File: gdb.info,  Node: Data Files,  Prev: Symbol Errors,  Up: GDB Files
+
+18.5 GDB Data Files
+===================
+
+GDB will sometimes read an auxiliary data file.  These files are kept
+in a directory known as the "data directory".
+
+   You can set the data directory's name, and view the name GDB is
+currently using.
+
+`set data-directory DIRECTORY'
+     Set the directory which GDB searches for auxiliary data files to
+     DIRECTORY.
+
+`show data-directory'
+     Show the directory GDB searches for auxiliary data files.
+
+   You can set the default data directory by using the configure-time
+`--with-gdb-datadir' option.  If the data directory is inside GDB's
+configured binary prefix (set with `--prefix' or `--exec-prefix'), then
+the default data directory will be updated automatically if the
+installed GDB is moved to a new location.
+
+   The data directory may also be specified with the `--data-directory'
+command line option.  *Note Mode Options::.
+
+
+File: gdb.info,  Node: Targets,  Next: Remote Debugging,  Prev: GDB Files,  Up: Top
+
+19 Specifying a Debugging Target
+********************************
+
+A "target" is the execution environment occupied by your program.
+
+   Often, GDB runs in the same host environment as your program; in
+that case, the debugging target is specified as a side effect when you
+use the `file' or `core' commands.  When you need more flexibility--for
+example, running GDB on a physically separate host, or controlling a
+standalone system over a serial port or a realtime system over a TCP/IP
+connection--you can use the `target' command to specify one of the
+target types configured for GDB (*note Commands for Managing Targets:
+Target Commands.).
+
+   It is possible to build GDB for several different "target
+architectures".  When GDB is built like that, you can choose one of the
+available architectures with the `set architecture' command.
+
+`set architecture ARCH'
+     This command sets the current target architecture to ARCH.  The
+     value of ARCH can be `"auto"', in addition to one of the supported
+     architectures.
+
+`show architecture'
+     Show the current target architecture.
+
+`set processor'
+`processor'
+     These are alias commands for, respectively, `set architecture' and
+     `show architecture'.
+
+* Menu:
+
+* Active Targets::              Active targets
+* Target Commands::             Commands for managing targets
+* Byte Order::                  Choosing target byte order
+
+
+File: gdb.info,  Node: Active Targets,  Next: Target Commands,  Up: Targets
+
+19.1 Active Targets
+===================
+
+There are multiple classes of targets such as: processes, executable
+files or recording sessions.  Core files belong to the process class,
+making core file and process mutually exclusive.  Otherwise, GDB can
+work concurrently on multiple active targets, one in each class.  This
+allows you to (for example) start a process and inspect its activity,
+while still having access to the executable file after the process
+finishes.  Or if you start process recording (*note Reverse
+Execution::) and `reverse-step' there, you are presented a virtual
+layer of the recording target, while the process target remains stopped
+at the chronologically last point of the process execution.
+
+   Use the `core-file' and `exec-file' commands to select a new core
+file or executable target (*note Commands to Specify Files: Files.).  To
+specify as a target a process that is already running, use the `attach'
+command (*note Debugging an Already-running Process: Attach.).
+
+
+File: gdb.info,  Node: Target Commands,  Next: Byte Order,  Prev: Active Targets,  Up: Targets
+
+19.2 Commands for Managing Targets
+==================================
+
+`target TYPE PARAMETERS'
+     Connects the GDB host environment to a target machine or process.
+     A target is typically a protocol for talking to debugging
+     facilities.  You use the argument TYPE to specify the type or
+     protocol of the target machine.
+
+     Further PARAMETERS are interpreted by the target protocol, but
+     typically include things like device names or host names to connect
+     with, process numbers, and baud rates.
+
+     The `target' command does not repeat if you press <RET> again
+     after executing the command.
+
+`help target'
+     Displays the names of all targets available.  To display targets
+     currently selected, use either `info target' or `info files'
+     (*note Commands to Specify Files: Files.).
+
+`help target NAME'
+     Describe a particular target, including any parameters necessary to
+     select it.
+
+`set gnutarget ARGS'
+     GDB uses its own library BFD to read your files.  GDB knows
+     whether it is reading an "executable", a "core", or a ".o" file;
+     however, you can specify the file format with the `set gnutarget'
+     command.  Unlike most `target' commands, with `gnutarget' the
+     `target' refers to a program, not a machine.
+
+          _Warning:_ To specify a file format with `set gnutarget', you
+          must know the actual BFD name.
+
+     *Note Commands to Specify Files: Files.
+
+`show gnutarget'
+     Use the `show gnutarget' command to display what file format
+     `gnutarget' is set to read.  If you have not set `gnutarget', GDB
+     will determine the file format for each file automatically, and
+     `show gnutarget' displays `The current BDF target is "auto"'.
+
+   Here are some common targets (available, or not, depending on the GDB
+configuration):
+
+`target exec PROGRAM'
+     An executable file.  `target exec PROGRAM' is the same as
+     `exec-file PROGRAM'.
+
+`target core FILENAME'
+     A core dump file.  `target core FILENAME' is the same as
+     `core-file FILENAME'.
+
+`target remote MEDIUM'
+     A remote system connected to GDB via a serial line or network
+     connection.  This command tells GDB to use its own remote protocol
+     over MEDIUM for debugging.  *Note Remote Debugging::.
+
+     For example, if you have a board connected to `/dev/ttya' on the
+     machine running GDB, you could say:
+
+          target remote /dev/ttya
+
+     `target remote' supports the `load' command.  This is only useful
+     if you have some other way of getting the stub to the target
+     system, and you can put it somewhere in memory where it won't get
+     clobbered by the download.
+
+`target sim [SIMARGS] ...'
+     Builtin CPU simulator.  GDB includes simulators for most
+     architectures.  In general,
+                  target sim
+                  load
+                  run
+     works; however, you cannot assume that a specific memory map,
+     device drivers, or even basic I/O is available, although some
+     simulators do provide these.  For info about any
+     processor-specific simulator details, see the appropriate section
+     in *Note Embedded Processors: Embedded Processors.
+
+
+   Some configurations may include these targets as well:
+
+`target nrom DEV'
+     NetROM ROM emulator.  This target only supports downloading.
+
+
+   Different targets are available on different configurations of GDB;
+your configuration may have more or fewer targets.
+
+   Many remote targets require you to download the executable's code
+once you've successfully established a connection.  You may wish to
+control various aspects of this process.
+
+`set hash'
+     This command controls whether a hash mark `#' is displayed while
+     downloading a file to the remote monitor.  If on, a hash mark is
+     displayed after each S-record is successfully downloaded to the
+     monitor.
+
+`show hash'
+     Show the current status of displaying the hash mark.
+
+`set debug monitor'
+     Enable or disable display of communications messages between GDB
+     and the remote monitor.
+
+`show debug monitor'
+     Show the current status of displaying communications between GDB
+     and the remote monitor.
+
+`load FILENAME'
+     Depending on what remote debugging facilities are configured into
+     GDB, the `load' command may be available.  Where it exists, it is
+     meant to make FILENAME (an executable) available for debugging on
+     the remote system--by downloading, or dynamic linking, for example.
+     `load' also records the FILENAME symbol table in GDB, like the
+     `add-symbol-file' command.
+
+     If your GDB does not have a `load' command, attempting to execute
+     it gets the error message "`You can't do that when your target is
+     ...'"
+
+     The file is loaded at whatever address is specified in the
+     executable.  For some object file formats, you can specify the
+     load address when you link the program; for other formats, like
+     a.out, the object file format specifies a fixed address.
+
+     Depending on the remote side capabilities, GDB may be able to load
+     programs into flash memory.
+
+     `load' does not repeat if you press <RET> again after using it.
+
+
+File: gdb.info,  Node: Byte Order,  Prev: Target Commands,  Up: Targets
+
+19.3 Choosing Target Byte Order
+===============================
+
+Some types of processors, such as the MIPS, PowerPC, and Renesas SH,
+offer the ability to run either big-endian or little-endian byte
+orders.  Usually the executable or symbol will include a bit to
+designate the endian-ness, and you will not need to worry about which
+to use.  However, you may still find it useful to adjust GDB's idea of
+processor endian-ness manually.
+
+`set endian big'
+     Instruct GDB to assume the target is big-endian.
+
+`set endian little'
+     Instruct GDB to assume the target is little-endian.
+
+`set endian auto'
+     Instruct GDB to use the byte order associated with the executable.
+
+`show endian'
+     Display GDB's current idea of the target byte order.
+
+
+   Note that these commands merely adjust interpretation of symbolic
+data on the host, and that they have absolutely no effect on the target
+system.
+
+
+File: gdb.info,  Node: Remote Debugging,  Next: Configurations,  Prev: Targets,  Up: Top
+
+20 Debugging Remote Programs
+****************************
+
+If you are trying to debug a program running on a machine that cannot
+run GDB in the usual way, it is often useful to use remote debugging.
+For example, you might use remote debugging on an operating system
+kernel, or on a small system which does not have a general purpose
+operating system powerful enough to run a full-featured debugger.
+
+   Some configurations of GDB have special serial or TCP/IP interfaces
+to make this work with particular debugging targets.  In addition, GDB
+comes with a generic serial protocol (specific to GDB, but not specific
+to any particular target system) which you can use if you write the
+remote stubs--the code that runs on the remote system to communicate
+with GDB.
+
+   Other remote targets may be available in your configuration of GDB;
+use `help target' to list them.
+
+* Menu:
+
+* Connecting::                  Connecting to a remote target
+* File Transfer::               Sending files to a remote system
+* Server::	                Using the gdbserver program
+* Remote Configuration::        Remote configuration
+* Remote Stub::                 Implementing a remote stub
+
+
+File: gdb.info,  Node: Connecting,  Next: File Transfer,  Up: Remote Debugging
+
+20.1 Connecting to a Remote Target
+==================================
+
+On the GDB host machine, you will need an unstripped copy of your
+program, since GDB needs symbol and debugging information.  Start up
+GDB as usual, using the name of the local copy of your program as the
+first argument.
+
+   GDB can communicate with the target over a serial line, or over an
+IP network using TCP or UDP.  In each case, GDB uses the same protocol
+for debugging your program; only the medium carrying the debugging
+packets varies.  The `target remote' command establishes a connection
+to the target.  Its arguments indicate which medium to use:
+
+`target remote SERIAL-DEVICE'
+     Use SERIAL-DEVICE to communicate with the target.  For example, to
+     use a serial line connected to the device named `/dev/ttyb':
+
+          target remote /dev/ttyb
+
+     If you're using a serial line, you may want to give GDB the
+     `--baud' option, or use the `set remotebaud' command (*note set
+     remotebaud: Remote Configuration.) before the `target' command.
+
+`target remote `HOST:PORT''
+`target remote `tcp:HOST:PORT''
+     Debug using a TCP connection to PORT on HOST.  The HOST may be
+     either a host name or a numeric IP address; PORT must be a decimal
+     number.  The HOST could be the target machine itself, if it is
+     directly connected to the net, or it might be a terminal server
+     which in turn has a serial line to the target.
+
+     For example, to connect to port 2828 on a terminal server named
+     `manyfarms':
+
+          target remote manyfarms:2828
+
+     If your remote target is actually running on the same machine as
+     your debugger session (e.g. a simulator for your target running on
+     the same host), you can omit the hostname.  For example, to
+     connect to port 1234 on your local machine:
+
+          target remote :1234
+     Note that the colon is still required here.
+
+`target remote `udp:HOST:PORT''
+     Debug using UDP packets to PORT on HOST.  For example, to connect
+     to UDP port 2828 on a terminal server named `manyfarms':
+
+          target remote udp:manyfarms:2828
+
+     When using a UDP connection for remote debugging, you should keep
+     in mind that the `U' stands for "Unreliable".  UDP can silently
+     drop packets on busy or unreliable networks, which will cause
+     havoc with your debugging session.
+
+`target remote | COMMAND'
+     Run COMMAND in the background and communicate with it using a
+     pipe.  The COMMAND is a shell command, to be parsed and expanded
+     by the system's command shell, `/bin/sh'; it should expect remote
+     protocol packets on its standard input, and send replies on its
+     standard output.  You could use this to run a stand-alone simulator
+     that speaks the remote debugging protocol, to make net connections
+     using programs like `ssh', or for other similar tricks.
+
+     If COMMAND closes its standard output (perhaps by exiting), GDB
+     will try to send it a `SIGTERM' signal.  (If the program has
+     already exited, this will have no effect.)
+
+
+   Once the connection has been established, you can use all the usual
+commands to examine and change data.  The remote program is already
+running; you can use `step' and `continue', and you do not need to use
+`run'.
+
+   Whenever GDB is waiting for the remote program, if you type the
+interrupt character (often `Ctrl-c'), GDB attempts to stop the program.
+This may or may not succeed, depending in part on the hardware and the
+serial drivers the remote system uses.  If you type the interrupt
+character once again, GDB displays this prompt:
+
+     Interrupted while waiting for the program.
+     Give up (and stop debugging it)?  (y or n)
+
+   If you type `y', GDB abandons the remote debugging session.  (If you
+decide you want to try again later, you can use `target remote' again
+to connect once more.)  If you type `n', GDB goes back to waiting.
+
+`detach'
+     When you have finished debugging the remote program, you can use
+     the `detach' command to release it from GDB control.  Detaching
+     from the target normally resumes its execution, but the results
+     will depend on your particular remote stub.  After the `detach'
+     command, GDB is free to connect to another target.
+
+`disconnect'
+     The `disconnect' command behaves like `detach', except that the
+     target is generally not resumed.  It will wait for GDB (this
+     instance or another one) to connect and continue debugging.  After
+     the `disconnect' command, GDB is again free to connect to another
+     target.
+
+`monitor CMD'
+     This command allows you to send arbitrary commands directly to the
+     remote monitor.  Since GDB doesn't care about the commands it
+     sends like this, this command is the way to extend GDB--you can
+     add new commands that only the external monitor will understand
+     and implement.
+
+
+File: gdb.info,  Node: File Transfer,  Next: Server,  Prev: Connecting,  Up: Remote Debugging
+
+20.2 Sending files to a remote system
+=====================================
+
+Some remote targets offer the ability to transfer files over the same
+connection used to communicate with GDB.  This is convenient for
+targets accessible through other means, e.g. GNU/Linux systems running
+`gdbserver' over a network interface.  For other targets, e.g. embedded
+devices with only a single serial port, this may be the only way to
+upload or download files.
+
+   Not all remote targets support these commands.
+
+`remote put HOSTFILE TARGETFILE'
+     Copy file HOSTFILE from the host system (the machine running GDB)
+     to TARGETFILE on the target system.
+
+`remote get TARGETFILE HOSTFILE'
+     Copy file TARGETFILE from the target system to HOSTFILE on the
+     host system.
+
+`remote delete TARGETFILE'
+     Delete TARGETFILE from the target system.
+
 
 
 File: gdb.info,  Node: Server,  Next: Remote Configuration,  Prev: File Transfer,  Up: Remote Debugging
@@ -86,9 +593,10 @@ syntax is:
 
      target> gdbserver COMM PROGRAM [ ARGS ... ]
 
-   COMM is either a device name (to use a serial line) or a TCP
-hostname and portnumber.  For example, to debug Emacs with the argument
-`foo.txt' and communicate with GDB over the serial port `/dev/com1':
+   COMM is either a device name (to use a serial line), or a TCP
+hostname and portnumber, or `-' or `stdio' to use stdin/stdout of
+`gdbserver'.  For example, to debug Emacs with the argument `foo.txt'
+and communicate with GDB over the serial port `/dev/com1':
 
      target> gdbserver /dev/com1 emacs foo.txt
 
@@ -107,6 +615,20 @@ port number as long as it does not conflict with any TCP ports already
 in use on the target system (for example, `23' is reserved for
 `telnet').(1)  You must use the same port number with the host GDB
 `target remote' command.
+
+   The `stdio' connection is useful when starting `gdbserver' with ssh:
+
+     (gdb) target remote | ssh -T hostname gdbserver - hello
+
+   The `-T' option to ssh is provided because we don't need a remote
+pty, and we don't want escape-character handling.  Ssh does this by
+default when a command is provided, the flag is provided to make it
+explicit.  You could elide it if you want to.
+
+   Programs started with stdio-connected gdbserver have `/dev/null' for
+`stdin', and `stdout',`stderr' are sent back to gdb for display through
+a pipe connected to gdbserver.  Both `stdout' and `stderr' use the same
+pipe.
 
 20.3.1.1 Attaching to a Running Program
 .......................................
@@ -549,6 +1071,7 @@ storage-address'                             `__thread'
                                              communications
                                              parameters
 `pass-signals'       `QPassSignals'          `handle SIGNAL'
+`program-signals'    `QProgramSignals'       `handle SIGNAL'
 `hostio-close-packet'`vFile:close'           `remote get',
                                              `remote put'
 `hostio-open-packet' `vFile:open'            `remote get',
@@ -558,6 +1081,7 @@ storage-address'                             `__thread'
 `hostio-pwrite-packet'`vFile:pwrite'          `remote get',
                                              `remote put'
 `hostio-unlink-packet'`vFile:unlink'          `remote delete'
+`hostio-readlink-packet'`vFile:readlink'        Host I/O
 `noack-packet'       `QStartNoAckMode'       Packet
                                              acknowledgment
 `osdata'             `qXfer:osdata:read'     `info os'
@@ -570,6 +1094,11 @@ storage-address'                             `__thread'
                                              tracing
 `disable-randomization'`QDisableRandomization' `set
                                              disable-randomization'
+`conditional-breakpoints-packet'`Z0 and Z1'             `Support for
+                                             target-side
+                                             breakpoint
+                                             condition
+                                             evaluation'
 
 
 File: gdb.info,  Node: Remote Stub,  Prev: Remote Configuration,  Up: Remote Debugging
@@ -663,8 +1192,8 @@ subroutines:
 
 `set_debug_traps'
      This routine arranges for `handle_exception' to run when your
-     program stops.  You must call this subroutine explicitly near the
-     beginning of your program.
+     program stops.  You must call this subroutine explicitly in your
+     program's startup code.
 
 `handle_exception'
      This is the central workhorse, but your program never calls it
@@ -792,10 +1321,19 @@ steps.
           `getDebugChar', `putDebugChar',
           `flush_i_cache', `memset', `exceptionHandler'.
 
-  2. Insert these lines near the top of your program:
+  2. Insert these lines in your program's startup code, before the main
+     procedure is called:
 
           set_debug_traps();
           breakpoint();
+
+     On some machines, when a breakpoint trap is raised, the hardware
+     automatically makes the PC point to the instruction after the
+     breakpoint.  If your machine doesn't do that, you may need to
+     adjust `handle_exception' to arrange for it to return to the
+     instruction after the breakpoint on this first invocation, so that
+     your program doesn't keep hitting the initial breakpoint instead
+     of making progress.
 
   3. For the 680x0 stub only, you need to provide a variable called
      `exceptionHook'.  Normally you just use:
@@ -1710,8 +2248,8 @@ to send an arbitrary command to the simulator.
 * MicroBlaze::			Xilinx MicroBlaze
 * MIPS Embedded::               MIPS Embedded
 * OpenRISC 1000::               OpenRisc 1000
-* PA::                          HP PA Embedded
 * PowerPC Embedded::            PowerPC Embedded
+* PA::                          HP PA Embedded
 * Sparclet::                    Tsqware Sparclet
 * Sparclite::                   Fujitsu Sparclite
 * Z8000::                       Zilog Z8000
@@ -1980,7 +2518,7 @@ File: gdb.info,  Node: MIPS Embedded,  Next: OpenRISC 1000,  Prev: MicroBlaze,  
 
 GDB can use the MIPS remote debugging protocol to talk to a MIPS board
 attached to a serial line.  This is available when you configure GDB
-with `--target=mips-idt-ecoff'.
+with `--target=mips-elf'.
 
    Use these GDB commands to specify the connection to your target
 board:
@@ -2062,7 +2600,7 @@ GDB also supports these special commands for MIPS targets:
      retransmit-timeout SECONDS' command.  The default is 3 seconds.
      You can inspect both values with `show timeout' and `show
      retransmit-timeout'.  (These commands are _only_ available when
-     GDB is configured for `--target=mips-idt-ecoff'.)
+     GDB is configured for `--target=mips-elf'.)
 
      The timeout set by `set timeout' does not apply when GDB is
      waiting for your program to stop.  In that case, GDB waits forever
@@ -2108,7 +2646,7 @@ GDB also supports these special commands for MIPS targets:
      monitor.  The monitor must be in debug mode for this to work.
 
 
-File: gdb.info,  Node: OpenRISC 1000,  Next: PA,  Prev: MIPS Embedded,  Up: Embedded Processors
+File: gdb.info,  Node: OpenRISC 1000,  Next: PowerPC Embedded,  Prev: MIPS Embedded,  Up: Embedded Processors
 
 21.3.6 OpenRISC 1000
 --------------------
@@ -2213,7 +2751,7 @@ Hardware breakpoints/watchpoint triggers can be set using:
 
 
 
-File: gdb.info,  Node: PowerPC Embedded,  Next: Sparclet,  Prev: PA,  Up: Embedded Processors
+File: gdb.info,  Node: PowerPC Embedded,  Next: PA,  Prev: OpenRISC 1000,  Up: Embedded Processors
 
 21.3.7 PowerPC Embedded
 -----------------------
@@ -2309,7 +2847,7 @@ GDB:
      Send the specified COMMAND string to the SDS monitor.
 
 
-File: gdb.info,  Node: PA,  Next: PowerPC Embedded,  Prev: OpenRISC 1000,  Up: Embedded Processors
+File: gdb.info,  Node: PA,  Next: Sparclet,  Prev: PowerPC Embedded,  Up: Embedded Processors
 
 21.3.8 HP PA Embedded
 ---------------------
@@ -2322,7 +2860,7 @@ File: gdb.info,  Node: PA,  Next: PowerPC Embedded,  Prev: OpenRISC 1000,  Up: E
 
 
 
-File: gdb.info,  Node: Sparclet,  Next: Sparclite,  Prev: PowerPC Embedded,  Up: Embedded Processors
+File: gdb.info,  Node: Sparclet,  Next: Sparclite,  Prev: PA,  Up: Embedded Processors
 
 21.3.9 Tsqware Sparclet
 -----------------------
@@ -2556,6 +3094,9 @@ File: gdb.info,  Node: Super-H,  Prev: CRIS,  Up: Embedded Processors
 For the Renesas Super-H processor, GDB provides these commands:
 
 `regs'
+     This command is deprecated, and `info all-registers' should be
+     used instead.
+
      Show the values of all Super-H registers.
 
 `set sh calling-convention CONVENTION'
@@ -2587,7 +3128,6 @@ uses of GDB with the architecture, both native and cross.
 * Menu:
 
 * i386::
-* A29K::
 * Alpha::
 * MIPS::
 * HPPA::               HP PA architecture
@@ -2595,7 +3135,7 @@ uses of GDB with the architecture, both native and cross.
 * PowerPC::
 
 
-File: gdb.info,  Node: i386,  Next: A29K,  Up: Architectures
+File: gdb.info,  Node: i386,  Next: Alpha,  Up: Architectures
 
 21.4.1 x86 Architecture-specific Issues
 ---------------------------------------
@@ -2613,31 +3153,9 @@ File: gdb.info,  Node: i386,  Next: A29K,  Up: Architectures
      from functions.
 
 
-File: gdb.info,  Node: A29K,  Next: Alpha,  Prev: i386,  Up: Architectures
+File: gdb.info,  Node: Alpha,  Next: MIPS,  Prev: i386,  Up: Architectures
 
-21.4.2 A29K
------------
-
-`set rstack_high_address ADDRESS'
-     On AMD 29000 family processors, registers are saved in a separate
-     "register stack".  There is no way for GDB to determine the extent
-     of this stack.  Normally, GDB just assumes that the stack is
-     "large enough".  This may result in GDB referencing memory
-     locations that do not exist.  If necessary, you can get around
-     this problem by specifying the ending address of the register
-     stack with the `set rstack_high_address' command.  The argument
-     should be an address, which you probably want to precede with `0x'
-     to specify in hexadecimal.
-
-`show rstack_high_address'
-     Display the current limit of the register stack, on AMD 29000
-     family processors.
-
-
-
-File: gdb.info,  Node: Alpha,  Next: MIPS,  Prev: A29K,  Up: Architectures
-
-21.4.3 Alpha
+21.4.2 Alpha
 ------------
 
 See the following section.
@@ -2645,7 +3163,7 @@ See the following section.
 
 File: gdb.info,  Node: MIPS,  Next: HPPA,  Prev: Alpha,  Up: Architectures
 
-21.4.4 MIPS
+21.4.3 MIPS
 -----------
 
 Alpha- and MIPS-based computers use an unusual stack frame, which
@@ -2696,6 +3214,33 @@ programs:
 `show mips abi'
      Show the MIPS ABI used by GDB to debug the inferior.
 
+`set mips compression ARG'
+     Tell GDB which MIPS compressed ISA (Instruction Set Architecture)
+     encoding is used by the inferior.  GDB uses this for code
+     disassembly and other internal interpretation purposes.  This
+     setting is only referred to when no executable has been associated
+     with the debugging session or the executable does not provide
+     information about the encoding it uses.  Otherwise this setting is
+     automatically updated from information provided by the executable.
+
+     Possible values of ARG are `mips16' and `micromips'.  The default
+     compressed ISA encoding is `mips16', as executables containing
+     MIPS16 code frequently are not identified as such.
+
+     This setting is "sticky"; that is, it retains its value across
+     debugging sessions until reset either explicitly with this command
+     or implicitly from an executable.
+
+     The compiler and/or assembler typically add symbol table
+     annotations to identify functions compiled for the MIPS16 or
+     microMIPS ISAs.  If these function-scope annotations are present,
+     GDB uses them in preference to the global compressed ISA encoding
+     setting.
+
+`show mips compression'
+     Show the MIPS compressed ISA encoding used by GDB to debug the
+     inferior.
+
 `set mipsfpu'
 `show mipsfpu'
      *Note set mipsfpu: MIPS Embedded.
@@ -2730,7 +3275,7 @@ programs:
 
 File: gdb.info,  Node: HPPA,  Next: SPU,  Prev: MIPS,  Up: Architectures
 
-21.4.5 HPPA
+21.4.4 HPPA
 -----------
 
 When GDB is debugging the HP PA architecture, it provides the following
@@ -2751,7 +3296,7 @@ special commands:
 
 File: gdb.info,  Node: SPU,  Next: PowerPC,  Prev: HPPA,  Up: Architectures
 
-21.4.6 Cell Broadband Engine SPU architecture
+21.4.5 Cell Broadband Engine SPU architecture
 ---------------------------------------------
 
 When GDB is debugging the Cell Broadband Engine SPU architecture, it
@@ -2809,7 +3354,7 @@ commands:
 
 File: gdb.info,  Node: PowerPC,  Prev: SPU,  Up: Architectures
 
-21.4.7 PowerPC
+21.4.6 PowerPC
 --------------
 
 When GDB is debugging the PowerPC architecture, it provides a set of
@@ -2843,6 +3388,7 @@ Print Settings: Print Settings.  Other settings are described here.
 * Screen Size::                 Screen size
 * Numbers::                     Numbers
 * ABI::                         Configuring the current ABI
+* Auto-loading::                Automatically loading associated files
 * Messages/Warnings::           Optional warnings and messages
 * Debugging Output::            Optional messages about internal happenings
 * Other Misc Settings::         Other Miscellaneous Settings
@@ -3104,7 +3650,7 @@ base for both input and output with the commands described below.
 
 
 
-File: gdb.info,  Node: ABI,  Next: Messages/Warnings,  Prev: Numbers,  Up: Controlling GDB
+File: gdb.info,  Node: ABI,  Next: Auto-loading,  Prev: Numbers,  Up: Controlling GDB
 
 22.6 Configuring the Current ABI
 ================================
@@ -3177,9 +3723,368 @@ the HP ANSI C++ compiler.  Other C++ compilers may use the "gnu-v2" or
      Set the current C++ ABI to ABI, or return to automatic detection.
 
 
-File: gdb.info,  Node: Messages/Warnings,  Next: Debugging Output,  Prev: ABI,  Up: Controlling GDB
+File: gdb.info,  Node: Auto-loading,  Next: Messages/Warnings,  Prev: ABI,  Up: Controlling GDB
 
-22.7 Optional Warnings and Messages
+22.7 Automatically loading associated files
+===========================================
+
+GDB sometimes reads files with commands and settings automatically,
+without being explicitly told so by the user.  We call this feature
+"auto-loading".  While auto-loading is useful for automatically adapting
+GDB to the needs of your project, it can sometimes produce unexpected
+results or introduce security risks (e.g., if the file comes from
+untrusted sources).
+
+   Note that loading of these associated files (including the local
+`.gdbinit' file) requires accordingly configured `auto-load safe-path'
+(*note Auto-loading safe path::).
+
+   For these reasons, GDB includes commands and options to let you
+control when to auto-load files and which files should be auto-loaded.
+
+`set auto-load off'
+     Globally disable loading of all auto-loaded files.  You may want
+     to use this command with the `-iex' option (*note Option
+     -init-eval-command::) such as:
+          $ gdb -iex "set auto-load off" untrusted-executable corefile
+
+     Be aware that system init file (*note System-wide configuration::)
+     and init files from your home directory (*note Home Directory Init
+     File::) still get read (as they come from generally trusted
+     directories).  To prevent GDB from auto-loading even those init
+     files, use the `-nx' option (*note Mode Options::), in addition to
+     `set auto-load no'.
+
+`show auto-load'
+     Show whether auto-loading of each specific `auto-load' file(s) is
+     enabled or disabled.
+
+          (gdb) show auto-load
+          gdb-scripts:  Auto-loading of canned sequences of commands scripts is on.
+          libthread-db:  Auto-loading of inferior specific libthread_db is on.
+          local-gdbinit:  Auto-loading of .gdbinit script from current directory
+                          is on.
+          python-scripts:  Auto-loading of Python scripts is on.
+          safe-path:  List of directories from which it is safe to auto-load files
+                      is $debugdir:$datadir/auto-load.
+          scripts-directory:  List of directories from which to load auto-loaded scripts
+                              is $debugdir:$datadir/auto-load.
+
+`info auto-load'
+     Print whether each specific `auto-load' file(s) have been
+     auto-loaded or not.
+
+          (gdb) info auto-load
+          gdb-scripts:
+          Loaded  Script
+          Yes     /home/user/gdb/gdb-gdb.gdb
+          libthread-db:  No auto-loaded libthread-db.
+          local-gdbinit:  Local .gdbinit file "/home/user/gdb/.gdbinit" has been
+                          loaded.
+          python-scripts:
+          Loaded  Script
+          Yes     /home/user/gdb/gdb-gdb.py
+
+   These are various kinds of files GDB can automatically load:
+
+   * *Note objfile-gdb.py file::, controlled by *Note set auto-load
+     python-scripts::.
+
+   * *Note objfile-gdb.gdb file::, controlled by *Note set auto-load
+     gdb-scripts::.
+
+   * *Note dotdebug_gdb_scripts section::, controlled by *Note set
+     auto-load python-scripts::.
+
+   * *Note Init File in the Current Directory::, controlled by *Note
+     set auto-load local-gdbinit::.
+
+   * *Note libthread_db.so.1 file::, controlled by *Note set auto-load
+     libthread-db::.
+
+   These are GDB control commands for the auto-loading:
+
+*Note set auto-load off::.           Disable auto-loading globally.
+*Note show auto-load::.              Show setting of all kinds of files.
+*Note info auto-load::.              Show state of all kinds of files.
+*Note set auto-load gdb-scripts::.   Control for GDB command scripts.
+*Note show auto-load gdb-scripts::.  Show setting of GDB command scripts.
+*Note info auto-load gdb-scripts::.  Show state of GDB command scripts.
+*Note set auto-load                  Control for GDB Python scripts.
+python-scripts::.                    
+*Note show auto-load                 Show setting of GDB Python scripts.
+python-scripts::.                    
+*Note info auto-load                 Show state of GDB Python scripts.
+python-scripts::.                    
+*Note set auto-load                  Control for GDB auto-loaded scripts
+scripts-directory::.                 location.
+*Note show auto-load                 Show GDB auto-loaded scripts
+scripts-directory::.                 location.
+*Note set auto-load local-gdbinit::. Control for init file in the
+                                     current directory.
+*Note show auto-load                 Show setting of init file in the
+local-gdbinit::.                     current directory.
+*Note info auto-load                 Show state of init file in the
+local-gdbinit::.                     current directory.
+*Note set auto-load libthread-db::.  Control for thread debugging
+                                     library.
+*Note show auto-load libthread-db::. Show setting of thread debugging
+                                     library.
+*Note info auto-load libthread-db::. Show state of thread debugging
+                                     library.
+*Note set auto-load safe-path::.     Control directories trusted for
+                                     automatic loading.
+*Note show auto-load safe-path::.    Show directories trusted for
+                                     automatic loading.
+*Note add-auto-load-safe-path::.     Add directory trusted for automatic
+                                     loading.
+
+* Menu:
+
+* Init File in the Current Directory:: `set/show/info auto-load local-gdbinit'
+* libthread_db.so.1 file::             `set/show/info auto-load libthread-db'
+* objfile-gdb.gdb file::               `set/show/info auto-load gdb-script'
+* Auto-loading safe path::             `set/show/info auto-load safe-path'
+* Auto-loading verbose mode::          `set/show debug auto-load'
+*Note Python Auto-loading::.
+
+
+File: gdb.info,  Node: Init File in the Current Directory,  Next: libthread_db.so.1 file,  Up: Auto-loading
+
+22.7.1 Automatically loading init file in the current directory
+---------------------------------------------------------------
+
+By default, GDB reads and executes the canned sequences of commands
+from init file (if any) in the current working directory, see *Note
+Init File in the Current Directory during Startup::.
+
+   Note that loading of this local `.gdbinit' file also requires
+accordingly configured `auto-load safe-path' (*note Auto-loading safe
+path::).
+
+`set auto-load local-gdbinit [on|off]'
+     Enable or disable the auto-loading of canned sequences of commands
+     (*note Sequences::) found in init file in the current directory.
+
+`show auto-load local-gdbinit'
+     Show whether auto-loading of canned sequences of commands from
+     init file in the current directory is enabled or disabled.
+
+`info auto-load local-gdbinit'
+     Print whether canned sequences of commands from init file in the
+     current directory have been auto-loaded.
+
+
+File: gdb.info,  Node: libthread_db.so.1 file,  Next: objfile-gdb.gdb file,  Prev: Init File in the Current Directory,  Up: Auto-loading
+
+22.7.2 Automatically loading thread debugging library
+-----------------------------------------------------
+
+This feature is currently present only on GNU/Linux native hosts.
+
+   GDB reads in some cases thread debugging library from places specific
+to the inferior (*note set libthread-db-search-path::).
+
+   The special `libthread-db-search-path' entry `$sdir' is processed
+without checking this `set auto-load libthread-db' switch as system
+libraries have to be trusted in general.  In all other cases of
+`libthread-db-search-path' entries GDB checks first if `set auto-load
+libthread-db' is enabled before trying to open such thread debugging
+library.
+
+   Note that loading of this debugging library also requires
+accordingly configured `auto-load safe-path' (*note Auto-loading safe
+path::).
+
+`set auto-load libthread-db [on|off]'
+     Enable or disable the auto-loading of inferior specific thread
+     debugging library.
+
+`show auto-load libthread-db'
+     Show whether auto-loading of inferior specific thread debugging
+     library is enabled or disabled.
+
+`info auto-load libthread-db'
+     Print the list of all loaded inferior specific thread debugging
+     libraries and for each such library print list of inferior PIDs
+     using it.
+
+
+File: gdb.info,  Node: objfile-gdb.gdb file,  Next: Auto-loading safe path,  Prev: libthread_db.so.1 file,  Up: Auto-loading
+
+22.7.3 The `OBJFILE-gdb.gdb' file
+---------------------------------
+
+GDB tries to load an `OBJFILE-gdb.gdb' file containing canned sequences
+of commands (*note Sequences::), as long as `set auto-load gdb-scripts'
+is set to `on'.
+
+   Note that loading of this script file also requires accordingly
+configured `auto-load safe-path' (*note Auto-loading safe path::).
+
+   For more background refer to the similar Python scripts auto-loading
+description (*note objfile-gdb.py file::).
+
+`set auto-load gdb-scripts [on|off]'
+     Enable or disable the auto-loading of canned sequences of commands
+     scripts.
+
+`show auto-load gdb-scripts'
+     Show whether auto-loading of canned sequences of commands scripts
+     is enabled or disabled.
+
+`info auto-load gdb-scripts [REGEXP]'
+     Print the list of all canned sequences of commands scripts that
+     GDB auto-loaded.
+
+   If REGEXP is supplied only canned sequences of commands scripts with
+matching names are printed.
+
+
+File: gdb.info,  Node: Auto-loading safe path,  Next: Auto-loading verbose mode,  Prev: objfile-gdb.gdb file,  Up: Auto-loading
+
+22.7.4 Security restriction for auto-loading
+--------------------------------------------
+
+As the files of inferior can come from untrusted source (such as
+submitted by an application user) GDB does not always load any files
+automatically.  GDB provides the `set auto-load safe-path' setting to
+list directories trusted for loading files not explicitly requested by
+user.  Each directory can also be a shell wildcard pattern.
+
+   If the path is not set properly you will see a warning and the file
+will not get loaded:
+
+     $ ./gdb -q ./gdb
+     Reading symbols from /home/user/gdb/gdb...done.
+     warning: File "/home/user/gdb/gdb-gdb.gdb" auto-loading has been
+              declined by your `auto-load safe-path' set
+              to "$debugdir:$datadir/auto-load".
+     warning: File "/home/user/gdb/gdb-gdb.py" auto-loading has been
+              declined by your `auto-load safe-path' set
+              to "$debugdir:$datadir/auto-load".
+
+   The list of trusted directories is controlled by the following
+commands:
+
+`set auto-load safe-path [DIRECTORIES]'
+     Set the list of directories (and their subdirectories) trusted for
+     automatic loading and execution of scripts.  You can also enter a
+     specific trusted file.  Each directory can also be a shell
+     wildcard pattern; wildcards do not match directory separator - see
+     `FNM_PATHNAME' for system function `fnmatch' (*note fnmatch:
+     (libc)Wildcard Matching.).  If you omit DIRECTORIES, `auto-load
+     safe-path' will be reset to its default value as specified during
+     GDB compilation.
+
+     The list of directories uses path separator (`:' on GNU and Unix
+     systems, `;' on MS-Windows and MS-DOS) to separate directories,
+     similarly to the `PATH' environment variable.
+
+`show auto-load safe-path'
+     Show the list of directories trusted for automatic loading and
+     execution of scripts.
+
+`add-auto-load-safe-path'
+     Add an entry (or list of entries) the list of directories trusted
+     for automatic loading and execution of scripts.  Multiple entries
+     may be delimited by the host platform path separator in use.
+
+   This variable defaults to what `--with-auto-load-dir' has been
+configured to (*note with-auto-load-dir::).  `$debugdir' and `$datadir'
+substitution applies the same as for *Note set auto-load
+scripts-directory::.  The default `set auto-load safe-path' value can
+be also overriden by GDB configuration option
+`--with-auto-load-safe-path'.
+
+   Setting this variable to `/' disables this security protection,
+corresponding GDB configuration option is
+`--without-auto-load-safe-path'.  This variable is supposed to be set
+to the system directories writable by the system superuser only.  Users
+can add their source directories in init files in their home
+directories (*note Home Directory Init File::).  See also deprecated
+init file in the current directory (*note Init File in the Current
+Directory during Startup::).
+
+   To force GDB to load the files it declined to load in the previous
+example, you could use one of the following ways:
+
+`~/.gdbinit': `add-auto-load-safe-path ~/src/gdb'
+     Specify this trusted directory (or a file) as additional component
+     of the list.  You have to specify also any existing directories
+     displayed by by `show auto-load safe-path' (such as `/usr:/bin' in
+     this example).
+
+`gdb -iex "set auto-load safe-path /usr:/bin:~/src/gdb" ...'
+     Specify this directory as in the previous case but just for a
+     single GDB session.
+
+`gdb -iex "set auto-load safe-path /" ...'
+     Disable auto-loading safety for a single GDB session.  This
+     assumes all the files you debug during this GDB session will come
+     from trusted sources.
+
+`./configure --without-auto-load-safe-path'
+     During compilation of GDB you may disable any auto-loading safety.
+     This assumes all the files you will ever debug with this GDB come
+     from trusted sources.
+
+   On the other hand you can also explicitly forbid automatic files
+loading which also suppresses any such warning messages:
+
+`gdb -iex "set auto-load no" ...'
+     You can use GDB command-line option for a single GDB session.
+
+`~/.gdbinit': `set auto-load no'
+     Disable auto-loading globally for the user (*note Home Directory
+     Init File::).  While it is improbable, you could also use system
+     init file instead (*note System-wide configuration::).
+
+   This setting applies to the file names as entered by user.  If no
+entry matches GDB tries as a last resort to also resolve all the file
+names into their canonical form (typically resolving symbolic links)
+and compare the entries again.  GDB already canonicalizes most of the
+filenames on its own before starting the comparison so a canonical form
+of directories is recommended to be entered.
+
+
+File: gdb.info,  Node: Auto-loading verbose mode,  Prev: Auto-loading safe path,  Up: Auto-loading
+
+22.7.5 Displaying files tried for auto-load
+-------------------------------------------
+
+For better visibility of all the file locations where you can place
+scripts to be auto-loaded with inferior -- or to protect yourself
+against accidental execution of untrusted scripts -- GDB provides a
+feature for printing all the files attempted to be loaded.  Both
+existing and non-existing files may be printed.
+
+   For example the list of directories from which it is safe to
+auto-load files (*note Auto-loading safe path::) applies also to
+canonicalized filenames which may not be too obvious while setting it
+up.
+
+     (gdb) set debug auto-load on
+     (gdb) file ~/src/t/true
+     auto-load: Loading canned sequences of commands script "/tmp/true-gdb.gdb"
+                for objfile "/tmp/true".
+     auto-load: Updating directories of "/usr:/opt".
+     auto-load: Using directory "/usr".
+     auto-load: Using directory "/opt".
+     warning: File "/tmp/true-gdb.gdb" auto-loading has been declined
+              by your `auto-load safe-path' set to "/usr:/opt".
+
+`set debug auto-load [on|off]'
+     Set whether to print the filenames attempted to be auto-loaded.
+
+`show debug auto-load'
+     Show whether printing of the filenames attempted to be auto-loaded
+     is turned on or off.
+
+
+File: gdb.info,  Node: Messages/Warnings,  Next: Debugging Output,  Prev: Auto-loading,  Up: Controlling GDB
+
+22.8 Optional Warnings and Messages
 ===================================
 
 By default, GDB is silent about its inner workings.  If you are running
@@ -3255,7 +4160,7 @@ symbols, the quantity denoting the call depth of each command.
 
 File: gdb.info,  Node: Debugging Output,  Next: Other Misc Settings,  Prev: Messages/Warnings,  Up: Controlling GDB
 
-22.8 Optional Messages about Internal Happenings
+22.9 Optional Messages about Internal Happenings
 ================================================
 
 GDB has commands that enable optional debugging messages from various
@@ -3303,6 +4208,13 @@ commands.
 
 `show debug dwarf2-die'
      Show the current state of DWARF2 DIE debugging.
+
+`set debug dwarf2-read'
+     Turns on or off display of debugging messages related to reading
+     DWARF debug info.  The default is off.
+
+`show debug dwarf2-read'
+     Show the current state of DWARF2 reader debugging.
 
 `set debug displaced'
      Turns on or off display of GDB debugging info for the displaced
@@ -3409,6 +4321,13 @@ commands.
      Display the current state of FR-V shared-library code debugging
      messages.
 
+`set debug symtab-create'
+     Turns on or off display of debugging messages related to symbol
+     table creation.  The default is off.
+
+`show debug symtab-create'
+     Show the current state of symbol table creation debugging.
+
 `set debug target'
      Turns on or off display of GDB target debugging info. This info
      includes what is going on at the target level of GDB, as it
@@ -3446,8 +4365,8 @@ commands.
 
 File: gdb.info,  Node: Other Misc Settings,  Prev: Debugging Output,  Up: Controlling GDB
 
-22.9 Other Miscellaneous Settings
-=================================
+22.10 Other Miscellaneous Settings
+==================================
 
 `set interactive-mode'
      If `on', forces GDB to assume that GDB was started in a terminal.
@@ -3596,20 +4515,23 @@ been passed.  This expands to a number in the range 0...10.
      repeat last command: Command Syntax.).
 
 `help user-defined'
-     List all user-defined commands, with the first line of the
-     documentation (if any) for each.
+     List all user-defined commands and all python commands defined in
+     class COMAND_USER.  The first line of the documentation or
+     docstring is included (if any).
 
 `show user'
 `show user COMMANDNAME'
      Display the GDB commands used to define COMMANDNAME (but not its
      documentation).  If no COMMANDNAME is given, display the
-     definitions for all user-defined commands.
+     definitions for all user-defined commands.  This does not work for
+     user-defined python commands.
 
 `show max-user-call-depth'
 `set max-user-call-depth'
      The value of `max-user-call-depth' controls how many recursion
      levels are allowed in user-defined commands before GDB suspects an
-     infinite recursion and aborts the command.
+     infinite recursion and aborts the command.  This does not apply to
+     user-defined python commands.
 
    In addition to the above commands, user-defined commands frequently
 use control flow commands, described in *Note Command Files::.
@@ -3951,7 +4873,7 @@ imported when GDB starts.
 
 * Python Commands::             Accessing Python from GDB.
 * Python API::                  Accessing GDB from Python.
-* Auto-loading::                Automatically loading Python code.
+* Python Auto-loading::         Automatically loading Python code.
 * Python modules::              Python modules provided by GDB.
 
 
@@ -4007,7 +4929,7 @@ interpreter:
      and thus is always available.
 
 
-File: gdb.info,  Node: Python API,  Next: Auto-loading,  Prev: Python Commands,  Up: Python
+File: gdb.info,  Node: Python API,  Next: Python Auto-loading,  Prev: Python Commands,  Up: Python
 
 23.2.2 Python API
 -----------------
@@ -4039,10 +4961,10 @@ user (*note Screen Size::).  In this situation, a Python
 * Blocks In Python::            Accessing frame blocks from Python.
 * Symbols In Python::           Python representation of symbols.
 * Symbol Tables In Python::     Python representation of symbol tables.
-* Lazy Strings In Python::      Python representation of lazy strings.
 * Breakpoints In Python::       Manipulating breakpoints using Python.
 * Finish Breakpoints in Python:: Setting Breakpoints on function return
                                 using Python.
+* Lazy Strings In Python::      Python representation of lazy strings.
 
 
 File: gdb.info,  Node: Basic Python,  Next: Exception Handling,  Up: Python API
@@ -4112,6 +5034,13 @@ classes added by GDB are placed in this module.  GDB automatically
      argument as an expression.  It is also useful simply to compute
      values, for example, it is the only way to get the value of a
      convenience variable (*note Convenience Vars::) as a `gdb.Value'.
+
+ -- Function: gdb.find_pc_line (pc)
+     Return the `gdb.Symtab_and_line' object corresponding to the PC
+     value.  *Note Symbol Tables In Python::.  If an invalid value of
+     PC is passed as an argument, then the `symtab' and `line'
+     attributes of the returned `gdb.Symtab_and_line' object will be
+     `None' and 0 respectively.
 
  -- Function: gdb.post_event (event)
      Put EVENT, a callable object taking no arguments, into GDB's
@@ -4278,7 +5207,7 @@ Example:
      >class HelloWorld (gdb.Command):
      >  """Greet the whole world."""
      >  def __init__ (self):
-     >    super (HelloWorld, self).__init__ ("hello-world", gdb.COMMAND_OBSCURE)
+     >    super (HelloWorld, self).__init__ ("hello-world", gdb.COMMAND_USER)
      >  def invoke (self, args, from_tty):
      >    argv = gdb.string_to_argv (args)
      >    if len (argv) != 0:
@@ -4430,6 +5359,70 @@ function, call it like so:
 
           The result `bar' will be a `gdb.Value' object holding the
           value pointed to by `foo'.
+
+          A similar function `Value.referenced_value' exists which also
+          returns `gdb.Value' objects corresonding to the values
+          pointed to by pointer values (and additionally, values
+          referenced by reference values).  However, the behavior of
+          `Value.dereference' differs from `Value.referenced_value' by
+          the fact that the behavior of `Value.dereference' is
+          identical to applying the C unary operator `*' on a given
+          value.  For example, consider a reference to a pointer
+          `ptrref', declared in your C++ program as
+
+               typedef int *intptr;
+               ...
+               int val = 10;
+               intptr ptr = &val;
+               intptr &ptrref = ptr;
+
+          Though `ptrref' is a reference value, one can apply the method
+          `Value.dereference' to the `gdb.Value' object corresponding
+          to it and obtain a `gdb.Value' which is identical to that
+          corresponding to `val'.  However, if you apply the method
+          `Value.referenced_value', the result would be a `gdb.Value'
+          object identical to that corresponding to `ptr'.
+
+               py_ptrref = gdb.parse_and_eval ("ptrref")
+               py_val = py_ptrref.dereference ()
+               py_ptr = py_ptrref.referenced_value ()
+
+          The `gdb.Value' object `py_val' is identical to that
+          corresponding to `val', and `py_ptr' is identical to that
+          corresponding to `ptr'.  In general, `Value.dereference' can
+          be applied whenever the C unary operator `*' can be applied
+          to the corresponding C value.  For those cases where applying
+          both `Value.dereference' and `Value.referenced_value' is
+          allowed, the results obtained need not be identical (as we
+          have seen in the above example).  The results are however
+          identical when applied on `gdb.Value' objects corresponding
+          to pointers (`gdb.Value' objects with type code
+          `TYPE_CODE_PTR') in a C/C++ program.
+
+      -- Function: Value.referenced_value ()
+          For pointer or reference data types, this method returns a new
+          `gdb.Value' object corresponding to the value referenced by
+          the pointer/reference value.  For pointer data types,
+          `Value.dereference' and `Value.referenced_value' produce
+          identical results.  The difference between these methods is
+          that `Value.dereference' cannot get the values referenced by
+          reference values.  For example, consider a reference to an
+          `int', declared in your C++ program as
+
+               int val = 10;
+               int &ref = val;
+
+          then applying `Value.dereference' to the `gdb.Value' object
+          corresponding to `ref' will result in an error, while applying
+          `Value.referenced_value' will result in a `gdb.Value' object
+          identical to that corresponding to `val'.
+
+               py_ref = gdb.parse_and_eval ("ref")
+               er_ref = py_ref.dereference ()       # Results in error
+               py_val = py_ref.referenced_value ()  # Returns the referenced value
+
+          The `gdb.Value' object `py_val' is identical to that
+          corresponding to `val'.
 
       -- Function: Value.dynamic_cast (type)
           Like `Value.cast', but works as if the C++ `dynamic_cast'
@@ -4943,11 +5936,11 @@ This practice will enable GDB to load multiple versions of your
 pretty-printers at the same time, because they will have different
 names.
 
-   You should write auto-loaded code (*note Auto-loading::) such that it
-can be evaluated multiple times without changing its meaning.  An ideal
-auto-load file will consist solely of `import's of your printer
-modules, followed by a call to a register pretty-printers with the
-current objfile.
+   You should write auto-loaded code (*note Python Auto-loading::) such
+that it can be evaluated multiple times without changing its meaning.
+An ideal auto-load file will consist solely of `import's of your
+printer modules, followed by a call to a register pretty-printers with
+the current objfile.
 
    Taken as a whole, this approach will scale nicely to multiple
 inferiors, each potentially using a different library version.
@@ -5095,13 +6088,13 @@ module:
           Read LENGTH bytes of memory from the inferior, starting at
           ADDRESS.  Returns a buffer object, which behaves much like an
           array or a string.  It can be modified and given to the
-          `gdb.write_memory' function.
+          `Inferior.write_memory' function.
 
       -- Function: Inferior.write_memory (address, buffer [, length])
           Write the contents of BUFFER to the inferior, starting at
           ADDRESS.  The BUFFER parameter must be a Python object which
           supports the buffer protocol, i.e., a string, an array or the
-          object returned from `gdb.read_memory'.  If given, LENGTH
+          object returned from `Inferior.read_memory'.  If given, LENGTH
           determines the number of bytes from BUFFER to be written.
 
       -- Function: Inferior.search_memory (address, length, pattern)
@@ -5461,6 +6454,12 @@ defined in the `gdb' module:
      tracepoints' at the GDB prompt to see a list of commands in this
      category.
 
+`gdb.COMMAND_USER'
+     The command is a general purpose command for the user, and
+     typically does not fit in one of the other categories.  Type `help
+     user-defined' at the GDB prompt to see a list of commands in this
+     category, as well as the list of gdb macros (*note Sequences::).
+
 `gdb.COMMAND_OBSCURE'
      The command is only used in unusual circumstances, or is not of
      general interest to users.  For example, `checkpoint', `fork', and
@@ -5503,7 +6502,7 @@ implemented in Python:
        """Greet the whole world."""
 
        def __init__ (self):
-         super (HelloWorld, self).__init__ ("hello-world", gdb.COMMAND_OBSCURE)
+         super (HelloWorld, self).__init__ ("hello-world", gdb.COMMAND_USER)
 
        def invoke (self, arg, from_tty):
          print "Hello, World!"
@@ -5749,10 +6748,10 @@ files "objfiles".
 module:
 
  -- Function: gdb.current_objfile ()
-     When auto-loading a Python script (*note Auto-loading::), GDB sets
-     the "current objfile" to the corresponding objfile.  This function
-     returns the current objfile.  If there is no current objfile, this
-     function returns `None'.
+     When auto-loading a Python script (*note Python Auto-loading::),
+     GDB sets the "current objfile" to the corresponding objfile.  This
+     function returns the current objfile.  If there is no current
+     objfile, this function returns `None'.
 
  -- Function: gdb.objfiles ()
      Return a sequence of all the objfiles current known to GDB.  *Note
@@ -5953,6 +6952,12 @@ Frames In Python::, for a more in-depth discussion on frames.
 Furthermore, see *Note Examining the Stack: Stack, for more detailed
 technical information on GDB's book-keeping of the stack.
 
+   A `gdb.Block' is iterable.  The iterator returns the symbols (*note
+Symbols In Python::) local to the block.  Python programs should not
+assume that a specific block object will always contain a given symbol,
+since changes in GDB features and infrastructure may cause symbols move
+across blocks in a symbol table.
+
    The following block-related functions are available in the `gdb'
 module:
 
@@ -5968,10 +6973,8 @@ module:
           not.  A block object can become invalid if the block it
           refers to doesn't exist anymore in the inferior.  All other
           `gdb.Block' methods will throw an exception if it is invalid
-          at the time the method is called.  This method is also made
-          available to the Python iterator object that `gdb.Block'
-          provides in an iteration context and via the Python `iter'
-          built-in function.
+          at the time the method is called.  The block's validity is
+          also checked during iteration over symbols of the block.
 
    A `gdb.Block' object has the following attributes:
 
@@ -6065,6 +7068,10 @@ module:
           is represented as a `gdb.Symtab' object.  *Note Symbol Tables
           In Python::.  This attribute is not writable.
 
+      -- Variable: Symbol.line
+          The line number in the source code at which the symbol was
+          defined.  This is an integer.
+
       -- Variable: Symbol.name
           The name of the symbol as a string.  This attribute is not
           writable.
@@ -6083,6 +7090,12 @@ module:
           the value of a symbol.  Each address class is a constant
           defined in the `gdb' module and described later in this
           chapter.
+
+      -- Variable: Symbol.needs_frame
+          This is `True' if evaluating this symbol's value requires a
+          frame (*note Frames In Python::) and `False' otherwise.
+          Typically, local variables will require a frame, but other
+          symbols will not.
 
       -- Variable: Symbol.is_argument
           `True' if the symbol is an argument of a function.
@@ -6104,6 +7117,14 @@ module:
           symbol it refers to does not exist in GDB any longer.  All
           other `gdb.Symbol' methods will throw an exception if it is
           invalid at the time the method is called.
+
+      -- Function: Symbol.value ([frame])
+          Compute the value of the symbol, as a `gdb.Value'.  For
+          functions, this computes the address of the function, cast to
+          the appropriate type.  If the symbol requires a frame in
+          order to compute its value, then FRAME must be given.  If
+          FRAME is not given, or if FRAME is invalid, then this method
+          will throw an exception.
 
    The available domain categories in `gdb.Symbol' are represented as
 constants in the `gdb' module:
@@ -6188,7 +7209,7 @@ represented as constants in the `gdb' module:
      The value's address is a computed location.
 
 
-File: gdb.info,  Node: Symbol Tables In Python,  Next: Lazy Strings In Python,  Prev: Symbols In Python,  Up: Python API
+File: gdb.info,  Node: Symbol Tables In Python,  Next: Breakpoints In Python,  Prev: Symbols In Python,  Up: Python API
 
 23.2.2.19 Symbol table representation in Python.
 ................................................
@@ -6208,8 +7229,12 @@ Examining the Symbol Table: Symbols, for more information.
           attribute is not writable.
 
       -- Variable: Symtab_and_line.pc
-          Indicates the current program counter address.  This
-          attribute is not writable.
+          Indicates the start of the address range occupied by code for
+          the current source line.  This attribute is not writable.
+
+      -- Variable: Symtab_and_line.last
+          Indicates the end of the address range occupied by code for
+          the current source line.  This attribute is not writable.
 
       -- Variable: Symtab_and_line.line
           Indicates the current line number for this object.  This
@@ -6247,8 +7272,16 @@ Examining the Symbol Table: Symbols, for more information.
       -- Function: Symtab.fullname ()
           Return the symbol table's source absolute file name.
 
+      -- Function: Symtab.global_block ()
+          Return the global block of the underlying symbol table.
+          *Note Blocks In Python::.
+
+      -- Function: Symtab.static_block ()
+          Return the static block of the underlying symbol table.
+          *Note Blocks In Python::.
+
 
-File: gdb.info,  Node: Breakpoints In Python,  Next: Finish Breakpoints in Python,  Prev: Lazy Strings In Python,  Up: Python API
+File: gdb.info,  Node: Breakpoints In Python,  Next: Finish Breakpoints in Python,  Prev: Symbol Tables In Python,  Up: Python API
 
 23.2.2.20 Manipulating breakpoints using Python
 ...............................................
@@ -6418,7 +7451,7 @@ module:
      this attribute is `None'.  This attribute is not writable.
 
 
-File: gdb.info,  Node: Finish Breakpoints in Python,  Prev: Breakpoints In Python,  Up: Python API
+File: gdb.info,  Node: Finish Breakpoints in Python,  Next: Lazy Strings In Python,  Prev: Breakpoints In Python,  Up: Python API
 
 23.2.2.21 Finish Breakpoints
 ............................
@@ -6464,7 +7497,7 @@ thread selected.
      computable.  This attribute is not writable.
 
 
-File: gdb.info,  Node: Lazy Strings In Python,  Next: Breakpoints In Python,  Prev: Symbol Tables In Python,  Up: Python API
+File: gdb.info,  Node: Lazy Strings In Python,  Prev: Finish Breakpoints in Python,  Up: Python API
 
 23.2.2.22 Python representation of lazy strings.
 ................................................
@@ -6514,21 +7547,16 @@ string is immediately retrieved and encoded on creation.
      attribute is not writable.
 
 
-File: gdb.info,  Node: Auto-loading,  Next: Python modules,  Prev: Python API,  Up: Python
+File: gdb.info,  Node: Python Auto-loading,  Next: Python modules,  Prev: Python API,  Up: Python
 
-23.2.3 Auto-loading
--------------------
+23.2.3 Python Auto-loading
+--------------------------
 
 When a new object file is read (for example, due to the `file' command,
 or because the inferior has loaded a shared library), GDB will look for
-Python support scripts in several ways: `OBJFILE-gdb.py' and
-`.debug_gdb_scripts' section.
-
-* Menu:
-
-* objfile-gdb.py file::         The `OBJFILE-gdb.py' file
-* .debug_gdb_scripts section::  The `.debug_gdb_scripts' section
-* Which flavor to choose?::
+Python support scripts in several ways: `OBJFILE-gdb.py' (*note
+objfile-gdb.py file::) and `.debug_gdb_scripts' section (*note
+dotdebug_gdb_scripts section::).
 
    The auto-loading feature is useful for supplying application-specific
 debugging commands and scripts.
@@ -6536,1263 +7564,41 @@ debugging commands and scripts.
    Auto-loading can be enabled or disabled, and the list of auto-loaded
 scripts can be printed.
 
-`set auto-load-scripts [yes|no]'
+`set auto-load python-scripts [on|off]'
      Enable or disable the auto-loading of Python scripts.
 
-`show auto-load-scripts'
+`show auto-load python-scripts'
      Show whether auto-loading of Python scripts is enabled or disabled.
 
-`info auto-load-scripts [REGEXP]'
-     Print the list of all scripts that GDB auto-loaded.
+`info auto-load python-scripts [REGEXP]'
+     Print the list of all Python scripts that GDB auto-loaded.
 
-     Also printed is the list of scripts that were mentioned in the
-     `.debug_gdb_scripts' section and were not found (*note
-     .debug_gdb_scripts section::).  This is useful because their names
-     are not printed when GDB tries to load them and fails.  There may
-     be many of them, and printing an error message for each one is
-     problematic.
+     Also printed is the list of Python scripts that were mentioned in
+     the `.debug_gdb_scripts' section and were not found (*note
+     dotdebug_gdb_scripts section::).  This is useful because their
+     names are not printed when GDB tries to load them and fails.
+     There may be many of them, and printing an error message for each
+     one is problematic.
 
-     If REGEXP is supplied only scripts with matching names are printed.
+     If REGEXP is supplied only Python scripts with matching names are
+     printed.
 
      Example:
 
-          (gdb) info auto-load-scripts
-          Loaded  Script
-          Yes     py-section-script.py
-                  full name: /tmp/py-section-script.py
-          Missing my-foo-pretty-printers.py
+          (gdb) info auto-load python-scripts
+          Loaded Script
+          Yes    py-section-script.py
+                 full name: /tmp/py-section-script.py
+          No     my-foo-pretty-printers.py
 
    When reading an auto-loaded file, GDB sets the "current objfile".
 This is available via the `gdb.current_objfile' function (*note
 Objfiles In Python::).  This can be useful for registering
 objfile-specific pretty-printers.
 
-
-File: gdb.info,  Node: objfile-gdb.py file,  Next: .debug_gdb_scripts section,  Up: Auto-loading
-
-23.2.3.1 The `OBJFILE-gdb.py' file
-..................................
-
-When a new object file is read, GDB looks for a file named
-`OBJFILE-gdb.py', where OBJFILE is the object file's real name, formed
-by ensuring that the file name is absolute, following all symlinks, and
-resolving `.' and `..' components.  If this file exists and is
-readable, GDB will evaluate it as a Python script.
-
-   If this file does not exist, and if the parameter
-`debug-file-directory' is set (*note Separate Debug Files::), then GDB
-will look for REAL-NAME in all of the directories mentioned in the
-value of `debug-file-directory'.
-
-   Finally, if this file does not exist, then GDB will look for a file
-named `DATA-DIRECTORY/python/auto-load/REAL-NAME', where DATA-DIRECTORY
-is GDB's data directory (available via `show data-directory', *note
-Data Files::), and REAL-NAME is the object file's real name, as
-described above.
-
-   GDB does not track which files it has already auto-loaded this way.
-GDB will load the associated script every time the corresponding
-OBJFILE is opened.  So your `-gdb.py' file should be careful to avoid
-errors if it is evaluated more than once.
-
-
-File: gdb.info,  Node: .debug_gdb_scripts section,  Next: Which flavor to choose?,  Prev: objfile-gdb.py file,  Up: Auto-loading
-
-23.2.3.2 The `.debug_gdb_scripts' section
-.........................................
-
-For systems using file formats like ELF and COFF, when GDB loads a new
-object file it will look for a special section named
-`.debug_gdb_scripts'.  If this section exists, its contents is a list
-of names of scripts to load.
-
-   GDB will look for each specified script file first in the current
-directory and then along the source search path (*note Specifying
-Source Directories: Source Path.), except that `$cdir' is not searched,
-since the compilation directory is not relevant to scripts.
-
-   Entries can be placed in section `.debug_gdb_scripts' with, for
-example, this GCC macro:
-
-     /* Note: The "MS" section flags are to remove duplicates.  */
-     #define DEFINE_GDB_SCRIPT(script_name) \
-       asm("\
-     .pushsection \".debug_gdb_scripts\", \"MS\",@progbits,1\n\
-     .byte 1\n\
-     .asciz \"" script_name "\"\n\
-     .popsection \n\
-     ");
-
-Then one can reference the macro in a header or source file like this:
-
-     DEFINE_GDB_SCRIPT ("my-app-scripts.py")
-
-   The script name may include directories if desired.
-
-   If the macro is put in a header, any application or library using
-this header will get a reference to the specified script.
-
-
-File: gdb.info,  Node: Which flavor to choose?,  Prev: .debug_gdb_scripts section,  Up: Auto-loading
-
-23.2.3.3 Which flavor to choose?
-................................
-
-Given the multiple ways of auto-loading Python scripts, it might not
-always be clear which one to choose.  This section provides some
-guidance.
-
-   Benefits of the `-gdb.py' way:
-
-   * Can be used with file formats that don't support multiple sections.
-
-   * Ease of finding scripts for public libraries.
-
-     Scripts specified in the `.debug_gdb_scripts' section are searched
-     for in the source search path.  For publicly installed libraries,
-     e.g., `libstdc++', there typically isn't a source directory in
-     which to find the script.
-
-   * Doesn't require source code additions.
-
-   Benefits of the `.debug_gdb_scripts' way:
-
-   * Works with static linking.
-
-     Scripts for libraries done the `-gdb.py' way require an objfile to
-     trigger their loading.  When an application is statically linked
-     the only objfile available is the executable, and it is cumbersome
-     to attach all the scripts from all the input libraries to the
-     executable's `-gdb.py' script.
-
-   * Works with classes that are entirely inlined.
-
-     Some classes can be entirely inlined, and thus there may not be an
-     associated shared library to attach a `-gdb.py' script to.
-
-   * Scripts needn't be copied out of the source tree.
-
-     In some circumstances, apps can be built out of large collections
-     of internal libraries, and the build infrastructure necessary to
-     install the `-gdb.py' scripts in a place where GDB can find them is
-     cumbersome.  It may be easier to specify the scripts in the
-     `.debug_gdb_scripts' section as relative paths, and add a path to
-     the top of the source tree to the source search path.
-
-
-File: gdb.info,  Node: Python modules,  Prev: Auto-loading,  Up: Python
-
-23.2.4 Python modules
----------------------
-
-GDB comes with several modules to assist writing Python code.
-
 * Menu:
 
-* gdb.printing::       Building and registering pretty-printers.
-* gdb.types::          Utilities for working with types.
-* gdb.prompt::         Utilities for prompt value substitution.
-
-
-File: gdb.info,  Node: gdb.printing,  Next: gdb.types,  Up: Python modules
-
-23.2.4.1 gdb.printing
-.....................
-
-This module provides a collection of utilities for working with
-pretty-printers.
-
-`PrettyPrinter (NAME, SUBPRINTERS=None)'
-     This class specifies the API that makes `info pretty-printer',
-     `enable pretty-printer' and `disable pretty-printer' work.
-     Pretty-printers should generally inherit from this class.
-
-`SubPrettyPrinter (NAME)'
-     For printers that handle multiple types, this class specifies the
-     corresponding API for the subprinters.
-
-`RegexpCollectionPrettyPrinter (NAME)'
-     Utility class for handling multiple printers, all recognized via
-     regular expressions.  *Note Writing a Pretty-Printer::, for an
-     example.
-
-`register_pretty_printer (OBJ, PRINTER, REPLACE=False)'
-     Register PRINTER with the pretty-printer list of OBJ.  If REPLACE
-     is `True' then any existing copy of the printer is replaced.
-     Otherwise a `RuntimeError' exception is raised if a printer with
-     the same name already exists.
-
-
-File: gdb.info,  Node: gdb.types,  Next: gdb.prompt,  Prev: gdb.printing,  Up: Python modules
-
-23.2.4.2 gdb.types
-..................
-
-This module provides a collection of utilities for working with
-`gdb.Types' objects.
-
-`get_basic_type (TYPE)'
-     Return TYPE with const and volatile qualifiers stripped, and with
-     typedefs and C++ references converted to the underlying type.
-
-     C++ example:
-
-          typedef const int const_int;
-          const_int foo (3);
-          const_int& foo_ref (foo);
-          int main () { return 0; }
-
-     Then in gdb:
-
-          (gdb) start
-          (gdb) python import gdb.types
-          (gdb) python foo_ref = gdb.parse_and_eval("foo_ref")
-          (gdb) python print gdb.types.get_basic_type(foo_ref.type)
-          int
-
-`has_field (TYPE, FIELD)'
-     Return `True' if TYPE, assumed to be a type with fields (e.g., a
-     structure or union), has field FIELD.
-
-`make_enum_dict (ENUM_TYPE)'
-     Return a Python `dictionary' type produced from ENUM_TYPE.
-
-`deep_items (TYPE)'
-     Returns a Python iterator similar to the standard
-     `gdb.Type.iteritems' method, except that the iterator returned by
-     `deep_items' will recursively traverse anonymous struct or union
-     fields.  For example:
-
-          struct A
-          {
-              int a;
-              union {
-                  int b0;
-                  int b1;
-              };
-          };
-
-     Then in GDB:
-          (gdb) python import gdb.types
-          (gdb) python struct_a = gdb.lookup_type("struct A")
-          (gdb) python print struct_a.keys ()
-          {['a', '']}
-          (gdb) python print [k for k,v in gdb.types.deep_items(struct_a)]
-          {['a', 'b0', 'b1']}
-
-
-
-File: gdb.info,  Node: gdb.prompt,  Prev: gdb.types,  Up: Python modules
-
-23.2.4.3 gdb.prompt
-...................
-
-This module provides a method for prompt value-substitution.
-
-`substitute_prompt (STRING)'
-     Return STRING with escape sequences substituted by values.  Some
-     escape sequences take arguments.  You can specify arguments inside
-     "{}" immediately following the escape sequence.
-
-     The escape sequences you can pass to this function are:
-
-    `\\'
-          Substitute a backslash.
-
-    `\e'
-          Substitute an ESC character.
-
-    `\f'
-          Substitute the selected frame; an argument names a frame
-          parameter.
-
-    `\n'
-          Substitute a newline.
-
-    `\p'
-          Substitute a parameter's value; the argument names the
-          parameter.
-
-    `\r'
-          Substitute a carriage return.
-
-    `\t'
-          Substitute the selected thread; an argument names a thread
-          parameter.
-
-    `\v'
-          Substitute the version of GDB.
-
-    `\w'
-          Substitute the current working directory.
-
-    `\['
-          Begin a sequence of non-printing characters.  These sequences
-          are typically used with the ESC character, and are not
-          counted in the string length.  Example:
-          "\[\e[0;34m\](gdb)\[\e[0m\]" will return a blue-colored
-          "(gdb)" prompt where the length is five.
-
-    `\]'
-          End a sequence of non-printing characters.
-
-     For example:
-
-          substitute_prompt (``frame: \f,
-                             print arguments: \p{print frame-arguments}'')
-
-will return the string:
-
-
-          "frame: main, print arguments: scalars"
-
-
-File: gdb.info,  Node: Aliases,  Prev: Python,  Up: Extending GDB
-
-23.3 Creating new spellings of existing commands
-================================================
-
-It is often useful to define alternate spellings of existing commands.
-For example, if a new GDB command defined in Python has a long name to
-type, it is handy to have an abbreviated version of it that involves
-less typing.
-
-   GDB itself uses aliases.  For example `s' is an alias of the `step'
-command even though it is otherwise an ambiguous abbreviation of other
-commands like `set' and `show'.
-
-   Aliases are also used to provide shortened or more common versions
-of multi-word commands.  For example, GDB provides the `tty' alias of
-the `set inferior-tty' command.
-
-   You can define a new alias with the `alias' command.
-
-`alias [-a] [--] ALIAS = COMMAND'
-
-   ALIAS specifies the name of the new alias.  Each word of ALIAS must
-consist of letters, numbers, dashes and underscores.
-
-   COMMAND specifies the name of an existing command that is being
-aliased.
-
-   The `-a' option specifies that the new alias is an abbreviation of
-the command.  Abbreviations are not shown in command lists displayed by
-the `help' command.
-
-   The `--' option specifies the end of options, and is useful when
-ALIAS begins with a dash.
-
-   Here is a simple example showing how to make an abbreviation of a
-command so that there is less to type.  Suppose you were tired of
-typing `disas', the current shortest unambiguous abbreviation of the
-`disassemble' command and you wanted an even shorter version named `di'.
-The following will accomplish this.
-
-     (gdb) alias -a di = disas
-
-   Note that aliases are different from user-defined commands.  With a
-user-defined command, you also need to write documentation for it with
-the `document' command.  An alias automatically picks up the
-documentation of the existing command.
-
-   Here is an example where we make `elms' an abbreviation of
-`elements' in the `set print elements' command.  This is to show that
-you can make an abbreviation of any part of a command.
-
-     (gdb) alias -a set print elms = set print elements
-     (gdb) alias -a show print elms = show print elements
-     (gdb) set p elms 20
-     (gdb) show p elms
-     Limit on string chars or array elements to print is 200.
-
-   Note that if you are defining an alias of a `set' command, and you
-want to have an alias for the corresponding `show' command, then you
-need to define the latter separately.
-
-   Unambiguously abbreviated commands are allowed in COMMAND and ALIAS,
-just as they are normally.
-
-     (gdb) alias -a set pr elms = set p ele
-
-   Finally, here is an example showing the creation of a one word alias
-for a more complex command.  This creates alias `spe' of the command
-`set print elements'.
-
-     (gdb) alias spe = set print elements
-     (gdb) spe 20
-
-
-File: gdb.info,  Node: Interpreters,  Next: TUI,  Prev: Extending GDB,  Up: Top
-
-24 Command Interpreters
-***********************
-
-GDB supports multiple command interpreters, and some command
-infrastructure to allow users or user interface writers to switch
-between interpreters or run commands in other interpreters.
-
-   GDB currently supports two command interpreters, the console
-interpreter (sometimes called the command-line interpreter or CLI) and
-the machine interface interpreter (or GDB/MI).  This manual describes
-both of these interfaces in great detail.
-
-   By default, GDB will start with the console interpreter.  However,
-the user may choose to start GDB with another interpreter by specifying
-the `-i' or `--interpreter' startup options.  Defined interpreters
-include:
-
-`console'
-     The traditional console or command-line interpreter.  This is the
-     most often used interpreter with GDB. With no interpreter
-     specified at runtime, GDB will use this interpreter.
-
-`mi'
-     The newest GDB/MI interface (currently `mi2').  Used primarily by
-     programs wishing to use GDB as a backend for a debugger GUI or an
-     IDE.  For more information, see *Note The GDB/MI Interface: GDB/MI.
-
-`mi2'
-     The current GDB/MI interface.
-
-`mi1'
-     The GDB/MI interface included in GDB 5.1, 5.2, and 5.3.
-
-
-   The interpreter being used by GDB may not be dynamically switched at
-runtime.  Although possible, this could lead to a very precarious
-situation.  Consider an IDE using GDB/MI.  If a user enters the command
-"interpreter-set console" in a console view, GDB would switch to using
-the console interpreter, rendering the IDE inoperable!
-
-   Although you may only choose a single interpreter at startup, you
-may execute commands in any interpreter from the current interpreter
-using the appropriate command.  If you are running the console
-interpreter, simply use the `interpreter-exec' command:
-
-     interpreter-exec mi "-data-list-register-names"
-
-   GDB/MI has a similar command, although it is only available in
-versions of GDB which support GDB/MI version 2 (or greater).
-
-
-File: gdb.info,  Node: TUI,  Next: Emacs,  Prev: Interpreters,  Up: Top
-
-25 GDB Text User Interface
-**************************
-
-* Menu:
-
-* TUI Overview::                TUI overview
-* TUI Keys::                    TUI key bindings
-* TUI Single Key Mode::         TUI single key mode
-* TUI Commands::                TUI-specific commands
-* TUI Configuration::           TUI configuration variables
-
-   The GDB Text User Interface (TUI) is a terminal interface which uses
-the `curses' library to show the source file, the assembly output, the
-program registers and GDB commands in separate text windows.  The TUI
-mode is supported only on platforms where a suitable version of the
-`curses' library is available.
-
-   The TUI mode is enabled by default when you invoke GDB as either
-`gdbtui' or `gdb -tui'.  You can also switch in and out of TUI mode
-while GDB runs by using various TUI commands and key bindings, such as
-`C-x C-a'.  *Note TUI Key Bindings: TUI Keys.
-
-
-File: gdb.info,  Node: TUI Overview,  Next: TUI Keys,  Up: TUI
-
-25.1 TUI Overview
-=================
-
-In TUI mode, GDB can display several text windows:
-
-_command_
-     This window is the GDB command window with the GDB prompt and the
-     GDB output.  The GDB input is still managed using readline.
-
-_source_
-     The source window shows the source file of the program.  The
-     current line and active breakpoints are displayed in this window.
-
-_assembly_
-     The assembly window shows the disassembly output of the program.
-
-_register_
-     This window shows the processor registers.  Registers are
-     highlighted when their values change.
-
-   The source and assembly windows show the current program position by
-highlighting the current line and marking it with a `>' marker.
-Breakpoints are indicated with two markers.  The first marker indicates
-the breakpoint type:
-
-`B'
-     Breakpoint which was hit at least once.
-
-`b'
-     Breakpoint which was never hit.
-
-`H'
-     Hardware breakpoint which was hit at least once.
-
-`h'
-     Hardware breakpoint which was never hit.
-
-   The second marker indicates whether the breakpoint is enabled or not:
-
-`+'
-     Breakpoint is enabled.
-
-`-'
-     Breakpoint is disabled.
-
-   The source, assembly and register windows are updated when the
-current thread changes, when the frame changes, or when the program
-counter changes.
-
-   These windows are not all visible at the same time.  The command
-window is always visible.  The others can be arranged in several
-layouts:
-
-   * source only,
-
-   * assembly only,
-
-   * source and assembly,
-
-   * source and registers, or
-
-   * assembly and registers.
-
-   A status line above the command window shows the following
-information:
-
-_target_
-     Indicates the current GDB target.  (*note Specifying a Debugging
-     Target: Targets.).
-
-_process_
-     Gives the current process or thread number.  When no process is
-     being debugged, this field is set to `No process'.
-
-_function_
-     Gives the current function name for the selected frame.  The name
-     is demangled if demangling is turned on (*note Print Settings::).
-     When there is no symbol corresponding to the current program
-     counter, the string `??' is displayed.
-
-_line_
-     Indicates the current line number for the selected frame.  When
-     the current line number is not known, the string `??' is displayed.
-
-_pc_
-     Indicates the current program counter address.
-
-
-File: gdb.info,  Node: TUI Keys,  Next: TUI Single Key Mode,  Prev: TUI Overview,  Up: TUI
-
-25.2 TUI Key Bindings
-=====================
-
-The TUI installs several key bindings in the readline keymaps (*note
-Command Line Editing::).  The following key bindings are installed for
-both TUI mode and the GDB standard mode.
-
-`C-x C-a'
-`C-x a'
-`C-x A'
-     Enter or leave the TUI mode.  When leaving the TUI mode, the
-     curses window management stops and GDB operates using its standard
-     mode, writing on the terminal directly.  When reentering the TUI
-     mode, control is given back to the curses windows.  The screen is
-     then refreshed.
-
-`C-x 1'
-     Use a TUI layout with only one window.  The layout will either be
-     `source' or `assembly'.  When the TUI mode is not active, it will
-     switch to the TUI mode.
-
-     Think of this key binding as the Emacs `C-x 1' binding.
-
-`C-x 2'
-     Use a TUI layout with at least two windows.  When the current
-     layout already has two windows, the next layout with two windows
-     is used.  When a new layout is chosen, one window will always be
-     common to the previous layout and the new one.
-
-     Think of it as the Emacs `C-x 2' binding.
-
-`C-x o'
-     Change the active window.  The TUI associates several key bindings
-     (like scrolling and arrow keys) with the active window.  This
-     command gives the focus to the next TUI window.
-
-     Think of it as the Emacs `C-x o' binding.
-
-`C-x s'
-     Switch in and out of the TUI SingleKey mode that binds single keys
-     to GDB commands (*note TUI Single Key Mode::).
-
-   The following key bindings only work in the TUI mode:
-
-<PgUp>
-     Scroll the active window one page up.
-
-<PgDn>
-     Scroll the active window one page down.
-
-<Up>
-     Scroll the active window one line up.
-
-<Down>
-     Scroll the active window one line down.
-
-<Left>
-     Scroll the active window one column left.
-
-<Right>
-     Scroll the active window one column right.
-
-`C-L'
-     Refresh the screen.
-
-   Because the arrow keys scroll the active window in the TUI mode, they
-are not available for their normal use by readline unless the command
-window has the focus.  When another window is active, you must use
-other readline key bindings such as `C-p', `C-n', `C-b' and `C-f' to
-control the command window.
-
-
-File: gdb.info,  Node: TUI Single Key Mode,  Next: TUI Commands,  Prev: TUI Keys,  Up: TUI
-
-25.3 TUI Single Key Mode
-========================
-
-The TUI also provides a "SingleKey" mode, which binds several
-frequently used GDB commands to single keys.  Type `C-x s' to switch
-into this mode, where the following key bindings are used:
-
-`c'
-     continue
-
-`d'
-     down
-
-`f'
-     finish
-
-`n'
-     next
-
-`q'
-     exit the SingleKey mode.
-
-`r'
-     run
-
-`s'
-     step
-
-`u'
-     up
-
-`v'
-     info locals
-
-`w'
-     where
-
-   Other keys temporarily switch to the GDB command prompt.  The key
-that was pressed is inserted in the editing buffer so that it is
-possible to type most GDB commands without interaction with the TUI
-SingleKey mode.  Once the command is entered the TUI SingleKey mode is
-restored.  The only way to permanently leave this mode is by typing `q'
-or `C-x s'.
-
-
-File: gdb.info,  Node: TUI Commands,  Next: TUI Configuration,  Prev: TUI Single Key Mode,  Up: TUI
-
-25.4 TUI-specific Commands
-==========================
-
-The TUI has specific commands to control the text windows.  These
-commands are always available, even when GDB is not in the TUI mode.
-When GDB is in the standard mode, most of these commands will
-automatically switch to the TUI mode.
-
-   Note that if GDB's `stdout' is not connected to a terminal, or GDB
-has been started with the machine interface interpreter (*note The
-GDB/MI Interface: GDB/MI.), most of these commands will fail with an
-error, because it would not be possible or desirable to enable curses
-window management.
-
-`info win'
-     List and give the size of all displayed windows.
-
-`layout next'
-     Display the next layout.
-
-`layout prev'
-     Display the previous layout.
-
-`layout src'
-     Display the source window only.
-
-`layout asm'
-     Display the assembly window only.
-
-`layout split'
-     Display the source and assembly window.
-
-`layout regs'
-     Display the register window together with the source or assembly
-     window.
-
-`focus next'
-     Make the next window active for scrolling.
-
-`focus prev'
-     Make the previous window active for scrolling.
-
-`focus src'
-     Make the source window active for scrolling.
-
-`focus asm'
-     Make the assembly window active for scrolling.
-
-`focus regs'
-     Make the register window active for scrolling.
-
-`focus cmd'
-     Make the command window active for scrolling.
-
-`refresh'
-     Refresh the screen.  This is similar to typing `C-L'.
-
-`tui reg float'
-     Show the floating point registers in the register window.
-
-`tui reg general'
-     Show the general registers in the register window.
-
-`tui reg next'
-     Show the next register group.  The list of register groups as well
-     as their order is target specific.  The predefined register groups
-     are the following: `general', `float', `system', `vector', `all',
-     `save', `restore'.
-
-`tui reg system'
-     Show the system registers in the register window.
-
-`update'
-     Update the source window and the current execution point.
-
-`winheight NAME +COUNT'
-`winheight NAME -COUNT'
-     Change the height of the window NAME by COUNT lines.  Positive
-     counts increase the height, while negative counts decrease it.
-
-`tabset NCHARS'
-     Set the width of tab stops to be NCHARS characters.
-
-
-File: gdb.info,  Node: TUI Configuration,  Prev: TUI Commands,  Up: TUI
-
-25.5 TUI Configuration Variables
-================================
-
-Several configuration variables control the appearance of TUI windows.
-
-`set tui border-kind KIND'
-     Select the border appearance for the source, assembly and register
-     windows.  The possible values are the following:
-    `space'
-          Use a space character to draw the border.
-
-    `ascii'
-          Use ASCII characters `+', `-' and `|' to draw the border.
-
-    `acs'
-          Use the Alternate Character Set to draw the border.  The
-          border is drawn using character line graphics if the terminal
-          supports them.
-
-`set tui border-mode MODE'
-`set tui active-border-mode MODE'
-     Select the display attributes for the borders of the inactive
-     windows or the active window.  The MODE can be one of the
-     following:
-    `normal'
-          Use normal attributes to display the border.
-
-    `standout'
-          Use standout mode.
-
-    `reverse'
-          Use reverse video mode.
-
-    `half'
-          Use half bright mode.
-
-    `half-standout'
-          Use half bright and standout mode.
-
-    `bold'
-          Use extra bright or bold mode.
-
-    `bold-standout'
-          Use extra bright or bold and standout mode.
-
-
-File: gdb.info,  Node: Emacs,  Next: GDB/MI,  Prev: TUI,  Up: Top
-
-26 Using GDB under GNU Emacs
-****************************
-
-A special interface allows you to use GNU Emacs to view (and edit) the
-source files for the program you are debugging with GDB.
-
-   To use this interface, use the command `M-x gdb' in Emacs.  Give the
-executable file you want to debug as an argument.  This command starts
-GDB as a subprocess of Emacs, with input and output through a newly
-created Emacs buffer.
-
-   Running GDB under Emacs can be just like running GDB normally except
-for two things:
-
-   * All "terminal" input and output goes through an Emacs buffer,
-     called the GUD buffer.
-
-     This applies both to GDB commands and their output, and to the
-     input and output done by the program you are debugging.
-
-     This is useful because it means that you can copy the text of
-     previous commands and input them again; you can even use parts of
-     the output in this way.
-
-     All the facilities of Emacs' Shell mode are available for
-     interacting with your program.  In particular, you can send
-     signals the usual way--for example, `C-c C-c' for an interrupt,
-     `C-c C-z' for a stop.
-
-   * GDB displays source code through Emacs.
-
-     Each time GDB displays a stack frame, Emacs automatically finds the
-     source file for that frame and puts an arrow (`=>') at the left
-     margin of the current line.  Emacs uses a separate buffer for
-     source display, and splits the screen to show both your GDB session
-     and the source.
-
-     Explicit GDB `list' or search commands still produce output as
-     usual, but you probably have no reason to use them from Emacs.
-
-   We call this "text command mode".  Emacs 22.1, and later, also uses
-a graphical mode, enabled by default, which provides further buffers
-that can control the execution and describe the state of your program.
-*Note GDB Graphical Interface: (Emacs)GDB Graphical Interface.
-
-   If you specify an absolute file name when prompted for the `M-x gdb'
-argument, then Emacs sets your current working directory to where your
-program resides.  If you only specify the file name, then Emacs sets
-your current working directory to the directory associated with the
-previous buffer.  In this case, GDB may find your program by searching
-your environment's `PATH' variable, but on some operating systems it
-might not find the source.  So, although the GDB input and output
-session proceeds normally, the auxiliary buffer does not display the
-current source and line of execution.
-
-   The initial working directory of GDB is printed on the top line of
-the GUD buffer and this serves as a default for the commands that
-specify files for GDB to operate on.  *Note Commands to Specify Files:
-Files.
-
-   By default, `M-x gdb' calls the program called `gdb'.  If you need
-to call GDB by a different name (for example, if you keep several
-configurations around, with different names) you can customize the
-Emacs variable `gud-gdb-command-name' to run the one you want.
-
-   In the GUD buffer, you can use these special Emacs commands in
-addition to the standard Shell mode commands:
-
-`C-h m'
-     Describe the features of Emacs' GUD Mode.
-
-`C-c C-s'
-     Execute to another source line, like the GDB `step' command; also
-     update the display window to show the current file and location.
-
-`C-c C-n'
-     Execute to next source line in this function, skipping all function
-     calls, like the GDB `next' command.  Then update the display window
-     to show the current file and location.
-
-`C-c C-i'
-     Execute one instruction, like the GDB `stepi' command; update
-     display window accordingly.
-
-`C-c C-f'
-     Execute until exit from the selected stack frame, like the GDB
-     `finish' command.
-
-`C-c C-r'
-     Continue execution of your program, like the GDB `continue'
-     command.
-
-`C-c <'
-     Go up the number of frames indicated by the numeric argument
-     (*note Numeric Arguments: (Emacs)Arguments.), like the GDB `up'
-     command.
-
-`C-c >'
-     Go down the number of frames indicated by the numeric argument,
-     like the GDB `down' command.
-
-   In any source file, the Emacs command `C-x <SPC>' (`gud-break')
-tells GDB to set a breakpoint on the source line point is on.
-
-   In text command mode, if you type `M-x speedbar', Emacs displays a
-separate frame which shows a backtrace when the GUD buffer is current.
-Move point to any frame in the stack and type <RET> to make it become
-the current frame and display the associated source in the source
-buffer.  Alternatively, click `Mouse-2' to make the selected frame
-become the current one.  In graphical mode, the speedbar displays watch
-expressions.
-
-   If you accidentally delete the source-display buffer, an easy way to
-get it back is to type the command `f' in the GDB buffer, to request a
-frame display; when you run under Emacs, this recreates the source
-buffer if necessary to show you the context of the current frame.
-
-   The source files displayed in Emacs are in ordinary Emacs buffers
-which are visiting the source files in the usual way.  You can edit the
-files with these buffers if you wish; but keep in mind that GDB
-communicates with Emacs in terms of line numbers.  If you add or delete
-lines from the text, the line numbers that GDB knows cease to
-correspond properly with the code.
-
-   A more detailed description of Emacs' interaction with GDB is given
-in the Emacs manual (*note Debuggers: (Emacs)Debuggers.).
-
-
-File: gdb.info,  Node: GDB/MI,  Next: Annotations,  Prev: Emacs,  Up: Top
-
-27 The GDB/MI Interface
-***********************
-
-Function and Purpose
-====================
-
-GDB/MI is a line based machine oriented text interface to GDB and is
-activated by specifying using the `--interpreter' command line option
-(*note Mode Options::).  It is specifically intended to support the
-development of systems which use the debugger as just one small
-component of a larger system.
-
-   This chapter is a specification of the GDB/MI interface.  It is
-written in the form of a reference manual.
-
-   Note that GDB/MI is still under construction, so some of the
-features described below are incomplete and subject to change (*note
-GDB/MI Development and Front Ends: GDB/MI Development and Front Ends.).
-
-Notation and Terminology
-========================
-
-This chapter uses the following notation:
-
-   * `|' separates two alternatives.
-
-   * `[ SOMETHING ]' indicates that SOMETHING is optional: it may or
-     may not be given.
-
-   * `( GROUP )*' means that GROUP inside the parentheses may repeat
-     zero or more times.
-
-   * `( GROUP )+' means that GROUP inside the parentheses may repeat
-     one or more times.
-
-   * `"STRING"' means a literal STRING.
-
-* Menu:
-
-* GDB/MI General Design::
-* GDB/MI Command Syntax::
-* GDB/MI Compatibility with CLI::
-* GDB/MI Development and Front Ends::
-* GDB/MI Output Records::
-* GDB/MI Simple Examples::
-* GDB/MI Command Description Format::
-* GDB/MI Breakpoint Commands::
-* GDB/MI Program Context::
-* GDB/MI Thread Commands::
-* GDB/MI Ada Tasking Commands::
-* GDB/MI Program Execution::
-* GDB/MI Stack Manipulation::
-* GDB/MI Variable Objects::
-* GDB/MI Data Manipulation::
-* GDB/MI Tracepoint Commands::
-* GDB/MI Symbol Query::
-* GDB/MI File Commands::
-* GDB/MI Target Manipulation::
-* GDB/MI File Transfer Commands::
-* GDB/MI Miscellaneous Commands::
-
-
-File: gdb.info,  Node: GDB/MI General Design,  Next: GDB/MI Command Syntax,  Up: GDB/MI
-
-27.1 GDB/MI General Design
-==========================
-
-Interaction of a GDB/MI frontend with GDB involves three
-parts--commands sent to GDB, responses to those commands and
-notifications.  Each command results in exactly one response,
-indicating either successful completion of the command, or an error.
-For the commands that do not resume the target, the response contains
-the requested information.  For the commands that resume the target, the
-response only indicates whether the target was successfully resumed.
-Notifications is the mechanism for reporting changes in the state of the
-target, or in GDB state, that cannot conveniently be associated with a
-command and reported as part of that command response.
-
-   The important examples of notifications are:
-   * Exec notifications.  These are used to report changes in target
-     state--when a target is resumed, or stopped.  It would not be
-     feasible to include this information in response of resuming
-     commands, because one resume commands can result in multiple
-     events in different threads.  Also, quite some time may pass
-     before any event happens in the target, while a frontend needs to
-     know whether the resuming command itself was successfully executed.
-
-   * Console output, and status notifications.  Console output
-     notifications are used to report output of CLI commands, as well as
-     diagnostics for other commands.  Status notifications are used to
-     report the progress of a long-running operation.  Naturally,
-     including this information in command response would mean no
-     output is produced until the command is finished, which is
-     undesirable.
-
-   * General notifications.  Commands may have various side effects on
-     the GDB or target state beyond their official purpose.  For
-     example, a command may change the selected thread.  Although such
-     changes can be included in command response, using notification
-     allows for more orthogonal frontend design.
-
-
-   There's no guarantee that whenever an MI command reports an error,
-GDB or the target are in any specific state, and especially, the state
-is not reverted to the state before the MI command was processed.
-Therefore, whenever an MI command results in an error, we recommend
-that the frontend refreshes all the information shown in the user
-interface.
-
-* Menu:
-
-* Context management::
-* Asynchronous and non-stop modes::
-* Thread groups::
-
-
-File: gdb.info,  Node: Context management,  Next: Asynchronous and non-stop modes,  Up: GDB/MI General Design
-
-27.1.1 Context management
--------------------------
-
-In most cases when GDB accesses the target, this access is done in
-context of a specific thread and frame (*note Frames::).  Often, even
-when accessing global data, the target requires that a thread be
-specified.  The CLI interface maintains the selected thread and frame,
-and supplies them to target on each command.  This is convenient,
-because a command line user would not want to specify that information
-explicitly on each command, and because user interacts with GDB via a
-single terminal, so no confusion is possible as to what thread and
-frame are the current ones.
-
-   In the case of MI, the concept of selected thread and frame is less
-useful.  First, a frontend can easily remember this information itself.
-Second, a graphical frontend can have more than one window, each one
-used for debugging a different thread, and the frontend might want to
-access additional threads for internal purposes.  This increases the
-risk that by relying on implicitly selected thread, the frontend may be
-operating on a wrong one.  Therefore, each MI command should explicitly
-specify which thread and frame to operate on.  To make it possible,
-each MI command accepts the `--thread' and `--frame' options, the value
-to each is GDB identifier for thread and frame to operate on.
-
-   Usually, each top-level window in a frontend allows the user to
-select a thread and a frame, and remembers the user selection for
-further operations.  However, in some cases GDB may suggest that the
-current thread be changed.  For example, when stopping on a breakpoint
-it is reasonable to switch to the thread where breakpoint is hit.  For
-another example, if the user issues the CLI `thread' command via the
-frontend, it is desirable to change the frontend's selected thread to
-the one specified by user.  GDB communicates the suggestion to change
-current thread using the `=thread-selected' notification.  No such
-notification is available for the selected frame at the moment.
-
-   Note that historically, MI shares the selected thread with CLI, so
-frontends used the `-thread-select' to execute commands in the right
-context.  However, getting this to work right is cumbersome.  The
-simplest way is for frontend to emit `-thread-select' command before
-every command.  This doubles the number of commands that need to be
-sent.  The alternative approach is to suppress `-thread-select' if the
-selected thread in GDB is supposed to be identical to the thread the
-frontend wants to operate on.  However, getting this optimization right
-can be tricky.  In particular, if the frontend sends several commands
-to GDB, and one of the commands changes the selected thread, then the
-behaviour of subsequent commands will change.  So, a frontend should
-either wait for response from such problematic commands, or explicitly
-add `-thread-select' for all subsequent commands.  No frontend is known
-to do this exactly right, so it is suggested to just always pass the
-`--thread' and `--frame' options.
-
-
-File: gdb.info,  Node: Asynchronous and non-stop modes,  Next: Thread groups,  Prev: Context management,  Up: GDB/MI General Design
-
-27.1.2 Asynchronous command execution and non-stop mode
--------------------------------------------------------
-
-On some targets, GDB is capable of processing MI commands even while
-the target is running.  This is called "asynchronous command execution"
-(*note Background Execution::).  The frontend may specify a preferrence
-for asynchronous execution using the `-gdb-set target-async 1' command,
-which should be emitted before either running the executable or
-attaching to the target.  After the frontend has started the executable
-or attached to the target, it can find if asynchronous execution is
-enabled using the `-list-target-features' command.
-
-   Even if GDB can accept a command while target is running, many
-commands that access the target do not work when the target is running.
-Therefore, asynchronous command execution is most useful when combined
-with non-stop mode (*note Non-Stop Mode::).  Then, it is possible to
-examine the state of one thread, while other threads are running.
-
-   When a given thread is running, MI commands that try to access the
-target in the context of that thread may not work, or may work only on
-some targets.  In particular, commands that try to operate on thread's
-stack will not work, on any target.  Commands that read memory, or
-modify breakpoints, may work or not work, depending on the target.  Note
-that even commands that operate on global state, such as `print',
-`set', and breakpoint commands, still access the target in the context
-of a specific thread,  so frontend should try to find a stopped thread
-and perform the operation on that thread (using the `--thread' option).
-
-   Which commands will work in the context of a running thread is
-highly target dependent.  However, the two commands `-exec-interrupt',
-to stop a thread, and `-thread-info', to find the state of a thread,
-will always work.
-
-
-File: gdb.info,  Node: Thread groups,  Prev: Asynchronous and non-stop modes,  Up: GDB/MI General Design
-
-27.1.3 Thread groups
---------------------
-
-GDB may be used to debug several processes at the same time.  On some
-platfroms, GDB may support debugging of several hardware systems, each
-one having several cores with several different processes running on
-each core.  This section describes the MI mechanism to support such
-debugging scenarios.
-
-   The key observation is that regardless of the structure of the
-target, MI can have a global list of threads, because most commands that
-accept the `--thread' option do not need to know what process that
-thread belongs to.  Therefore, it is not necessary to introduce neither
-additional `--process' option, nor an notion of the current process in
-the MI interface.  The only strictly new feature that is required is
-the ability to find how the threads are grouped into processes.
-
-   To allow the user to discover such grouping, and to support arbitrary
-hierarchy of machines/cores/processes, MI introduces the concept of a
-"thread group".  Thread group is a collection of threads and other
-thread groups.  A thread group always has a string identifier, a type,
-and may have additional attributes specific to the type.  A new
-command, `-list-thread-groups', returns the list of top-level thread
-groups, which correspond to processes that GDB is debugging at the
-moment.  By passing an identifier of a thread group to the
-`-list-thread-groups' command, it is possible to obtain the members of
-specific thread group.
-
-   To allow the user to easily discover processes, and other objects, he
-wishes to debug, a concept of "available thread group" is introduced.
-Available thread group is an thread group that GDB is not debugging,
-but that can be attached to, using the `-target-attach' command.  The
-list of available top-level thread groups can be obtained using
-`-list-thread-groups --available'.  In general, the content of a thread
-group may be only retrieved only after attaching to that thread group.
-
-   Thread groups are related to inferiors (*note Inferiors and
-Programs::).  Each inferior corresponds to a thread group of a special
-type `process', and some additional operations are permitted on such
-thread groups.
-
-
-File: gdb.info,  Node: GDB/MI Command Syntax,  Next: GDB/MI Compatibility with CLI,  Prev: GDB/MI General Design,  Up: GDB/MI
-
-27.2 GDB/MI Command Syntax
-==========================
-
-* Menu:
-
-* GDB/MI Input Syntax::
-* GDB/MI Output Syntax::
-
-
-File: gdb.info,  Node: GDB/MI Input Syntax,  Next: GDB/MI Output Syntax,  Up: GDB/MI Command Syntax
-
-27.2.1 GDB/MI Input Syntax
---------------------------
-
-`COMMAND ==>'
-     `CLI-COMMAND | MI-COMMAND'
-
-`CLI-COMMAND ==>'
-     `[ TOKEN ] CLI-COMMAND NL', where CLI-COMMAND is any existing GDB
-     CLI command.
-
-`MI-COMMAND ==>'
-     `[ TOKEN ] "-" OPERATION ( " " OPTION )* `[' " --" `]' ( " "
-     PARAMETER )* NL'
-
-`TOKEN ==>'
-     "any sequence of digits"
-
-`OPTION ==>'
-     `"-" PARAMETER [ " " PARAMETER ]'
-
-`PARAMETER ==>'
-     `NON-BLANK-SEQUENCE | C-STRING'
-
-`OPERATION ==>'
-     _any of the operations described in this chapter_
-
-`NON-BLANK-SEQUENCE ==>'
-     _anything, provided it doesn't contain special characters such as
-     "-", NL, """ and of course " "_
-
-`C-STRING ==>'
-     `""" SEVEN-BIT-ISO-C-STRING-CONTENT """'
-
-`NL ==>'
-     `CR | CR-LF'
-
-Notes:
-
-   * The CLI commands are still handled by the MI interpreter; their
-     output is described below.
-
-   * The `TOKEN', when present, is passed back when the command
-     finishes.
-
-   * Some MI commands accept optional arguments as part of the parameter
-     list.  Each option is identified by a leading `-' (dash) and may be
-     followed by an optional argument parameter.  Options occur first
-     in the parameter list and can be delimited from normal parameters
-     using `--' (this is useful when some parameters begin with a dash).
-
-   Pragmatics:
-
-   * We want easy access to the existing CLI syntax (for debugging).
-
-   * We want it to be easy to spot a MI operation.
+* objfile-gdb.py file::          The `OBJFILE-gdb.py' file
+* dotdebug_gdb_scripts section:: The `.debug_gdb_scripts' section
+* Which flavor to choose?::
 

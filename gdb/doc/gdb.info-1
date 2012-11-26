@@ -7,7 +7,7 @@ END-INFO-DIR-ENTRY
 
    Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996,
 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010 Free Software Foundation, Inc.
+2010 2011, 2012 Free Software Foundation, Inc.
 
    Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -23,11 +23,11 @@ developing GNU and promoting software freedom."
    This file documents the GNU debugger GDB.
 
    This is the Tenth Edition, of `Debugging with GDB: the GNU
-Source-Level Debugger' for GDB (GDB) Version 7.4.1.
+Source-Level Debugger' for GDB (GDB) Version 7.5.
 
    Copyright (C) 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996,
 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
-2010 Free Software Foundation, Inc.
+2010 2011, 2012 Free Software Foundation, Inc.
 
    Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -48,9 +48,9 @@ Debugging with GDB
 
 This file describes GDB, the GNU symbolic debugger.
 
-   This is the Tenth Edition, for GDB (GDB) Version 7.4.1.
+   This is the Tenth Edition, for GDB (GDB) Version 7.5.
 
-   Copyright (C) 1988-2010 Free Software Foundation, Inc.
+   Copyright (C) 1988-2012 Free Software Foundation, Inc.
 
    This edition of the GDB manual is dedicated to the memory of Fred
 Fish.  Fred was a long-standing contributor to GDB and to Free software
@@ -91,6 +91,7 @@ in general.  We will miss him.
 * GDB/MI::                      GDB's Machine Interface.
 * Annotations::                 GDB's annotation interface.
 * JIT Interface::               Using the JIT debugging interface.
+* In-Process Agent::            In-Process Agent
 
 * GDB Bugs::                    Reporting bugs in GDB
 
@@ -112,7 +113,9 @@ in general.  We will miss him.
 * Copying::			GNU General Public License says
                                 how you can copy and share GDB
 * GNU Free Documentation License::  The license for this documentation
-* Index::                       Index
+* Concept Index::               Index of GDB concepts
+* Command and Variable Index::  Index of GDB commands, variables,
+                                  functions, and Python data types
 
 
 File: gdb.info,  Node: Summary,  Next: Sample Session,  Prev: Top,  Up: Top
@@ -163,10 +166,11 @@ either the Apple/NeXT or the GNU Objective-C runtime.
 * Menu:
 
 * Free Software::               Freely redistributable software
+* Free Documentation::          Free Software Needs Free Documentation
 * Contributors::                Contributors to GDB
 
 
-File: gdb.info,  Node: Free Software,  Next: Contributors,  Up: Summary
+File: gdb.info,  Node: Free Software,  Next: Free Documentation,  Up: Summary
 
 Free Software
 =============
@@ -182,6 +186,9 @@ Software Foundation uses the GPL to preserve these freedoms.
    Fundamentally, the General Public License is a license which says
 that you have these freedoms and that you cannot take these freedoms
 away from anyone else.
+
+
+File: gdb.info,  Node: Free Documentation,  Next: Contributors,  Prev: Free Software,  Up: Summary
 
 Free Software Needs Free Documentation
 ======================================
@@ -273,7 +280,7 @@ published by other publishers, at
 `http://www.fsf.org/doc/other-free-books.html'.
 
 
-File: gdb.info,  Node: Contributors,  Prev: Free Software,  Up: Summary
+File: gdb.info,  Node: Contributors,  Prev: Free Documentation,  Up: Summary
 
 Contributors to GDB
 ===================
@@ -489,7 +496,7 @@ Let us use GDB to try to see what is going on.
      There is absolutely no warranty for GDB; type "show warranty"
       for details.
 
-     GDB 7.4.1, Copyright 1999 Free Software Foundation, Inc...
+     GDB 7.5, Copyright 1999 Free Software Foundation, Inc...
      (gdb)
 
 GDB reads only enough symbol data to know where to find the rest when
@@ -810,6 +817,16 @@ them, so long as enough of the option is present to be unambiguous.
           gdb -ex 'target sim' -ex 'load' \
              -x setbreakpoints -ex 'run' a.out
 
+`-init-command FILE'
+`-ix FILE'
+     Execute commands from file FILE before loading the inferior (but
+     after loading gdbinit files).  *Note Startup::.
+
+`-init-eval-command COMMAND'
+`-iex COMMAND'
+     Execute a single GDB command before loading the inferior (but
+     after loading gdbinit files).  *Note Startup::.
+
 `-directory DIRECTORY'
 `-d DIRECTORY'
      Add DIRECTORY to the path to search for source and script files.
@@ -963,10 +980,8 @@ mode or quiet mode.
      Activate the "Text User Interface" when starting.  The Text User
      Interface manages several text windows on the terminal, showing
      source, assembly, registers and GDB command outputs (*note GDB
-     Text User Interface: TUI.).  Alternatively, the Text User
-     Interface can be enabled by invoking the program `gdbtui'.  Do not
-     use this option if you run GDB from Emacs (*note Using GDB under
-     GNU Emacs: Emacs.).
+     Text User Interface: TUI.).  Do not use this option if you run GDB
+     from Emacs (*note Using GDB under GNU Emacs: Emacs.).
 
 `-interpreter INTERP'
      Use the interpreter INTERP for interface with the controlling
@@ -1013,16 +1028,23 @@ Here's the description of what GDB does during session startup:
   3. Reads the init file (if any) in your home directory(1) and
      executes all the commands in that file.
 
-  4. Processes command line options and operands.
+  4. Executes commands and command files specified by the `-iex' and
+     `-ix' options in their specified order.  Usually you should use the
+     `-ex' and `-x' options instead, but this way you can apply
+     settings before GDB init files get executed and before inferior
+     gets loaded.
 
-  5. Reads and executes the commands from init file (if any) in the
-     current working directory.  This is only done if the current
-     directory is different from your home directory.  Thus, you can
-     have more than one init file, one generic in your home directory,
-     and another, specific to the program you are debugging, in the
-     directory where you invoke GDB.
+  5. Processes command line options and operands.
 
-  6. If the command line specified a program to debug, or a process to
+  6. Reads and executes the commands from init file (if any) in the
+     current working directory as long as `set auto-load local-gdbinit'
+     is set to `on' (*note Init File in the Current Directory::).  This
+     is only done if the current directory is different from your home
+     directory.  Thus, you can have more than one init file, one
+     generic in your home directory, and another, specific to the
+     program you are debugging, in the directory where you invoke GDB.
+
+  7. If the command line specified a program to debug, or a process to
      attach to, or a core file, GDB loads any auto-loaded scripts
      provided for the program or for its loaded shared libraries.
      *Note Auto-loading::.
@@ -1030,17 +1052,16 @@ Here's the description of what GDB does during session startup:
      If you wish to disable the auto-loading during startup, you must
      do something like the following:
 
-          $ gdb -ex "set auto-load-scripts off" -ex "file myprogram"
+          $ gdb -iex "set auto-load python-scripts off" myprogram
 
-     The following does not work because the auto-loading is turned off
-     too late:
+     Option `-ex' does not work because the auto-loading is then turned
+     off too late.
 
-          $ gdb -ex "set auto-load-scripts off" myprogram
+  8. Executes commands and command files specified by the `-ex' and
+     `-x' options in their specified order.  *Note Command Files::, for
+     more details about GDB command files.
 
-  7. Reads command files specified by the `-x' option.  *Note Command
-     Files::, for more details about GDB command files.
-
-  8. Reads the command history recorded in the "history file".  *Note
+  9. Reads the command history recorded in the "history file".  *Note
      Command History::, for more details about the command history and
      the files where GDB records it.
 
@@ -1406,14 +1427,15 @@ the command `help'.
      and their documentation, for the regular expression specified in
      ARGS.  It prints out all matches found.  For example:
 
-          apropos reload
+          apropos alias
 
      results in:
 
-          set symbol-reloading -- Set dynamic symbol table reloading
-                                  multiple times in one run
-          show symbol-reloading -- Show dynamic symbol table reloading
-                                  multiple times in one run
+          alias -- Define a new command that is an alias of an existing command
+          aliases -- Aliases of other commands
+          d -- Delete some breakpoints or auto-display expressions
+          del -- Delete some breakpoints or auto-display expressions
+          delete -- Delete some breakpoints or auto-display expressions
 
 `complete ARGS'
      The `complete ARGS' command lists all the possible completions for
@@ -1435,8 +1457,8 @@ the command `help'.
 `show' to inquire about the state of your program, or the state of GDB
 itself.  Each command supports many topics of inquiry; this manual
 introduces each of them in the appropriate context.  The listings under
-`info' and under `show' in the Index point to all the sub-commands.
-*Note Index::.
+`info' and under `show' in the Command, Variable, and Function Index
+point to all the sub-commands.  *Note Command and Variable Index::.
 
 `info'
      This command (abbreviated `i') is for describing the state of your
@@ -2379,11 +2401,15 @@ watchpoints in programs with multiple threads.
      On GNU/Linux and Solaris systems, GDB uses a "helper"
      `libthread_db' library to obtain information about threads in the
      inferior process.  GDB will use `libthread-db-search-path' to find
-     `libthread_db'.
+     `libthread_db'.  GDB also consults first if inferior specific
+     thread debugging library loading is enabled by `set auto-load
+     libthread-db' (*note libthread_db.so.1 file::).
 
      A special entry `$sdir' for `libthread-db-search-path' refers to
      the default system directories that are normally searched for
-     loading shared libraries.
+     loading shared libraries.  The `$sdir' entry is the only kind not
+     needing to be enabled by `set auto-load libthread-db' (*note
+     libthread_db.so.1 file::).
 
      A special entry `$pdir' for `libthread-db-search-path' refers to
      the directory from which `libpthread' was loaded in the inferior
@@ -2760,7 +2786,9 @@ in that range are operated on.
 * Disabling::                   Disabling breakpoints
 * Conditions::                  Break conditions
 * Break Commands::              Breakpoint command lists
+* Dynamic Printf::              Dynamic printf
 * Save Breakpoints::            How to save breakpoints in a file
+* Static Probe Points::         Listing static probe points
 * Error in Breakpoints::        ``Cannot insert breakpoints''
 * Breakpoint-related Warnings:: ``Breakpoint address adjusted...''
 
@@ -2929,12 +2957,19 @@ variables.
           cannot be resolved until the appropriate shared library is
           loaded in the future.
 
-     If a breakpoint is conditional, `info break' shows the condition on
-     the line following the affected breakpoint; breakpoint commands,
-     if any, are listed after that.  A pending breakpoint is allowed to
-     have a condition specified for it.  The condition is not parsed
-     for validity until a shared library is loaded that allows the
-     pending breakpoint to resolve to a valid location.
+     If a breakpoint is conditional, there are two evaluation modes:
+     "host" and "target".  If mode is "host", breakpoint condition
+     evaluation is done by GDB on the host's side.  If it is "target",
+     then the condition is evaluated by the target.  The `info break'
+     command shows the condition on the line following the affected
+     breakpoint, together with its condition evaluation mode in between
+     parentheses.
+
+     Breakpoint commands, if any, are listed after that.  A pending
+     breakpoint is allowed to have a condition specified for it.  The
+     condition is not parsed for validity until a shared library is
+     loaded that allows the pending breakpoint to resolve to a valid
+     location.
 
      `info break' with a breakpoint number N as argument lists only
      that breakpoint.  The convenience variable `$_' and the default
@@ -2948,6 +2983,10 @@ variables.
      breakpoint was hit, and then run again, ignoring one less than
      that number.  This will get you quickly to the last hit of that
      breakpoint.
+
+     For a breakpoints with an enable count (xref) greater than 1,
+     `info break' also displays that count.
+
 
    GDB allows you to set any number of breakpoints at the same place in
 your program.  There is nothing silly or meaningless about this.  When
@@ -3098,6 +3137,43 @@ controlled with the following commands::
      `breakpoint always-inserted' mode is on.  If GDB is controlling
      the inferior in all-stop mode, GDB behaves as if `breakpoint
      always-inserted' mode is off.
+
+   GDB handles conditional breakpoints by evaluating these conditions
+when a breakpoint breaks.  If the condition is true, then the process
+being debugged stops, otherwise the process is resumed.
+
+   If the target supports evaluating conditions on its end, GDB may
+download the breakpoint, together with its conditions, to it.
+
+   This feature can be controlled via the following commands:
+
+`set breakpoint condition-evaluation host'
+     This option commands GDB to evaluate the breakpoint conditions on
+     the host's side.  Unconditional breakpoints are sent to the target
+     which in turn receives the triggers and reports them back to GDB
+     for condition evaluation.  This is the standard evaluation mode.
+
+`set breakpoint condition-evaluation target'
+     This option commands GDB to download breakpoint conditions to the
+     target at the moment of their insertion.  The target is
+     responsible for evaluating the conditional expression and reporting
+     breakpoint stop events back to GDB whenever the condition is true.
+     Due to limitations of target-side evaluation, some conditions
+     cannot be evaluated there, e.g., conditions that depend on local
+     data that is only known to the host.  Examples include conditional
+     expressions involving convenience variables, complex types that
+     cannot be handled by the agent expression parser and expressions
+     that are too long to be sent over to the target, specially when the
+     target is a remote system.  In these cases, the conditions will be
+     evaluated by GDB.
+
+`set breakpoint condition-evaluation auto'
+     This is the default mode.  If the target supports evaluating
+     breakpoint conditions on its end, GDB will download breakpoint
+     conditions to the target (limitations mentioned previously apply).
+     If the target does not support breakpoint condition evaluation,
+     then GDB will fallback to evaluating all these conditions on the
+     host's side.
 
    GDB itself sometimes sets breakpoints in your program for special
 purposes, such as proper handling of `longjmp' (in C programs).  These
@@ -3473,6 +3549,12 @@ shared library.  Use the `catch' command to set a catchpoint.
           A call to `vfork'.  This is currently only available for HP-UX
           and GNU/Linux.
 
+    `load [regexp]'
+    `unload [regexp]'
+          The loading or unloading of a shared library.  If REGEXP is
+          given, then the catchpoint will stop only if the regular
+          expression matches one of the affected libraries.
+
 
 `tcatch EVENT'
      Set a catchpoint that is enabled only for one stop.  The
@@ -3592,7 +3674,7 @@ numbers to use.
    Disabling and enabling a breakpoint that has multiple locations
 affects all of its locations.
 
-   A breakpoint, watchpoint, or catchpoint can have any of four
+   A breakpoint, watchpoint, or catchpoint can have any of several
 different states of enablement:
 
    * Enabled.  The breakpoint stops your program.  A breakpoint set
@@ -3602,6 +3684,9 @@ different states of enablement:
 
    * Enabled once.  The breakpoint stops your program, but then becomes
      disabled.
+
+   * Enabled for a count.  The breakpoint stops your program for the
+     next N times, then becomes disabled.
 
    * Enabled for deletion.  The breakpoint stops your program, but
      immediately after it does so it is deleted permanently.  A
@@ -3624,6 +3709,14 @@ watchpoints, and catchpoints:
 `enable [breakpoints] once RANGE...'
      Enable the specified breakpoints temporarily.  GDB disables any of
      these breakpoints immediately after stopping your program.
+
+`enable [breakpoints] count COUNT RANGE...'
+     Enable the specified breakpoints temporarily.  GDB records COUNT
+     with each of the specified breakpoints, and decrements a
+     breakpoint's count when it is hit.  When any count reaches 0, GDB
+     disables that breakpoint.  If a breakpoint has an ignore count
+     (*note Break Conditions: Conditions.), that will be decremented to
+     0 before COUNT is affected.
 
 `enable [breakpoints] delete RANGE...'
      Enable the specified breakpoints to work once, then die.  GDB
@@ -3674,6 +3767,19 @@ without checking the condition of this one.)  Note that breakpoint
 commands are usually more convenient and flexible than break conditions
 for the purpose of performing side effects when a breakpoint is reached
 (*note Breakpoint Command Lists: Break Commands.).
+
+   Breakpoint conditions can also be evaluated on the target's side if
+the target supports it.  Instead of evaluating the conditions locally,
+GDB encodes the expression into an agent expression (*note Agent
+Expressions::) suitable for execution on the target, independently of
+GDB.  Global variables become raw memory locations, locals become stack
+accesses, and so forth.
+
+   In this case, GDB will only be notified of a breakpoint trigger when
+its condition evaluates to true.  This mechanism may provide faster
+response times depending on the performance characteristics of the
+target since it does not need to keep GDB informed about every
+breakpoint trigger, even those with false conditions.
 
    Break conditions can be specified when a breakpoint is set, by using
 `if' in the arguments to the `break' command.  *Note Setting
@@ -3742,7 +3848,7 @@ it.
    Ignore counts apply to breakpoints, watchpoints, and catchpoints.
 
 
-File: gdb.info,  Node: Break Commands,  Next: Save Breakpoints,  Prev: Conditions,  Up: Breakpoints
+File: gdb.info,  Node: Break Commands,  Next: Dynamic Printf,  Prev: Conditions,  Up: Breakpoints
 
 5.1.7 Breakpoint Command Lists
 ------------------------------
@@ -3821,9 +3927,107 @@ that no output is produced.  Here is an example:
      end
 
 
-File: gdb.info,  Node: Save Breakpoints,  Next: Error in Breakpoints,  Prev: Break Commands,  Up: Breakpoints
+File: gdb.info,  Node: Dynamic Printf,  Next: Save Breakpoints,  Prev: Break Commands,  Up: Breakpoints
 
-5.1.8 How to save breakpoints to a file
+5.1.8 Dynamic Printf
+--------------------
+
+The dynamic printf command `dprintf' combines a breakpoint with
+formatted printing of your program's data to give you the effect of
+inserting `printf' calls into your program on-the-fly, without having
+to recompile it.
+
+   In its most basic form, the output goes to the GDB console.  However,
+you can set the variable `dprintf-style' for alternate handling.  For
+instance, you can ask to format the output by calling your program's
+`printf' function.  This has the advantage that the characters go to
+the program's output device, so they can recorded in redirects to files
+and so forth.
+
+   If you are doing remote debugging with a stub or agent, you can also
+ask to have the printf handled by the remote agent.  In addition to
+ensuring that the output goes to the remote program's device along with
+any other output the program might produce, you can also ask that the
+dprintf remain active even after disconnecting from the remote target.
+Using the stub/agent is also more efficient, as it can do everything
+without needing to communicate with GDB.
+
+`dprintf LOCATION,TEMPLATE,EXPRESSION[,EXPRESSION...]'
+     Whenever execution reaches LOCATION, print the values of one or
+     more EXPRESSIONS under the control of the string TEMPLATE.  To
+     print several values, separate them with commas.
+
+`set dprintf-style STYLE'
+     Set the dprintf output to be handled in one of several different
+     styles enumerated below.  A change of style affects all existing
+     dynamic printfs immediately.  (If you need individual control over
+     the print commands, simply define normal breakpoints with
+     explicitly-supplied command lists.)
+
+`gdb'
+     Handle the output using the GDB `printf' command.
+
+`call'
+     Handle the output by calling a function in your program (normally
+     `printf').
+
+`agent'
+     Have the remote debugging agent (such as `gdbserver') handle the
+     output itself.  This style is only available for agents that
+     support running commands on the target.
+
+`set dprintf-function FUNCTION'
+     Set the function to call if the dprintf style is `call'.  By
+     default its value is `printf'.  You may set it to any expression.
+     that GDB can evaluate to a function, as per the `call' command.
+
+`set dprintf-channel CHANNEL'
+     Set a "channel" for dprintf.  If set to a non-empty value, GDB
+     will evaluate it as an expression and pass the result as a first
+     argument to the `dprintf-function', in the manner of `fprintf' and
+     similar functions.  Otherwise, the dprintf format string will be
+     the first argument, in the manner of `printf'.
+
+     As an example, if you wanted `dprintf' output to go to a logfile
+     that is a standard I/O stream assigned to the variable `mylog',
+     you could do the following:
+
+          (gdb) set dprintf-style call
+          (gdb) set dprintf-function fprintf
+          (gdb) set dprintf-channel mylog
+          (gdb) dprintf 25,"at line 25, glob=%d\n",glob
+          Dprintf 1 at 0x123456: file main.c, line 25.
+          (gdb) info break
+          1       dprintf        keep y   0x00123456 in main at main.c:25
+                  call (void) fprintf (mylog,"at line 25, glob=%d\n",glob)
+                  continue
+          (gdb)
+
+     Note that the `info break' displays the dynamic printf commands as
+     normal breakpoint commands; you can thus easily see the effect of
+     the variable settings.
+
+`set disconnected-dprintf on'
+`set disconnected-dprintf off'
+     Choose whether `dprintf' commands should continue to run if GDB
+     has disconnected from the target.  This only applies if the
+     `dprintf-style' is `agent'.
+
+`show disconnected-dprintf off'
+     Show the current choice for disconnected `dprintf'.
+
+
+   GDB does not check the validity of function and channel, relying on
+you to supply values that are meaningful for the contexts in which they
+are being used.  For instance, the function and channel may be the
+values of local variables, but if that is the case, then all enabled
+dynamic prints must be at locations within the scope of those locals.
+If evaluation fails, GDB will report an error.
+
+
+File: gdb.info,  Node: Save Breakpoints,  Next: Static Probe Points,  Prev: Dynamic Printf,  Up: Breakpoints
+
+5.1.9 How to save breakpoints to a file
 ---------------------------------------
 
 To save breakpoint definitions to a file use the `save breakpoints'
@@ -3845,10 +4049,69 @@ command.
      no longer be recreated.
 
 
-File: gdb.info,  Node: Error in Breakpoints,  Next: Breakpoint-related Warnings,  Prev: Save Breakpoints,  Up: Breakpoints
+File: gdb.info,  Node: Static Probe Points,  Next: Error in Breakpoints,  Prev: Save Breakpoints,  Up: Breakpoints
 
-5.1.9 "Cannot insert breakpoints"
----------------------------------
+5.1.10 Static Probe Points
+--------------------------
+
+GDB supports "SDT" probes in the code.  SDT stands for Statically
+Defined Tracing, and the probes are designed to have a tiny runtime
+code and data footprint, and no dynamic relocations.  They are usable
+from assembly, C and C++ languages.  See
+`http://sourceware.org/systemtap/wiki/UserSpaceProbeImplementation' for
+a good reference on how the SDT probes are implemented.
+
+   Currently, `SystemTap' (`http://sourceware.org/systemtap/') SDT
+probes are supported on ELF-compatible systems.  See
+`http://sourceware.org/systemtap/wiki/AddingUserSpaceProbingToApps' for
+more information on how to add `SystemTap' SDT probes in your
+applications.
+
+   Some probes have an associated semaphore variable; for instance, this
+happens automatically if you defined your probe using a DTrace-style
+`.d' file.  If your probe has a semaphore, GDB will automatically
+enable it when you specify a breakpoint using the `-probe-stap'
+notation.  But, if you put a breakpoint at a probe's location by some
+other method (e.g., `break file:line'), then GDB will not automatically
+set the semaphore.
+
+   You can examine the available static static probes using `info
+probes', with optional arguments:
+
+`info probes stap [PROVIDER [NAME [OBJFILE]]]'
+     If given, PROVIDER is a regular expression used to match against
+     provider names when selecting which probes to list.  If omitted,
+     probes by all probes from all providers are listed.
+
+     If given, NAME is a regular expression to match against probe names
+     when selecting which probes to list.  If omitted, probe names are
+     not considered when deciding whether to display them.
+
+     If given, OBJFILE is a regular expression used to select which
+     object files (executable or shared libraries) to examine.  If not
+     given, all object files are considered.
+
+`info probes all'
+     List the available static probes, from all types.
+
+   A probe may specify up to twelve arguments.  These are available at
+the point at which the probe is defined--that is, when the current PC is
+at the probe's location.  The arguments are available using the
+convenience variables (*note Convenience Vars::)
+`$_probe_arg0'...`$_probe_arg11'.  Each probe argument is an integer of
+the appropriate size; types are not preserved.  The convenience
+variable `$_probe_argc' holds the number of arguments at the current
+probe point.
+
+   These variables are always available, but attempts to access them at
+any location other than a probe point will cause GDB to give an error
+message.
+
+
+File: gdb.info,  Node: Error in Breakpoints,  Next: Breakpoint-related Warnings,  Prev: Static Probe Points,  Up: Breakpoints
+
+5.1.11 "Cannot insert breakpoints"
+----------------------------------
 
 If you request too many active hardware-assisted breakpoints and
 watchpoints, you will see this error message:
@@ -3866,7 +4129,7 @@ the hardware-assisted breakpoints and watchpoints, and then continue.
 
 File: gdb.info,  Node: Breakpoint-related Warnings,  Prev: Error in Breakpoints,  Up: Breakpoints
 
-5.1.10 "Breakpoint address adjusted..."
+5.1.12 "Breakpoint address adjusted..."
 ---------------------------------------
 
 Some processor architectures place constraints on the addresses at
@@ -5430,13 +5693,6 @@ stack frame.
      automatic) accessible at the point of execution of the selected
      frame.
 
-`info catch'
-     Print a list of all the exception handlers that are active in the
-     current stack frame at the current point of execution.  To see
-     other exception handlers, visit the associated frame (using the
-     `up', `down', or `frame' commands); then type `info catch'.  *Note
-     Setting Catchpoints: Set Catchpoints.
-
 
 
 File: gdb.info,  Node: Source,  Next: Data,  Prev: Stack,  Up: Top
@@ -5570,7 +5826,12 @@ GDB understands:
      specifies the line OFFSET lines up or down from the first linespec.
 
 `FILENAME:LINENUM'
-     Specifies the line LINENUM in the source file FILENAME.
+     Specifies the line LINENUM in the source file FILENAME.  If
+     FILENAME is a relative file name, then it will match any source
+     file name with the same trailing components.  For example, if
+     FILENAME is `gcc/expr.c', then it will match source file name of
+     `/build/trunk/gcc/expr.c', but not `/build/trunk/libcpp/expr.c' or
+     `/build/trunk/gcc/x-expr.c'.
 
 `FUNCTION'
      Specifies the line that begins the body of the function FUNCTION.
@@ -5627,6 +5888,18 @@ GDB understands:
           does not specify the function unambiguously, e.g., if there
           are several functions with identical names in different
           source files.
+
+`-pstap|-probe-stap [OBJFILE:[PROVIDER:]]NAME'
+     The GNU/Linux tool `SystemTap' provides a way for applications to
+     embed static probes.  *Note Static Probe Points::, for more
+     information on finding and using static probes.  This form of
+     linespec specifies the location of such a static probe.
+
+     If OBJFILE is given, only probes coming from that shared library
+     or executable matching OBJFILE as a regular expression are
+     considered.  If PROVIDER is given, then only probes from that
+     provider are considered.  If several probes match the spec, GDB
+     will insert a breakpoint at each one of those probes.
 
 
 
@@ -6075,6 +6348,125 @@ specified format.  *Note Examining Memory: Memory.
 fields of a struct or a class are declared, use the `ptype EXP' command
 rather than `print'.  *Note Examining the Symbol Table: Symbols.
 
+   Another way of examining values of expressions and type information
+is through the Python extension command `explore' (available only if
+the GDB build is configured with `--with-python').  It offers an
+interactive way to start at the highest level (or, the most abstract
+level) of the data type of an expression (or, the data type itself) and
+explore all the way down to leaf scalar values/fields embedded in the
+higher level data types.
+
+`explore ARG'
+     ARG is either an expression (in the source language), or a type
+     visible in the current context of the program being debugged.
+
+   The working of the `explore' command can be illustrated with an
+example.  If a data type `struct ComplexStruct' is defined in your C
+program as
+
+     struct SimpleStruct
+     {
+       int i;
+       double d;
+     };
+
+     struct ComplexStruct
+     {
+       struct SimpleStruct *ss_p;
+       int arr[10];
+     };
+
+followed by variable declarations as
+
+     struct SimpleStruct ss = { 10, 1.11 };
+     struct ComplexStruct cs = { &ss, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 } };
+
+then, the value of the variable `cs' can be explored using the
+`explore' command as follows.
+
+     (gdb) explore cs
+     The value of `cs' is a struct/class of type `struct ComplexStruct' with
+     the following fields:
+
+       ss_p = <Enter 0 to explore this field of type `struct SimpleStruct *'>
+        arr = <Enter 1 to explore this field of type `int [10]'>
+
+     Enter the field number of choice:
+
+Since the fields of `cs' are not scalar values, you are being prompted
+to chose the field you want to explore.  Let's say you choose the field
+`ss_p' by entering `0'.  Then, since this field is a pointer, you will
+be asked if it is pointing to a single value.  From the declaration of
+`cs' above, it is indeed pointing to a single value, hence you enter
+`y'.  If you enter `n', then you will be asked if it were pointing to
+an array of values, in which case this field will be explored as if it
+were an array.
+
+     `cs.ss_p' is a pointer to a value of type `struct SimpleStruct'
+     Continue exploring it as a pointer to a single value [y/n]: y
+     The value of `*(cs.ss_p)' is a struct/class of type `struct
+     SimpleStruct' with the following fields:
+
+       i = 10 .. (Value of type `int')
+       d = 1.1100000000000001 .. (Value of type `double')
+
+     Press enter to return to parent value:
+
+If the field `arr' of `cs' was chosen for exploration by entering `1'
+earlier, then since it is as array, you will be prompted to enter the
+index of the element in the array that you want to explore.
+
+     `cs.arr' is an array of `int'.
+     Enter the index of the element you want to explore in `cs.arr': 5
+
+     `(cs.arr)[5]' is a scalar value of type `int'.
+
+     (cs.arr)[5] = 4
+
+     Press enter to return to parent value:
+
+   In general, at any stage of exploration, you can go deeper towards
+the leaf values by responding to the prompts appropriately, or hit the
+return key to return to the enclosing data structure (the higher level
+data structure).
+
+   Similar to exploring values, you can use the `explore' command to
+explore types.  Instead of specifying a value (which is typically a
+variable name or an expression valid in the current context of the
+program being debugged), you specify a type name.  If you consider the
+same example as above, your can explore the type `struct ComplexStruct'
+by passing the argument `struct ComplexStruct' to the `explore' command.
+
+     (gdb) explore struct ComplexStruct
+
+By responding to the prompts appropriately in the subsequent interactive
+session, you can explore the type `struct ComplexStruct' in a manner
+similar to how the value `cs' was explored in the above example.
+
+   The `explore' command also has two sub-commands, `explore value' and
+`explore type'. The former sub-command is a way to explicitly specify
+that value exploration of the argument is being invoked, while the
+latter is a way to explicitly specify that type exploration of the
+argument is being invoked.
+
+`explore value EXPR'
+     This sub-command of `explore' explores the value of the expression
+     EXPR (if EXPR is an expression valid in the current context of the
+     program being debugged).  The behavior of this command is
+     identical to that of the behavior of the `explore' command being
+     passed the argument EXPR.
+
+`explore type ARG'
+     This sub-command of `explore' explores the type of ARG (if ARG is
+     a type visible in the current context of program being debugged),
+     or the type of the value/expression ARG (if ARG is an expression
+     valid in the current context of the program being debugged).  If
+     ARG is a type, then the behavior of this command is identical to
+     that of the `explore' command being passed the argument ARG.  If
+     ARG is an expression, then the behavior of this command will be
+     identical to that of the `explore' command being passed the type
+     of ARG as the argument.
+
 * Menu:
 
 * Expressions::                 Expressions
@@ -6264,7 +6656,7 @@ scope is a single source file even if the current execution point is not
 in this file.  But it is possible to have more than one such variable or
 function with the same name (in different source files).  If that
 happens, referring to that name has unpredictable effects.  If you wish,
-you can specify a static variable in a particular function or file,
+you can specify a static variable in a particular function or file by
 using the colon-colon (`::') notation:
 
      FILE::VARIABLE
@@ -6277,7 +6669,43 @@ global value of `x' defined in `f2.c':
 
      (gdb) p 'f2.c'::x
 
-   This use of `::' is very rarely in conflict with the very similar
+   The `::' notation is normally used for referring to static
+variables, since you typically disambiguate uses of local variables in
+functions by selecting the appropriate frame and using the simple name
+of the variable.  However, you may also use this notation to refer to
+local variables in frames enclosing the selected frame:
+
+     void
+     foo (int a)
+     {
+       if (a < 10)
+         bar (a);
+       else
+         process (a);    /* Stop here */
+     }
+
+     int
+     bar (int a)
+     {
+       foo (a + 5);
+     }
+
+For example, if there is a breakpoint at the commented line, here is
+what you might see when the program stops after executing the call
+`bar(0)':
+
+     (gdb) p a
+     $1 = 10
+     (gdb) p bar::a
+     $2 = 5
+     (gdb) up 2
+     #2  0x080483d0 in foo (a=5) at foobar.c:12
+     (gdb) p a
+     $3 = 5
+     (gdb) p bar::a
+     $4 = 0
+
+   These uses of `::' are very rarely in conflict with the very similar
 use of the same notation in C++.  GDB also supports use of the C++
 scope resolution operator in GDB expressions.
 
@@ -6638,580 +7066,4 @@ for such situations.
      With no arguments, compares all loadable sections.  This command's
      availability depends on the target's support for the `"qCRC"'
      remote request.
-
-
-File: gdb.info,  Node: Auto Display,  Next: Print Settings,  Prev: Memory,  Up: Data
-
-10.7 Automatic Display
-======================
-
-If you find that you want to print the value of an expression frequently
-(to see how it changes), you might want to add it to the "automatic
-display list" so that GDB prints its value each time your program stops.
-Each expression added to the list is given a number to identify it; to
-remove an expression from the list, you specify that number.  The
-automatic display looks like this:
-
-     2: foo = 38
-     3: bar[5] = (struct hack *) 0x3804
-
-This display shows item numbers, expressions and their current values.
-As with displays you request manually using `x' or `print', you can
-specify the output format you prefer; in fact, `display' decides
-whether to use `print' or `x' depending your format specification--it
-uses `x' if you specify either the `i' or `s' format, or a unit size;
-otherwise it uses `print'.
-
-`display EXPR'
-     Add the expression EXPR to the list of expressions to display each
-     time your program stops.  *Note Expressions: Expressions.
-
-     `display' does not repeat if you press <RET> again after using it.
-
-`display/FMT EXPR'
-     For FMT specifying only a display format and not a size or count,
-     add the expression EXPR to the auto-display list but arrange to
-     display it each time in the specified format FMT.  *Note Output
-     Formats: Output Formats.
-
-`display/FMT ADDR'
-     For FMT `i' or `s', or including a unit-size or a number of units,
-     add the expression ADDR as a memory address to be examined each
-     time your program stops.  Examining means in effect doing `x/FMT
-     ADDR'.  *Note Examining Memory: Memory.
-
-   For example, `display/i $pc' can be helpful, to see the machine
-instruction about to be executed each time execution stops (`$pc' is a
-common name for the program counter; *note Registers: Registers.).
-
-`undisplay DNUMS...'
-`delete display DNUMS...'
-     Remove items from the list of expressions to display.  Specify the
-     numbers of the displays that you want affected with the command
-     argument DNUMS.  It can be a single display number, one of the
-     numbers shown in the first field of the `info display' display; or
-     it could be a range of display numbers, as in `2-4'.
-
-     `undisplay' does not repeat if you press <RET> after using it.
-     (Otherwise you would just get the error `No display number ...'.)
-
-`disable display DNUMS...'
-     Disable the display of item numbers DNUMS.  A disabled display
-     item is not printed automatically, but is not forgotten.  It may be
-     enabled again later.  Specify the numbers of the displays that you
-     want affected with the command argument DNUMS.  It can be a single
-     display number, one of the numbers shown in the first field of the
-     `info display' display; or it could be a range of display numbers,
-     as in `2-4'.
-
-`enable display DNUMS...'
-     Enable display of item numbers DNUMS.  It becomes effective once
-     again in auto display of its expression, until you specify
-     otherwise.  Specify the numbers of the displays that you want
-     affected with the command argument DNUMS.  It can be a single
-     display number, one of the numbers shown in the first field of the
-     `info display' display; or it could be a range of display numbers,
-     as in `2-4'.
-
-`display'
-     Display the current values of the expressions on the list, just as
-     is done when your program stops.
-
-`info display'
-     Print the list of expressions previously set up to display
-     automatically, each one with its item number, but without showing
-     the values.  This includes disabled expressions, which are marked
-     as such.  It also includes expressions which would not be
-     displayed right now because they refer to automatic variables not
-     currently available.
-
-   If a display expression refers to local variables, then it does not
-make sense outside the lexical context for which it was set up.  Such an
-expression is disabled when execution enters a context where one of its
-variables is not defined.  For example, if you give the command
-`display last_char' while inside a function with an argument
-`last_char', GDB displays this argument while your program continues to
-stop inside that function.  When it stops elsewhere--where there is no
-variable `last_char'--the display is disabled automatically.  The next
-time your program stops where `last_char' is meaningful, you can enable
-the display expression once again.
-
-
-File: gdb.info,  Node: Print Settings,  Next: Pretty Printing,  Prev: Auto Display,  Up: Data
-
-10.8 Print Settings
-===================
-
-GDB provides the following ways to control how arrays, structures, and
-symbols are printed.
-
-These settings are useful for debugging programs in any language:
-
-`set print address'
-`set print address on'
-     GDB prints memory addresses showing the location of stack traces,
-     structure values, pointer values, breakpoints, and so forth, even
-     when it also displays the contents of those addresses.  The default
-     is `on'.  For example, this is what a stack frame display looks
-     like with `set print address on':
-
-          (gdb) f
-          #0  set_quotes (lq=0x34c78 "<<", rq=0x34c88 ">>")
-              at input.c:530
-          530         if (lquote != def_lquote)
-
-`set print address off'
-     Do not print addresses when displaying their contents.  For
-     example, this is the same stack frame displayed with `set print
-     address off':
-
-          (gdb) set print addr off
-          (gdb) f
-          #0  set_quotes (lq="<<", rq=">>") at input.c:530
-          530         if (lquote != def_lquote)
-
-     You can use `set print address off' to eliminate all machine
-     dependent displays from the GDB interface.  For example, with
-     `print address off', you should get the same text for backtraces on
-     all machines--whether or not they involve pointer arguments.
-
-`show print address'
-     Show whether or not addresses are to be printed.
-
-   When GDB prints a symbolic address, it normally prints the closest
-earlier symbol plus an offset.  If that symbol does not uniquely
-identify the address (for example, it is a name whose scope is a single
-source file), you may need to clarify.  One way to do this is with
-`info line', for example `info line *0x4537'.  Alternately, you can set
-GDB to print the source file and line number when it prints a symbolic
-address:
-
-`set print symbol-filename on'
-     Tell GDB to print the source file name and line number of a symbol
-     in the symbolic form of an address.
-
-`set print symbol-filename off'
-     Do not print source file name and line number of a symbol.  This
-     is the default.
-
-`show print symbol-filename'
-     Show whether or not GDB will print the source file name and line
-     number of a symbol in the symbolic form of an address.
-
-   Another situation where it is helpful to show symbol filenames and
-line numbers is when disassembling code; GDB shows you the line number
-and source file that corresponds to each instruction.
-
-   Also, you may wish to see the symbolic form only if the address being
-printed is reasonably close to the closest earlier symbol:
-
-`set print max-symbolic-offset MAX-OFFSET'
-     Tell GDB to only display the symbolic form of an address if the
-     offset between the closest earlier symbol and the address is less
-     than MAX-OFFSET.  The default is 0, which tells GDB to always
-     print the symbolic form of an address if any symbol precedes it.
-
-`show print max-symbolic-offset'
-     Ask how large the maximum offset is that GDB prints in a symbolic
-     address.
-
-   If you have a pointer and you are not sure where it points, try `set
-print symbol-filename on'.  Then you can determine the name and source
-file location of the variable where it points, using `p/a POINTER'.
-This interprets the address in symbolic form.  For example, here GDB
-shows that a variable `ptt' points at another variable `t', defined in
-`hi2.c':
-
-     (gdb) set print symbol-filename on
-     (gdb) p/a ptt
-     $4 = 0xe008 <t in hi2.c>
-
-     _Warning:_ For pointers that point to a local variable, `p/a' does
-     not show the symbol name and filename of the referent, even with
-     the appropriate `set print' options turned on.
-
-   Other settings control how different kinds of objects are printed:
-
-`set print array'
-`set print array on'
-     Pretty print arrays.  This format is more convenient to read, but
-     uses more space.  The default is off.
-
-`set print array off'
-     Return to compressed format for arrays.
-
-`show print array'
-     Show whether compressed or pretty format is selected for displaying
-     arrays.
-
-`set print array-indexes'
-`set print array-indexes on'
-     Print the index of each element when displaying arrays.  May be
-     more convenient to locate a given element in the array or quickly
-     find the index of a given element in that printed array.  The
-     default is off.
-
-`set print array-indexes off'
-     Stop printing element indexes when displaying arrays.
-
-`show print array-indexes'
-     Show whether the index of each element is printed when displaying
-     arrays.
-
-`set print elements NUMBER-OF-ELEMENTS'
-     Set a limit on how many elements of an array GDB will print.  If
-     GDB is printing a large array, it stops printing after it has
-     printed the number of elements set by the `set print elements'
-     command.  This limit also applies to the display of strings.  When
-     GDB starts, this limit is set to 200.  Setting  NUMBER-OF-ELEMENTS
-     to zero means that the printing is unlimited.
-
-`show print elements'
-     Display the number of elements of a large array that GDB will
-     print.  If the number is 0, then the printing is unlimited.
-
-`set print frame-arguments VALUE'
-     This command allows to control how the values of arguments are
-     printed when the debugger prints a frame (*note Frames::).  The
-     possible values are:
-
-    `all'
-          The values of all arguments are printed.
-
-    `scalars'
-          Print the value of an argument only if it is a scalar.  The
-          value of more complex arguments such as arrays, structures,
-          unions, etc, is replaced by `...'.  This is the default.
-          Here is an example where only scalar arguments are shown:
-
-               #1  0x08048361 in call_me (i=3, s=..., ss=0xbf8d508c, u=..., e=green)
-                 at frame-args.c:23
-
-    `none'
-          None of the argument values are printed.  Instead, the value
-          of each argument is replaced by `...'.  In this case, the
-          example above now becomes:
-
-               #1  0x08048361 in call_me (i=..., s=..., ss=..., u=..., e=...)
-                 at frame-args.c:23
-
-     By default, only scalar arguments are printed.  This command can
-     be used to configure the debugger to print the value of all
-     arguments, regardless of their type.  However, it is often
-     advantageous to not print the value of more complex parameters.
-     For instance, it reduces the amount of information printed in each
-     frame, making the backtrace more readable.  Also, it improves
-     performance when displaying Ada frames, because the computation of
-     large arguments can sometimes be CPU-intensive, especially in
-     large applications.  Setting `print frame-arguments' to `scalars'
-     (the default) or `none' avoids this computation, thus speeding up
-     the display of each Ada frame.
-
-`show print frame-arguments'
-     Show how the value of arguments should be displayed when printing
-     a frame.
-
-`set print entry-values VALUE'
-     Set printing of frame argument values at function entry.  In some
-     cases GDB can determine the value of function argument which was
-     passed by the function caller, even if the value was modified
-     inside the called function and therefore is different.  With
-     optimized code, the current value could be unavailable, but the
-     entry value may still be known.
-
-     The default value is `default' (see below for its description).
-     Older GDB behaved as with the setting `no'.  Compilers not
-     supporting this feature will behave in the `default' setting the
-     same way as with the `no' setting.
-
-     This functionality is currently supported only by DWARF 2
-     debugging format and the compiler has to produce
-     `DW_TAG_GNU_call_site' tags.  With GCC, you need to specify `-O
-     -g' during compilation, to get this information.
-
-     The VALUE parameter can be one of the following:
-
-    `no'
-          Print only actual parameter values, never print values from
-          function entry point.
-               #0  equal (val=5)
-               #0  different (val=6)
-               #0  lost (val=<optimized out>)
-               #0  born (val=10)
-               #0  invalid (val=<optimized out>)
-
-    `only'
-          Print only parameter values from function entry point.  The
-          actual parameter values are never printed.
-               #0  equal (val@entry=5)
-               #0  different (val@entry=5)
-               #0  lost (val@entry=5)
-               #0  born (val@entry=<optimized out>)
-               #0  invalid (val@entry=<optimized out>)
-
-    `preferred'
-          Print only parameter values from function entry point.  If
-          value from function entry point is not known while the actual
-          value is known, print the actual value for such parameter.
-               #0  equal (val@entry=5)
-               #0  different (val@entry=5)
-               #0  lost (val@entry=5)
-               #0  born (val=10)
-               #0  invalid (val@entry=<optimized out>)
-
-    `if-needed'
-          Print actual parameter values.  If actual parameter value is
-          not known while value from function entry point is known,
-          print the entry point value for such parameter.
-               #0  equal (val=5)
-               #0  different (val=6)
-               #0  lost (val@entry=5)
-               #0  born (val=10)
-               #0  invalid (val=<optimized out>)
-
-    `both'
-          Always print both the actual parameter value and its value
-          from function entry point, even if values of one or both are
-          not available due to compiler optimizations.
-               #0  equal (val=5, val@entry=5)
-               #0  different (val=6, val@entry=5)
-               #0  lost (val=<optimized out>, val@entry=5)
-               #0  born (val=10, val@entry=<optimized out>)
-               #0  invalid (val=<optimized out>, val@entry=<optimized out>)
-
-    `compact'
-          Print the actual parameter value if it is known and also its
-          value from function entry point if it is known.  If neither
-          is known, print for the actual value `<optimized out>'.  If
-          not in MI mode (*note GDB/MI::) and if both values are known
-          and identical, print the shortened `param=param@entry=VALUE'
-          notation.
-               #0  equal (val=val@entry=5)
-               #0  different (val=6, val@entry=5)
-               #0  lost (val@entry=5)
-               #0  born (val=10)
-               #0  invalid (val=<optimized out>)
-
-    `default'
-          Always print the actual parameter value.  Print also its
-          value from function entry point, but only if it is known.  If
-          not in MI mode (*note GDB/MI::) and if both values are known
-          and identical, print the shortened `param=param@entry=VALUE'
-          notation.
-               #0  equal (val=val@entry=5)
-               #0  different (val=6, val@entry=5)
-               #0  lost (val=<optimized out>, val@entry=5)
-               #0  born (val=10)
-               #0  invalid (val=<optimized out>)
-
-     For analysis messages on possible failures of frame argument
-     values at function entry resolution see *Note set debug
-     entry-values::.
-
-`show print entry-values'
-     Show the method being used for printing of frame argument values
-     at function entry.
-
-`set print repeats'
-     Set the threshold for suppressing display of repeated array
-     elements.  When the number of consecutive identical elements of an
-     array exceeds the threshold, GDB prints the string `"<repeats N
-     times>"', where N is the number of identical repetitions, instead
-     of displaying the identical elements themselves.  Setting the
-     threshold to zero will cause all elements to be individually
-     printed.  The default threshold is 10.
-
-`show print repeats'
-     Display the current threshold for printing repeated identical
-     elements.
-
-`set print null-stop'
-     Cause GDB to stop printing the characters of an array when the
-     first NULL is encountered.  This is useful when large arrays
-     actually contain only short strings.  The default is off.
-
-`show print null-stop'
-     Show whether GDB stops printing an array on the first NULL
-     character.
-
-`set print pretty on'
-     Cause GDB to print structures in an indented format with one member
-     per line, like this:
-
-          $1 = {
-            next = 0x0,
-            flags = {
-              sweet = 1,
-              sour = 1
-            },
-            meat = 0x54 "Pork"
-          }
-
-`set print pretty off'
-     Cause GDB to print structures in a compact format, like this:
-
-          $1 = {next = 0x0, flags = {sweet = 1, sour = 1}, \
-          meat = 0x54 "Pork"}
-
-     This is the default format.
-
-`show print pretty'
-     Show which format GDB is using to print structures.
-
-`set print sevenbit-strings on'
-     Print using only seven-bit characters; if this option is set, GDB
-     displays any eight-bit characters (in strings or character values)
-     using the notation `\'NNN.  This setting is best if you are
-     working in English (ASCII) and you use the high-order bit of
-     characters as a marker or "meta" bit.
-
-`set print sevenbit-strings off'
-     Print full eight-bit characters.  This allows the use of more
-     international character sets, and is the default.
-
-`show print sevenbit-strings'
-     Show whether or not GDB is printing only seven-bit characters.
-
-`set print union on'
-     Tell GDB to print unions which are contained in structures and
-     other unions.  This is the default setting.
-
-`set print union off'
-     Tell GDB not to print unions which are contained in structures and
-     other unions.  GDB will print `"{...}"' instead.
-
-`show print union'
-     Ask GDB whether or not it will print unions which are contained in
-     structures and other unions.
-
-     For example, given the declarations
-
-          typedef enum {Tree, Bug} Species;
-          typedef enum {Big_tree, Acorn, Seedling} Tree_forms;
-          typedef enum {Caterpillar, Cocoon, Butterfly}
-                        Bug_forms;
-
-          struct thing {
-            Species it;
-            union {
-              Tree_forms tree;
-              Bug_forms bug;
-            } form;
-          };
-
-          struct thing foo = {Tree, {Acorn}};
-
-     with `set print union on' in effect `p foo' would print
-
-          $1 = {it = Tree, form = {tree = Acorn, bug = Cocoon}}
-
-     and with `set print union off' in effect it would print
-
-          $1 = {it = Tree, form = {...}}
-
-     `set print union' affects programs written in C-like languages and
-     in Pascal.
-
-These settings are of interest when debugging C++ programs:
-
-`set print demangle'
-`set print demangle on'
-     Print C++ names in their source form rather than in the encoded
-     ("mangled") form passed to the assembler and linker for type-safe
-     linkage.  The default is on.
-
-`show print demangle'
-     Show whether C++ names are printed in mangled or demangled form.
-
-`set print asm-demangle'
-`set print asm-demangle on'
-     Print C++ names in their source form rather than their mangled
-     form, even in assembler code printouts such as instruction
-     disassemblies.  The default is off.
-
-`show print asm-demangle'
-     Show whether C++ names in assembly listings are printed in mangled
-     or demangled form.
-
-`set demangle-style STYLE'
-     Choose among several encoding schemes used by different compilers
-     to represent C++ names.  The choices for STYLE are currently:
-
-    `auto'
-          Allow GDB to choose a decoding style by inspecting your
-          program.
-
-    `gnu'
-          Decode based on the GNU C++ compiler (`g++') encoding
-          algorithm.  This is the default.
-
-    `hp'
-          Decode based on the HP ANSI C++ (`aCC') encoding algorithm.
-
-    `lucid'
-          Decode based on the Lucid C++ compiler (`lcc') encoding
-          algorithm.
-
-    `arm'
-          Decode using the algorithm in the `C++ Annotated Reference
-          Manual'.  *Warning:* this setting alone is not sufficient to
-          allow debugging `cfront'-generated executables.  GDB would
-          require further enhancement to permit that.
-
-     If you omit STYLE, you will see a list of possible formats.
-
-`show demangle-style'
-     Display the encoding style currently in use for decoding C++
-     symbols.
-
-`set print object'
-`set print object on'
-     When displaying a pointer to an object, identify the _actual_
-     (derived) type of the object rather than the _declared_ type, using
-     the virtual function table.  Note that the virtual function table
-     is required--this feature can only work for objects that have
-     run-time type identification; a single virtual method in the
-     object's declared type is sufficient.
-
-`set print object off'
-     Display only the declared type of objects, without reference to the
-     virtual function table.  This is the default setting.
-
-`show print object'
-     Show whether actual, or declared, object types are displayed.
-
-`set print static-members'
-`set print static-members on'
-     Print static members when displaying a C++ object.  The default is
-     on.
-
-`set print static-members off'
-     Do not print static members when displaying a C++ object.
-
-`show print static-members'
-     Show whether C++ static members are printed or not.
-
-`set print pascal_static-members'
-`set print pascal_static-members on'
-     Print static members when displaying a Pascal object.  The default
-     is on.
-
-`set print pascal_static-members off'
-     Do not print static members when displaying a Pascal object.
-
-`show print pascal_static-members'
-     Show whether Pascal static members are printed or not.
-
-`set print vtbl'
-`set print vtbl on'
-     Pretty print C++ virtual function tables.  The default is off.
-     (The `vtbl' commands do not work on programs compiled with the HP
-     ANSI C++ compiler (`aCC').)
-
-`set print vtbl off'
-     Do not pretty print C++ virtual function tables.
-
-`show print vtbl'
-     Show whether C++ virtual function tables are pretty printed, or
-     not.
 

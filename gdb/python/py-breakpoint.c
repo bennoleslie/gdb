@@ -21,6 +21,7 @@
 #include "value.h"
 #include "exceptions.h"
 #include "python-internal.h"
+#include "python.h"
 #include "charset.h"
 #include "breakpoint.h"
 #include "gdbcmd.h"
@@ -621,7 +622,7 @@ bppy_init (PyObject *self, PyObject *args, PyObject *kwargs)
 	case bp_breakpoint:
 	  {
 	    create_breakpoint (python_gdbarch,
-			       copy, NULL, -1,
+			       copy, NULL, -1, NULL,
 			       0,
 			       0, bp_breakpoint,
 			       0,
