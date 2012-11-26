@@ -1,3 +1,82 @@
+2012-04-26  Joel Brobecker  <brobecker@adacore.com>
+
+	* version.in: Update GDB version number to 7.4.1.
+
+2012-04-24  Marc Khouzam  <marc.khouzam@ericsson.com>
+
+	* mi/mi-main.c (mi_cmd_execute): Choose a live thread not just
+	any thread.
+
+2012-04-13  Pierre Muller  <muller@ics.u-strasbg.fr>
+
+	* p-typeprint.c (pascal_type_print_method_args):
+	Fix display of parameter of methods.
+
+2012-03-20  Pedro Alves  <palves@redhat.com>
+
+	* remote.c (remote_start_remote): Clear `rs->starting_up' on early
+	returns.
+
+2012-03-13  Hui Zhu  <teawater@gmail.com>
+	    Pedro Alves  <palves@redhat.com>
+
+	* breakpoint.c (init_breakpoint_sal): New flags parameter.  Handle
+	CREATE_BREAKPOINT_FLAGS_INSERTED.
+	(create_breakpoint_sal, create_breakpoints_sal)
+	(create_breakpoint): New flags parameter.  Pass it down.
+	(break_command_1, handle_gnu_v3_exceptions, trace_command)
+	(ftrace_command, strace_command): Adjust.
+	(create_tracepoint_from_upload): Pass
+	CREATE_BREAKPOINT_FLAGS_INSERTED.
+	* breakpoint.h (enum breakpoint_create_flags): New.
+	(create_breakpoint): New flags parameter.
+	* mi/mi-cmd-break.c (mi_cmd_break_insert): Adjust.
+	* python/py-breakpoint.c (bppy_init): Adjust.
+	* python/py-finishbreakpoint.c (bpfinishpy_init): Adjust.
+	* spu-tdep.c (spu_catch_start): Adjust.
+
+2012-03-13  Pedro Alves  <palves@redhat.com>
+	    Hui Zhu  <teawater@gmail.com>
+	    Yao Qi  <yao@codesourcery.com>
+
+	* remote.c (struct remote_state): New field `starting_up'.
+	(remote_start_remote): Set and clear it.
+	(remote_can_download_tracepoint): If starting up, return false.
+
+2012-03-06  Pedro Alves  <palves@redhat.com>
+
+	PR gdb/13766
+
+	* i387-tdep.c (i387_supply_xsave): If we have an xsave buffer, and
+	the register state is clear, supply explicit zero, instead of
+	marking the register unavailable.
+
+2012-02-23  Jan Kratochvil  <jan.kratochvil@redhat.com>
+
+	PR backtrace/13716
+	* infcmd.c (finish_forward): New variable frame_id, initialize it, use
+	it after set_momentary_breakpoint.
+
+2012-02-21  Jan Kratochvil  <jan.kratochvil@redhat.com>
+
+	PR build/13638
+	* configure.ac (MAKEINFO): Replace AC_CHECK_PROG by AC_ARG_VAR.
+	(MAKEINFOFLAGS): Replace static string by AC_ARG_VAR.
+	* configure: Regenerate.
+
+2012-02-21  Jan Kratochvil  <jan.kratochvil@redhat.com>
+
+	* configure: Regenerate.
+	* config.in: Regenerate.
+
+2012-01-24  Joel Brobecker  <brobecker@adacore.com>
+
+	* version.in: Set version to 7.4.0.20120124-cvs.
+
+2012-01-24  Joel Brobecker  <brobecker@adacore.com>
+
+	GDB 7.4 released.
+
 2012-01-24  Joel Brobecker  <brobecker@adacore.com>
 
 	* NEWS: Change "since GDB 7.3.1" into "in GDB 7.4".

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-24 09:23+0000\n"
+"POT-Creation-Date: 2012-04-26 15:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -593,11 +593,11 @@ msgstr ""
 msgid "`%s' Ada exception"
 msgstr ""
 
-#: ada-lang.c:11287 breakpoint.c:9796
+#: ada-lang.c:11287 breakpoint.c:9806
 msgid "Temporary catchpoint "
 msgstr ""
 
-#: ada-lang.c:11288 breakpoint.c:9797
+#: ada-lang.c:11288 breakpoint.c:9807
 msgid "Catchpoint "
 msgstr ""
 
@@ -622,8 +622,8 @@ msgstr ""
 msgid "unexpected catchpoint kind (%d)"
 msgstr ""
 
-#: ada-lang.c:11806 breakpoint.c:7635 breakpoint.c:9544 breakpoint.c:9673
-#: breakpoint.c:9718 breakpoint.c:9861 breakpoint.c:13030 skip.c:191
+#: ada-lang.c:11806 breakpoint.c:7643 breakpoint.c:9554 breakpoint.c:9683
+#: breakpoint.c:9728 breakpoint.c:9872 breakpoint.c:13042 skip.c:191
 msgid "Junk at end of arguments."
 msgstr ""
 
@@ -2455,7 +2455,7 @@ msgid ""
 "breakpoint."
 msgstr ""
 
-#: breakpoint.c:698 breakpoint.c:12114
+#: breakpoint.c:698 breakpoint.c:12125
 #, possible-c-format
 msgid "No breakpoint number %d."
 msgstr ""
@@ -2568,7 +2568,7 @@ msgstr ""
 #. Did we stop because the user set the stop_on_solib_events
 #. variable?  (If so, we report this as a generic, "Stopped due
 #. to shlib event" message.)
-#: breakpoint.c:3520 breakpoint.c:11123
+#: breakpoint.c:3520 breakpoint.c:11134
 msgid "Stopped due to shared library event\n"
 msgstr ""
 
@@ -2662,232 +2662,232 @@ msgstr ""
 msgid "Catchpoint %d (exec)"
 msgstr ""
 
-#: breakpoint.c:7264 breakpoint.c:12318
+#: breakpoint.c:7265 breakpoint.c:12329
 msgid "No hardware breakpoint support in the target."
 msgstr ""
 
-#: breakpoint.c:7266 breakpoint.c:8335 breakpoint.c:12320
+#: breakpoint.c:7267 breakpoint.c:8345 breakpoint.c:12331
 msgid "Hardware breakpoints used exceeds limit."
 msgstr ""
 
-#: breakpoint.c:7317 breakpoint.c:7326
+#: breakpoint.c:7321 breakpoint.c:7330
 #, possible-c-format
 msgid "Probed static tracepoint marker \"%s\"\n"
 msgstr ""
 
-#: breakpoint.c:7331
+#: breakpoint.c:7335
 msgid "Couldn't determine the static tracepoint marker to probe"
 msgstr ""
 
-#: breakpoint.c:7350
+#: breakpoint.c:7356
 #, possible-c-format
 msgid "Garbage %s follows condition"
 msgstr ""
 
-#: breakpoint.c:7502
+#: breakpoint.c:7510
 msgid "No default breakpoint address now."
 msgstr ""
 
-#: breakpoint.c:7567
+#: breakpoint.c:7575
 #, possible-c-format
 msgid "May not have a fast tracepoint at 0x%s%s"
 msgstr ""
 
-#: breakpoint.c:7618
+#: breakpoint.c:7626
 msgid "Junk after thread keyword."
 msgstr ""
 
-#: breakpoint.c:7620 breakpoint.c:9098 thread.c:1239
+#: breakpoint.c:7628 breakpoint.c:9108 thread.c:1239
 #, possible-c-format
 msgid "Unknown thread %d."
 msgstr ""
 
-#: breakpoint.c:7630
+#: breakpoint.c:7638
 msgid "Junk after task keyword."
 msgstr ""
 
-#: breakpoint.c:7632
+#: breakpoint.c:7640
 #, possible-c-format
 msgid "Unknown task %d."
 msgstr ""
 
-#: breakpoint.c:7663
+#: breakpoint.c:7671
 #, possible-c-format
 msgid "No known static tracepoint marker named %s"
 msgstr ""
 
-#: breakpoint.c:7766
+#: breakpoint.c:7775
 #, possible-c-format
 msgid "Make %s pending on future shared library load? "
 msgstr ""
 
-#: breakpoint.c:7944
+#: breakpoint.c:7953
 msgid ""
 "Multiple breakpoints were set.\n"
 "Use the \"delete\" command to delete unwanted breakpoints."
 msgstr ""
 
-#: breakpoint.c:7998 linespec.c:2429
+#: breakpoint.c:8008 linespec.c:2429
 #, possible-c-format
 msgid "No line %d in file \"%s\"."
 msgstr ""
 
-#: breakpoint.c:8072
+#: breakpoint.c:8082
 msgid ""
 "Specify the type of breakpoint to set.\n"
 "Usage: stop in <function | address>\n"
 "       stop at <line>\n"
 msgstr ""
 
-#: breakpoint.c:8105
+#: breakpoint.c:8115
 msgid "Usage: stop in <function | address>\n"
 msgstr ""
 
-#: breakpoint.c:8137
+#: breakpoint.c:8147
 msgid "Usage: stop at <line>\n"
 msgstr ""
 
-#: breakpoint.c:8262
+#: breakpoint.c:8272
 #, possible-c-format
 msgid "Hardware assisted ranged breakpoint %d from %s to %s."
 msgstr ""
 
-#: breakpoint.c:8303 breakpoint.c:8383
+#: breakpoint.c:8313 breakpoint.c:8393
 msgid "Could not find location of the end of the range."
 msgstr ""
 
-#: breakpoint.c:8328
+#: breakpoint.c:8338
 msgid "This target does not support hardware ranged breakpoints."
 msgstr ""
 
-#: breakpoint.c:8339
+#: breakpoint.c:8349
 msgid "No address range specified."
 msgstr ""
 
-#: breakpoint.c:8349
+#: breakpoint.c:8359
 msgid "Too few arguments."
 msgstr ""
 
-#: breakpoint.c:8351
+#: breakpoint.c:8361
 msgid "Could not find location of the beginning of the range."
 msgstr ""
 
-#: breakpoint.c:8357 breakpoint.c:8388
+#: breakpoint.c:8367 breakpoint.c:8398
 msgid "Cannot create a ranged breakpoint with multiple locations."
 msgstr ""
 
-#: breakpoint.c:8396
+#: breakpoint.c:8406
 msgid "Invalid address range, end precedes start."
 msgstr ""
 
 #. Length overflowed.
-#: breakpoint.c:8401
+#: breakpoint.c:8411
 msgid "Address range too large."
 msgstr ""
 
-#: breakpoint.c:8788 breakpoint.c:8911 breakpoint.c:8967 breakpoint.c:8998
+#: breakpoint.c:8798 breakpoint.c:8921 breakpoint.c:8977 breakpoint.c:9008
 msgid "Invalid hardware watchpoint type."
 msgstr ""
 
-#: breakpoint.c:8819
+#: breakpoint.c:8829
 msgid "Invalid watchpoint type."
 msgstr ""
 
-#: breakpoint.c:8915
+#: breakpoint.c:8925
 msgid ""
 "\n"
 "Check the underlying instruction at PC for the memory\n"
 "address and value which triggered this watchpoint.\n"
 msgstr ""
 
-#: breakpoint.c:9086
+#: breakpoint.c:9096
 msgid "You can specify only one thread."
 msgstr ""
 
-#: breakpoint.c:9094
+#: breakpoint.c:9104
 #, possible-c-format
 msgid "Invalid thread ID specification %s."
 msgstr ""
 
-#: breakpoint.c:9108
+#: breakpoint.c:9118
 msgid "You can specify only one mask."
 msgstr ""
 
-#: breakpoint.c:9146
+#: breakpoint.c:9156
 #, possible-c-format
 msgid "Cannot watch constant value `%.*s'."
 msgstr ""
 
-#: breakpoint.c:9167
+#: breakpoint.c:9177
 msgid "This target does not support masked watchpoints."
 msgstr ""
 
-#: breakpoint.c:9169
+#: breakpoint.c:9179
 msgid "Invalid mask or memory region."
 msgstr ""
 
-#: breakpoint.c:9195
+#: breakpoint.c:9205
 msgid "Junk at end of command."
 msgstr ""
 
-#: breakpoint.c:9538
+#: breakpoint.c:9548
 msgid "Couldn't get information on specified line."
 msgstr ""
 
-#: breakpoint.c:9690
+#: breakpoint.c:9700
 msgid "unsupported or unknown fork kind; cannot catch it"
 msgstr ""
 
-#: breakpoint.c:9799
+#: breakpoint.c:9809
 msgid " (throw)"
 msgstr ""
 
-#: breakpoint.c:9800
+#: breakpoint.c:9810
 msgid " (catch)"
 msgstr ""
 
-#: breakpoint.c:9865
+#: breakpoint.c:9876
 msgid "Unsupported or unknown exception event; cannot catch it"
 msgstr ""
 
-#: breakpoint.c:9870
+#: breakpoint.c:9881
 msgid "Unsupported with this platform/compiler combination."
 msgstr ""
 
 #. Here we have to issue an error instead of a warning,
 #. because GDB cannot do anything useful if there's no
 #. syscall number to be caught.
-#: breakpoint.c:9966
+#: breakpoint.c:9977
 #, possible-c-format
 msgid "Unknown syscall name '%s'."
 msgstr ""
 
-#: breakpoint.c:9990
+#: breakpoint.c:10001
 msgid "The feature 'catch syscall' is not supported on this architecture yet."
 msgstr ""
 
-#: breakpoint.c:10021 breakpoint.c:10028
+#: breakpoint.c:10032 breakpoint.c:10039
 msgid "Catch requires an event name."
 msgstr ""
 
-#: breakpoint.c:10085
+#: breakpoint.c:10096
 msgid "No source file specified."
 msgstr ""
 
-#: breakpoint.c:10175
+#: breakpoint.c:10186
 #, possible-c-format
 msgid "No breakpoint at %s."
 msgstr ""
 
-#: breakpoint.c:10177
+#: breakpoint.c:10188
 msgid "No breakpoint at this line."
 msgstr ""
 
-#: breakpoint.c:10200
+#: breakpoint.c:10211
 msgid "Deleted breakpoint "
 msgstr ""
 
-#: breakpoint.c:10202
+#: breakpoint.c:10213
 msgid "Deleted breakpoints "
 msgstr ""
 
@@ -2899,195 +2899,195 @@ msgstr ""
 #. Note that at this point, old_loc->owner is still
 #. valid, as delete_breakpoint frees the breakpoint
 #. only after calling us.
-#: breakpoint.c:10547
+#: breakpoint.c:10558
 #, possible-c-format
 msgid "warning: Error removing breakpoint %d\n"
 msgstr ""
 
-#: breakpoint.c:10651
+#: breakpoint.c:10662
 msgid "allegedly permanent breakpoint is not actually inserted"
 msgstr ""
 
-#: breakpoint.c:10683
+#: breakpoint.c:10694
 msgid "another breakpoint was inserted on top of a permanent breakpoint"
 msgstr ""
 
-#: breakpoint.c:10763
+#: breakpoint.c:10774
 #, possible-c-format
 msgid " (%s) pending."
 msgstr ""
 
-#: breakpoint.c:11040
+#: breakpoint.c:11051
 msgid "Temporary breakpoint"
 msgstr ""
 
-#: breakpoint.c:11042
+#: breakpoint.c:11053
 msgid "Breakpoint"
 msgstr ""
 
-#: breakpoint.c:11043 breakpoint.c:11261 breakpoint.c:11265 breakpoint.c:11269
+#: breakpoint.c:11054 breakpoint.c:11272 breakpoint.c:11276 breakpoint.c:11280
 #, possible-c-format
 msgid " %d"
 msgstr ""
 
-#: breakpoint.c:11045
+#: breakpoint.c:11056
 msgid " at gnu-indirect-function resolver"
 msgstr ""
 
-#: breakpoint.c:11048
+#: breakpoint.c:11059
 #, possible-c-format
 msgid "Hardware assisted breakpoint %d"
 msgstr ""
 
-#: breakpoint.c:11069
+#: breakpoint.c:11080
 #, possible-c-format
 msgid "unhandled breakpoint type %d"
 msgstr ""
 
 #. Not sure how we will get here.
 #. GDB should not stop for these breakpoints.
-#: breakpoint.c:11132
+#: breakpoint.c:11143
 msgid "Thread Event Breakpoint: gdb should not stop!\n"
 msgstr ""
 
 #. By analogy with the thread event, GDB should not stop for these.
-#: breakpoint.c:11137
+#: breakpoint.c:11148
 msgid "Overlay Event Breakpoint: gdb should not stop!\n"
 msgstr ""
 
 #. These should never be enabled.
-#: breakpoint.c:11142
+#: breakpoint.c:11153
 msgid "Longjmp Master Breakpoint: gdb should not stop!\n"
 msgstr ""
 
 #. These should never be enabled.
-#: breakpoint.c:11147
+#: breakpoint.c:11158
 msgid "std::terminate Master Breakpoint: gdb should not stop!\n"
 msgstr ""
 
 #. These should never be enabled.
-#: breakpoint.c:11153
+#: breakpoint.c:11164
 msgid "Exception Master Breakpoint: gdb should not stop!\n"
 msgstr ""
 
-#: breakpoint.c:11260
+#: breakpoint.c:11271
 msgid "Tracepoint"
 msgstr ""
 
-#: breakpoint.c:11264
+#: breakpoint.c:11275
 msgid "Fast tracepoint"
 msgstr ""
 
-#: breakpoint.c:11268
+#: breakpoint.c:11279
 msgid "Static tracepoint"
 msgstr ""
 
-#: breakpoint.c:11273 breakpoint.c:11292
+#: breakpoint.c:11284 breakpoint.c:11303
 #, possible-c-format
 msgid "unhandled tracepoint type %d"
 msgstr ""
 
-#: breakpoint.c:11486
+#: breakpoint.c:11497
 msgid "Delete all breakpoints? "
 msgstr ""
 
-#: breakpoint.c:11593
+#: breakpoint.c:11604
 #, possible-c-format
 msgid "static tracepoint %d changed probed marker from %s to %s"
 msgstr ""
 
-#: breakpoint.c:11628
+#: breakpoint.c:11639
 #, possible-c-format
 msgid "marker for static tracepoint %d (%s) not found at previous line number"
 msgstr ""
 
-#: breakpoint.c:11726
+#: breakpoint.c:11737
 #, possible-c-format
 msgid "Could not reset ranged breakpoint %d: multiple locations found\n"
 msgstr ""
 
-#: breakpoint.c:11766
+#: breakpoint.c:11777
 #, possible-c-format
 msgid "failed to reevaluate condition for breakpoint %d: %s"
 msgstr ""
 
-#: breakpoint.c:11857
+#: breakpoint.c:11868
 #, possible-c-format
 msgid "marker %s not found"
 msgstr ""
 
-#: breakpoint.c:12089
+#: breakpoint.c:12100
 #, possible-c-format
 msgid "Ignore count ignored for tracepoint %d."
 msgstr ""
 
-#: breakpoint.c:12098
+#: breakpoint.c:12109
 #, possible-c-format
 msgid "Will stop next time breakpoint %d is reached."
 msgstr ""
 
-#: breakpoint.c:12102
+#: breakpoint.c:12113
 #, possible-c-format
 msgid "Will ignore next crossing of breakpoint %d."
 msgstr ""
 
-#: breakpoint.c:12105
+#: breakpoint.c:12116
 #, possible-c-format
 msgid "Will ignore next %d crossings of breakpoint %d."
 msgstr ""
 
-#: breakpoint.c:12126
+#: breakpoint.c:12137
 msgid "a breakpoint number"
 msgstr ""
 
-#: breakpoint.c:12130
+#: breakpoint.c:12141
 #, possible-c-format
 msgid "bad breakpoint number: '%s'"
 msgstr ""
 
-#: breakpoint.c:12132
+#: breakpoint.c:12143
 msgid "Second argument (specified ignore-count) is missing."
 msgstr ""
 
-#: breakpoint.c:12155
+#: breakpoint.c:12166
 msgid "one or more breakpoint numbers"
 msgstr ""
 
-#: breakpoint.c:12168
+#: breakpoint.c:12179
 #, possible-c-format
 msgid "bad breakpoint number at or near '%s'"
 msgstr ""
 
-#: breakpoint.c:12180
+#: breakpoint.c:12191
 #, possible-c-format
 msgid "No breakpoint number %d.\n"
 msgstr ""
 
-#: breakpoint.c:12200 breakpoint.c:12209
+#: breakpoint.c:12211 breakpoint.c:12220
 #, possible-c-format
 msgid "Bad breakpoint number '%s'"
 msgstr ""
 
-#: breakpoint.c:12214 breakpoint.c:12221
+#: breakpoint.c:12225 breakpoint.c:12232
 #, possible-c-format
 msgid "Bad breakpoint location number '%s'"
 msgstr ""
 
-#: breakpoint.c:12340
+#: breakpoint.c:12351
 #, possible-c-format
 msgid "Cannot enable watchpoint %d: "
 msgstr ""
 
-#: breakpoint.c:12507 symtab.c:4681
+#: breakpoint.c:12518 symtab.c:4681
 msgid "Empty line specification."
 msgstr ""
 
-#: breakpoint.c:12515 symtab.c:4691
+#: breakpoint.c:12526 symtab.c:4691
 #, possible-c-format
 msgid "Junk at end of line specification: %s"
 msgstr ""
 
-#: breakpoint.c:12597
+#: breakpoint.c:12608
 #, possible-c-format
 msgid "Could not insert single-step breakpoint at %s"
 msgstr ""
@@ -3096,76 +3096,76 @@ msgstr ""
 #. address.  Since there is no way to confirm that the address
 #. means the same thing as when the trace was started, warn the
 #. user.
-#: breakpoint.c:12850
+#: breakpoint.c:12861
 #, possible-c-format
 msgid "Uploaded tracepoint %d has no source location, using raw address"
 msgstr ""
 
-#: breakpoint.c:12859
+#: breakpoint.c:12870
 #, possible-c-format
 msgid "Uploaded tracepoint %d condition has no source form, ignoring it"
 msgstr ""
 
-#: breakpoint.c:12906
+#: breakpoint.c:12918
 #, possible-c-format
 msgid "Uploaded tracepoint %d actions have no source form, ignoring them"
 msgstr ""
 
-#: breakpoint.c:12980
+#: breakpoint.c:12992
 msgid "Delete all tracepoints? "
 msgstr ""
 
-#: breakpoint.c:12999
+#: breakpoint.c:13011
 #, possible-c-format
 msgid "Setting tracepoint %d's passcount to %d\n"
 msgstr ""
 
-#: breakpoint.c:13016
+#: breakpoint.c:13028
 msgid "passcount command requires an argument (count + optional TP num)"
 msgstr ""
 
-#: breakpoint.c:13114
+#: breakpoint.c:13126
 msgid "tracepoint number"
 msgstr ""
 
-#: breakpoint.c:13122
+#: breakpoint.c:13134
 #, possible-c-format
 msgid "bad tracepoint number at or near '%s'\n"
 msgstr ""
 
-#: breakpoint.c:13125
+#: breakpoint.c:13137
 msgid "Tracepoint argument missing and no previous tracepoint\n"
 msgstr ""
 
-#: breakpoint.c:13169
+#: breakpoint.c:13181
 msgid "Argument required (file name in which to save)"
 msgstr ""
 
-#: breakpoint.c:13195
+#: breakpoint.c:13207
 msgid "Nothing to save."
 msgstr ""
 
-#: breakpoint.c:13203
+#: breakpoint.c:13215
 #, possible-c-format
 msgid "Unable to open file '%s' for saving (%s)"
 msgstr ""
 
-#: breakpoint.c:13273
+#: breakpoint.c:13285
 #, possible-c-format
 msgid "Saved to file '%s'.\n"
 msgstr ""
 
-#: breakpoint.c:13371
+#: breakpoint.c:13383
 msgid "\"save\" must be followed by the name of a save subcommand.\n"
 msgstr ""
 
-#: breakpoint.c:13598
+#: breakpoint.c:13610
 msgid ""
 "Set ignore-count of breakpoint number N to COUNT.\n"
 "Usage is `ignore N COUNT'."
 msgstr ""
 
-#: breakpoint.c:13604
+#: breakpoint.c:13616
 msgid ""
 "Set commands to be executed when a breakpoint is hit.\n"
 "Give breakpoint number as argument after \"commands\".\n"
@@ -3176,14 +3176,14 @@ msgid ""
 "then no output is printed when it is hit, except what the commands print."
 msgstr ""
 
-#: breakpoint.c:13613
+#: breakpoint.c:13625
 msgid ""
 "Specify breakpoint number N to break only if COND is true.\n"
 "Usage is `condition N COND', where N is an integer and COND is an\n"
 "expression to be evaluated whenever breakpoint N is reached."
 msgstr ""
 
-#: breakpoint.c:13618
+#: breakpoint.c:13630
 msgid ""
 "Set a temporary breakpoint.\n"
 "Like \"break\" except the breakpoint is only temporary,\n"
@@ -3192,7 +3192,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: breakpoint.c:13627
+#: breakpoint.c:13639
 msgid ""
 "Set a hardware assisted breakpoint.\n"
 "Like \"break\" except the breakpoint requires hardware support,\n"
@@ -3200,7 +3200,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: breakpoint.c:13635
+#: breakpoint.c:13647
 msgid ""
 "Set a temporary hardware assisted breakpoint.\n"
 "Like \"hbreak\" except the breakpoint is only temporary,\n"
@@ -3208,7 +3208,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: breakpoint.c:13643 breakpoint.c:13651
+#: breakpoint.c:13655 breakpoint.c:13663
 msgid ""
 "Enable some breakpoints.\n"
 "Give breakpoint numbers (separated by spaces) as arguments.\n"
@@ -3217,7 +3217,7 @@ msgid ""
 "With a subcommand you can enable temporarily."
 msgstr ""
 
-#: breakpoint.c:13660
+#: breakpoint.c:13672
 msgid ""
 "Enable some breakpoints.\n"
 "Give breakpoint numbers (separated by spaces) as arguments.\n"
@@ -3225,19 +3225,19 @@ msgid ""
 "May be abbreviated to simply \"enable\".\n"
 msgstr ""
 
-#: breakpoint.c:13667 breakpoint.c:13682
+#: breakpoint.c:13679 breakpoint.c:13694
 msgid ""
 "Enable breakpoints for one hit.  Give breakpoint numbers.\n"
 "If a breakpoint is hit while enabled in this fashion, it becomes disabled."
 msgstr ""
 
-#: breakpoint.c:13672 breakpoint.c:13677
+#: breakpoint.c:13684 breakpoint.c:13689
 msgid ""
 "Enable breakpoints and delete when hit.  Give breakpoint numbers.\n"
 "If a breakpoint is hit while enabled in this fashion, it is deleted."
 msgstr ""
 
-#: breakpoint.c:13687 breakpoint.c:13696
+#: breakpoint.c:13699 breakpoint.c:13708
 msgid ""
 "Disable some breakpoints.\n"
 "Arguments are breakpoint numbers with spaces in between.\n"
@@ -3245,7 +3245,7 @@ msgid ""
 "A disabled breakpoint is not forgotten, but has no effect until re-enabled."
 msgstr ""
 
-#: breakpoint.c:13702
+#: breakpoint.c:13714
 msgid ""
 "Disable some breakpoints.\n"
 "Arguments are breakpoint numbers with spaces in between.\n"
@@ -3254,7 +3254,7 @@ msgid ""
 "This command may be abbreviated \"disable\"."
 msgstr ""
 
-#: breakpoint.c:13710
+#: breakpoint.c:13722
 msgid ""
 "Delete some breakpoints or auto-display expressions.\n"
 "Arguments are breakpoint numbers with spaces in between.\n"
@@ -3264,14 +3264,14 @@ msgid ""
 "The \"unset\" command is also an alias for \"delete\"."
 msgstr ""
 
-#: breakpoint.c:13721
+#: breakpoint.c:13733
 msgid ""
 "Delete some breakpoints.\n"
 "Arguments are breakpoint numbers with spaces in between.\n"
 "To delete all breakpoints, give no argument.\n"
 msgstr ""
 
-#: breakpoint.c:13726
+#: breakpoint.c:13738
 msgid ""
 "Delete some breakpoints or auto-display expressions.\n"
 "Arguments are breakpoint numbers with spaces in between.\n"
@@ -3279,7 +3279,7 @@ msgid ""
 "This command may be abbreviated \"delete\"."
 msgstr ""
 
-#: breakpoint.c:13733
+#: breakpoint.c:13745
 msgid ""
 "Clear breakpoint at specified line or function.\n"
 "Argument may be line number, function name, or \"*\" and an address.\n"
@@ -3294,23 +3294,23 @@ msgid ""
 "See also the \"delete\" command which clears breakpoints by number."
 msgstr ""
 
-#: breakpoint.c:13746
+#: breakpoint.c:13758
 msgid "Set breakpoint at specified line or function.\n"
 msgstr ""
 
-#: breakpoint.c:13761
+#: breakpoint.c:13773
 msgid "Break in function/address or break at a line in the current file."
 msgstr ""
 
-#: breakpoint.c:13765
+#: breakpoint.c:13777
 msgid "Break in function or address."
 msgstr ""
 
-#: breakpoint.c:13767
+#: breakpoint.c:13779
 msgid "Break at a line in the current file."
 msgstr ""
 
-#: breakpoint.c:13768 breakpoint.c:13804
+#: breakpoint.c:13780 breakpoint.c:13816
 msgid ""
 "Status of user-settable breakpoints, or breakpoint number NUMBER.\n"
 "The \"Type\" column indicates one of:\n"
@@ -3332,7 +3332,7 @@ msgid ""
 "breakpoint set."
 msgstr ""
 
-#: breakpoint.c:13785
+#: breakpoint.c:13797
 msgid ""
 "Status of specified breakpoints (all user-settable breakpoints if no "
 "argument).\n"
@@ -3355,7 +3355,7 @@ msgid ""
 "breakpoint set."
 msgstr ""
 
-#: breakpoint.c:13820
+#: breakpoint.c:13832
 msgid ""
 "Status of all breakpoints, or breakpoint number NUMBER.\n"
 "The \"Type\" column indicates one of:\n"
@@ -3381,42 +3381,42 @@ msgid ""
 "breakpoint set."
 msgstr ""
 
-#: breakpoint.c:13841
+#: breakpoint.c:13853
 msgid "Set catchpoints to catch events."
 msgstr ""
 
 #. allow-unknown
-#: breakpoint.c:13846
+#: breakpoint.c:13858
 msgid "Set temporary catchpoints to catch events."
 msgstr ""
 
 #. allow-unknown
 #. Add catch and tcatch sub-commands.
-#: breakpoint.c:13852
+#: breakpoint.c:13864
 msgid ""
 "Catch an exception, when caught.\n"
 "With an argument, catch only exceptions with the given name."
 msgstr ""
 
-#: breakpoint.c:13859
+#: breakpoint.c:13871
 msgid ""
 "Catch an exception, when thrown.\n"
 "With an argument, catch only exceptions with the given name."
 msgstr ""
 
-#: breakpoint.c:13866
+#: breakpoint.c:13878
 msgid "Catch calls to fork."
 msgstr ""
 
-#: breakpoint.c:13871
+#: breakpoint.c:13883
 msgid "Catch calls to vfork."
 msgstr ""
 
-#: breakpoint.c:13876
+#: breakpoint.c:13888
 msgid "Catch calls to exec."
 msgstr ""
 
-#: breakpoint.c:13881
+#: breakpoint.c:13893
 msgid ""
 "Catch system calls by their names and/or numbers.\n"
 "Arguments say which system calls to catch.  If no arguments\n"
@@ -3425,7 +3425,7 @@ msgid ""
 "(if your system supports that), or system call numbers."
 msgstr ""
 
-#: breakpoint.c:13892
+#: breakpoint.c:13904
 msgid ""
 "Set a watchpoint for an expression.\n"
 "Usage: watch [-l|-location] EXPRESSION\n"
@@ -3435,7 +3435,7 @@ msgid ""
 "the memory to which it refers."
 msgstr ""
 
-#: breakpoint.c:13901
+#: breakpoint.c:13913
 msgid ""
 "Set a read watchpoint for an expression.\n"
 "Usage: rwatch [-l|-location] EXPRESSION\n"
@@ -3445,7 +3445,7 @@ msgid ""
 "the memory to which it refers."
 msgstr ""
 
-#: breakpoint.c:13910
+#: breakpoint.c:13922
 msgid ""
 "Set a watchpoint for an expression.\n"
 "Usage: awatch [-l|-location] EXPRESSION\n"
@@ -3455,19 +3455,19 @@ msgid ""
 "the memory to which it refers."
 msgstr ""
 
-#: breakpoint.c:13919
+#: breakpoint.c:13931
 msgid "Status of specified watchpoints (all watchpoints if no argument)."
 msgstr ""
 
-#: breakpoint.c:13925
+#: breakpoint.c:13937
 msgid "Set debugger's willingness to use watchpoint hardware."
 msgstr ""
 
-#: breakpoint.c:13926
+#: breakpoint.c:13938
 msgid "Show debugger's willingness to use watchpoint hardware."
 msgstr ""
 
-#: breakpoint.c:13927
+#: breakpoint.c:13939
 msgid ""
 "If zero, gdb will not use hardware for new watchpoints, even if\n"
 "such is available.  (However, any hardware watchpoints that were\n"
@@ -3476,25 +3476,25 @@ msgid ""
 msgstr ""
 
 #. Tracepoint manipulation commands.
-#: breakpoint.c:13940
+#: breakpoint.c:13952
 msgid ""
 "Set a tracepoint at specified line or function.\n"
 "\n"
 msgstr ""
 
-#: breakpoint.c:13943 breakpoint.c:13955
+#: breakpoint.c:13955 breakpoint.c:13967
 msgid ""
 "\n"
 "Do \"help tracepoints\" for info on other tracepoint commands."
 msgstr ""
 
-#: breakpoint.c:13952
+#: breakpoint.c:13964
 msgid ""
 "Set a fast tracepoint at specified line or function.\n"
 "\n"
 msgstr ""
 
-#: breakpoint.c:13959
+#: breakpoint.c:13971
 msgid ""
 "Set a static tracepoint at specified line, function or marker.\n"
 "\n"
@@ -3522,35 +3522,35 @@ msgid ""
 "Do \"help tracepoints\" for info on other tracepoint commands."
 msgstr ""
 
-#: breakpoint.c:13985
+#: breakpoint.c:13997
 msgid ""
 "Status of specified tracepoints (all tracepoints if no argument).\n"
 "Convenience variable \"$tpnum\" contains the number of the\n"
 "last tracepoint set."
 msgstr ""
 
-#: breakpoint.c:13992
+#: breakpoint.c:14004
 msgid ""
 "Delete specified tracepoints.\n"
 "Arguments are tracepoint numbers, separated by spaces.\n"
 "No argument means delete all tracepoints."
 msgstr ""
 
-#: breakpoint.c:13998
+#: breakpoint.c:14010
 msgid ""
 "Disable specified tracepoints.\n"
 "Arguments are tracepoint numbers, separated by spaces.\n"
 "No argument means disable all tracepoints."
 msgstr ""
 
-#: breakpoint.c:14005
+#: breakpoint.c:14017
 msgid ""
 "Enable specified tracepoints.\n"
 "Arguments are tracepoint numbers, separated by spaces.\n"
 "No argument means enable all tracepoints."
 msgstr ""
 
-#: breakpoint.c:14012
+#: breakpoint.c:14024
 msgid ""
 "Set the passcount for a tracepoint.\n"
 "The trace will end when the tracepoint has been passed 'count' times.\n"
@@ -3558,12 +3558,12 @@ msgid ""
 "if TPNUM is omitted, passcount refers to the last tracepoint defined."
 msgstr ""
 
-#: breakpoint.c:14019
+#: breakpoint.c:14031
 msgid "Save breakpoint definitions as a script."
 msgstr ""
 
 #. allow-unknown
-#: breakpoint.c:14023
+#: breakpoint.c:14035
 msgid ""
 "Save current breakpoint definitions as a script.\n"
 "This includes all types of breakpoints (breakpoints, watchpoints,\n"
@@ -3571,29 +3571,29 @@ msgid ""
 "session to restore them."
 msgstr ""
 
-#: breakpoint.c:14031
+#: breakpoint.c:14043
 msgid ""
 "Save current tracepoint definitions as a script.\n"
 "Use the 'source' command in another debug session to restore them."
 msgstr ""
 
 #. allow-unknown
-#: breakpoint.c:14040 breakpoint.c:14046
+#: breakpoint.c:14052 breakpoint.c:14058
 msgid ""
 "Breakpoint specific settings\n"
 "Configure various breakpoint-specific variables such as\n"
 "pending breakpoint behavior"
 msgstr ""
 
-#: breakpoint.c:14054
+#: breakpoint.c:14066
 msgid "Set debugger's behavior regarding pending breakpoints."
 msgstr ""
 
-#: breakpoint.c:14055
+#: breakpoint.c:14067
 msgid "Show debugger's behavior regarding pending breakpoints."
 msgstr ""
 
-#: breakpoint.c:14056
+#: breakpoint.c:14068
 msgid ""
 "If on, an unrecognized breakpoint location will cause gdb to create a\n"
 "pending breakpoint.  If off, an unrecognized breakpoint location results in\n"
@@ -3601,15 +3601,15 @@ msgid ""
 "user-query to see if a pending breakpoint should be created."
 msgstr ""
 
-#: breakpoint.c:14069
+#: breakpoint.c:14081
 msgid "Set automatic usage of hardware breakpoints."
 msgstr ""
 
-#: breakpoint.c:14070
+#: breakpoint.c:14082
 msgid "Show automatic usage of hardware breakpoints."
 msgstr ""
 
-#: breakpoint.c:14071
+#: breakpoint.c:14083
 msgid ""
 "If set, the debugger will automatically use hardware breakpoints for\n"
 "breakpoints set with \"break\" but falling in read-only memory.  If not "
@@ -3617,15 +3617,15 @@ msgid ""
 "a warning will be emitted for such breakpoints."
 msgstr ""
 
-#: breakpoint.c:14081
+#: breakpoint.c:14093
 msgid "Set mode for inserting breakpoints."
 msgstr ""
 
-#: breakpoint.c:14082
+#: breakpoint.c:14094
 msgid "Show mode for inserting breakpoints."
 msgstr ""
 
-#: breakpoint.c:14083
+#: breakpoint.c:14095
 msgid ""
 "When this mode is off, breakpoints are inserted in inferior when it is\n"
 "resumed, and removed when execution stops.  When this mode is on,\n"
@@ -3637,7 +3637,7 @@ msgid ""
 "inferior in all-stop mode, gdb behaves as if always-inserted mode is off."
 msgstr ""
 
-#: breakpoint.c:14097
+#: breakpoint.c:14109
 msgid ""
 "Set a breakpoint for an address range.\n"
 "break-range START-LOCATION, END-LOCATION\n"
@@ -3996,7 +3996,7 @@ msgid "\"info\" must be followed by the name of an info command.\n"
 msgstr ""
 
 #: cli/cli-cmds.c:336 cli/cli-script.c:1501 infcmd.c:1140 infcmd.c:1154
-#: infcmd.c:2288 symfile.c:1103 symfile.c:1268 symfile.c:2360
+#: infcmd.c:2289 symfile.c:1103 symfile.c:1268 symfile.c:2360
 #: tracepoint.c:2165 tracepoint.c:2171
 msgid "Not confirmed."
 msgstr ""
@@ -4986,7 +4986,7 @@ msgstr ""
 #: infcall.c:671 infcmd.c:1460 infrun.c:3306 language.c:797 language.c:823
 #: mi/mi-out.c:348 mi/mi-out.c:367 mips-tdep.c:254 mips-tdep.c:311
 #: mips-tdep.c:1411 mips-tdep.c:4086 mips-tdep.c:5073 mn10300-tdep.c:126
-#: reggroups.c:219 remote.c:6492 utils.c:987 utils.c:1006
+#: reggroups.c:219 remote.c:6508 utils.c:987 utils.c:1006
 msgid "bad switch"
 msgstr ""
 
@@ -8796,7 +8796,7 @@ msgstr ""
 msgid "No selected thread."
 msgstr ""
 
-#: frame.c:1299 infcmd.c:1796
+#: frame.c:1299 infcmd.c:1797
 msgid "Invalid selected thread."
 msgstr ""
 
@@ -10301,7 +10301,7 @@ msgid ""
 "Cannot convert non-floating-point type to floating-point register value."
 msgstr ""
 
-#: i387-tdep.c:1044 i387-tdep.c:1089
+#: i387-tdep.c:1065 i387-tdep.c:1110
 msgid "invalid i387 regclass"
 msgstr ""
 
@@ -10550,7 +10550,7 @@ msgstr ""
 msgid "Use the \"run\" command to start a Unix child process."
 msgstr ""
 
-#: infcmd.c:128 infcmd.c:2286 infcmd.c:2674 linux-fork.c:658 remote-sim.c:888
+#: infcmd.c:128 infcmd.c:2287 infcmd.c:2675 linux-fork.c:658 remote-sim.c:888
 msgid "The program is not being run."
 msgstr ""
 
@@ -10584,7 +10584,7 @@ msgid "The target does not support running in non-stop mode."
 msgstr ""
 
 #: infcmd.c:557 infcmd.c:730 infcmd.c:873 infcmd.c:1113 infcmd.c:1217
-#: infcmd.c:1366 infcmd.c:1402 infcmd.c:1698 infcmd.c:2518
+#: infcmd.c:1366 infcmd.c:1402 infcmd.c:1699 infcmd.c:2519
 msgid "Asynchronous execution not supported on this target."
 msgstr ""
 
@@ -10681,152 +10681,152 @@ msgstr ""
 msgid "Finish: couldn't find function."
 msgstr ""
 
-#: infcmd.c:1709
+#: infcmd.c:1710
 msgid "The \"finish\" command does not take any arguments."
 msgstr ""
 
 #. Finishing from an inline frame is completely different.  We don't
 #. try to show the "return value" - no way to locate it.  So we do
 #. not need a completion.
-#: infcmd.c:1711 infcmd.c:1720
+#: infcmd.c:1712 infcmd.c:1721
 msgid "No selected frame."
 msgstr ""
 
-#: infcmd.c:1713
+#: infcmd.c:1714
 msgid "\"finish\" not meaningful in the outermost frame."
 msgstr ""
 
-#: infcmd.c:1741 infcmd.c:1760
+#: infcmd.c:1742 infcmd.c:1761
 msgid "Run till exit from "
 msgstr ""
 
-#: infcmd.c:1758
+#: infcmd.c:1759
 msgid "Run back to call of "
 msgstr ""
 
-#: infcmd.c:1782
+#: infcmd.c:1783
 msgid "The program being debugged is not being run.\n"
 msgstr ""
 
-#: infcmd.c:1798 infrun.c:6500
+#: infcmd.c:1799 infrun.c:6500
 msgid "Selected thread is running."
 msgstr ""
 
-#: infcmd.c:1805
+#: infcmd.c:1806
 #, possible-c-format
 msgid "Program stopped at %s.\n"
 msgstr ""
 
-#: infcmd.c:1808
+#: infcmd.c:1809
 msgid "It stopped after being stepped.\n"
 msgstr ""
 
-#: infcmd.c:1817
+#: infcmd.c:1818
 msgid "It stopped at a breakpoint that has since been deleted.\n"
 msgstr ""
 
-#: infcmd.c:1821
+#: infcmd.c:1822
 #, possible-c-format
 msgid "It stopped at breakpoint %d.\n"
 msgstr ""
 
-#: infcmd.c:1827
+#: infcmd.c:1828
 #, possible-c-format
 msgid "It stopped with signal %s, %s.\n"
 msgstr ""
 
-#: infcmd.c:1834
+#: infcmd.c:1835
 msgid "Type \"info stack\" or \"info registers\" for more information.\n"
 msgstr ""
 
-#: infcmd.c:1879
+#: infcmd.c:1880
 msgid "environment variable and value"
 msgstr ""
 
-#: infcmd.c:1903
+#: infcmd.c:1904
 msgid "environment variable to set"
 msgstr ""
 
-#: infcmd.c:1925
+#: infcmd.c:1926
 #, possible-c-format
 msgid "Setting environment variable \"%s\" to null value.\n"
 msgstr ""
 
 #. If there is no argument, delete all environment variables.
 #. Ask for confirmation if reading from the terminal.
-#: infcmd.c:1942
+#: infcmd.c:1943
 msgid "Delete all environment variables? "
 msgstr ""
 
-#: infcmd.c:2120 infcmd.c:2271 infcmd.c:2795
+#: infcmd.c:2121 infcmd.c:2272 infcmd.c:2796
 msgid "The program has no registers now."
 msgstr ""
 
-#: infcmd.c:2148
+#: infcmd.c:2149
 msgid "Missing register name"
 msgstr ""
 
 #. Nothing matched.
-#: infcmd.c:2222
+#: infcmd.c:2223
 #, possible-c-format
 msgid "Invalid register `%.*s'"
 msgstr ""
 
-#: infcmd.c:2287
+#: infcmd.c:2288
 msgid "Kill the program being debugged? "
 msgstr ""
 
-#: infcmd.c:2301
+#: infcmd.c:2302
 #, possible-c-format
 msgid "In %s,\n"
 msgstr ""
 
-#: infcmd.c:2498 target.c:2522
+#: infcmd.c:2499 target.c:2522
 msgid "A program is being debugged already.  Kill it? "
 msgstr ""
 
-#: infcmd.c:2501
+#: infcmd.c:2502
 msgid "Not killed."
 msgstr ""
 
-#: infcmd.c:2509
+#: infcmd.c:2510
 msgid "Cannot attach to this target in non-stop mode"
 msgstr ""
 
-#: infcmd.c:2755
+#: infcmd.c:2756
 msgid "-a is meaningless in all-stop mode."
 msgstr ""
 
-#: infcmd.c:2803
+#: infcmd.c:2804
 msgid "\"unset\" must be followed by the name of an unset subcommand.\n"
 msgstr ""
 
-#: infcmd.c:2815
+#: infcmd.c:2816
 msgid "Set terminal for future runs of program being debugged."
 msgstr ""
 
-#: infcmd.c:2816
+#: infcmd.c:2817
 msgid "Show terminal for future runs of program being debugged."
 msgstr ""
 
-#: infcmd.c:2817
+#: infcmd.c:2818
 msgid "Usage: set inferior-tty /dev/pts/1"
 msgstr ""
 
-#: infcmd.c:2825
+#: infcmd.c:2826
 msgid "Set argument list to give program being debugged when it is started."
 msgstr ""
 
-#: infcmd.c:2826
+#: infcmd.c:2827
 msgid "Show argument list to give program being debugged when it is started."
 msgstr ""
 
-#: infcmd.c:2827
+#: infcmd.c:2828
 msgid ""
 "Follow this command with any number of args, to be passed to the program."
 msgstr ""
 
-#: infcmd.c:2833
+#: infcmd.c:2834
 msgid ""
 "The environment to give the program, or one variable's value.\n"
 "With an argument VAR, prints the value of environment variable VAR to\n"
@@ -10834,17 +10834,17 @@ msgid ""
 "environment to be given to the program."
 msgstr ""
 
-#: infcmd.c:2841
+#: infcmd.c:2842
 msgid "Complement to certain \"set\" commands."
 msgstr ""
 
-#: infcmd.c:2844
+#: infcmd.c:2845
 msgid ""
 "Cancel environment variable VAR for the program.\n"
 "This does not affect the program until the next \"run\" command."
 msgstr ""
 
-#: infcmd.c:2850
+#: infcmd.c:2851
 msgid ""
 "Set environment variable value to give the program.\n"
 "Arguments are VAR VALUE where VAR is variable name and VALUE is value.\n"
@@ -10852,7 +10852,7 @@ msgid ""
 "This does not affect the program until the next \"run\" command."
 msgstr ""
 
-#: infcmd.c:2858
+#: infcmd.c:2859
 msgid ""
 "Add directory DIR(s) to beginning of search path for object files.\n"
 "$cwd in the path means the current working directory.\n"
@@ -10861,7 +10861,7 @@ msgid ""
 "fully linked executable files and separately compiled object files as needed."
 msgstr ""
 
-#: infcmd.c:2867
+#: infcmd.c:2868
 msgid ""
 "Current search path for finding object files.\n"
 "$cwd in the path means the current working directory.\n"
@@ -10870,11 +10870,11 @@ msgid ""
 "fully linked executable files and separately compiled object files as needed."
 msgstr ""
 
-#: infcmd.c:2878
+#: infcmd.c:2879
 msgid "Kill execution of program being debugged."
 msgstr ""
 
-#: infcmd.c:2881
+#: infcmd.c:2882
 msgid ""
 "Attach to a process or file outside of GDB.\n"
 "This command attaches to another target, of the same type as your last\n"
@@ -10889,45 +10889,45 @@ msgid ""
 "to specify the program, and to load its symbol table."
 msgstr ""
 
-#: infcmd.c:2894
+#: infcmd.c:2895
 msgid ""
 "Detach a process or file previously attached.\n"
 "If a process, it is no longer traced, and it continues its execution.  If\n"
 "you were debugging a file, the file is closed and gdb no longer accesses it."
 msgstr ""
 
-#: infcmd.c:2900
+#: infcmd.c:2901
 msgid ""
 "Disconnect from a target.\n"
 "The target will wait for another debugger to connect.  Not available for\n"
 "all targets."
 msgstr ""
 
-#: infcmd.c:2905
+#: infcmd.c:2906
 msgid ""
 "Continue program giving it signal specified by the argument.\n"
 "An argument of \"0\" means continue program without giving it a signal."
 msgstr ""
 
-#: infcmd.c:2909
+#: infcmd.c:2910
 msgid ""
 "Step one instruction exactly.\n"
 "Argument N means do this N times (or till program stops for another reason)."
 msgstr ""
 
-#: infcmd.c:2915
+#: infcmd.c:2916
 msgid ""
 "Step one instruction, but proceed through subroutine calls.\n"
 "Argument N means do this N times (or till program stops for another reason)."
 msgstr ""
 
-#: infcmd.c:2921
+#: infcmd.c:2922
 msgid ""
 "Execute until selected stack frame returns.\n"
 "Upon return, the value returned is printed and put in the value history."
 msgstr ""
 
-#: infcmd.c:2926
+#: infcmd.c:2927
 msgid ""
 "Step program, proceeding through subroutine calls.\n"
 "Like the \"step\" command as long as subroutine calls do not happen;\n"
@@ -10935,34 +10935,34 @@ msgid ""
 "Argument N means do this N times (or till program stops for another reason)."
 msgstr ""
 
-#: infcmd.c:2936
+#: infcmd.c:2937
 msgid ""
 "Step program until it reaches a different source line.\n"
 "Argument N means do this N times (or till program stops for another reason)."
 msgstr ""
 
-#: infcmd.c:2942
+#: infcmd.c:2943
 msgid ""
 "Execute until the program reaches a source line greater than the current\n"
 "or a specified location (same args as break command) within the current "
 "frame."
 msgstr ""
 
-#: infcmd.c:2949
+#: infcmd.c:2950
 msgid ""
 "Continue the program up to the given location (same form as args for break "
 "command).\n"
 "Execution will also stop upon exit from the current stack frame."
 msgstr ""
 
-#: infcmd.c:2955
+#: infcmd.c:2956
 msgid ""
 "Continue program being debugged at specified line or address.\n"
 "Give as argument either LINENUM or *ADDR, where ADDR is an expression\n"
 "for an address to start at."
 msgstr ""
 
-#: infcmd.c:2963
+#: infcmd.c:2964
 msgid ""
 "Usage: go <location>\n"
 "Continue program being debugged, stopping at specified line or \n"
@@ -10972,7 +10972,7 @@ msgid ""
 "This command is a combination of tbreak and jump."
 msgstr ""
 
-#: infcmd.c:2976
+#: infcmd.c:2977
 msgid ""
 "Continue program being debugged, after signal or breakpoint.\n"
 "If proceeding from breakpoint, a number N may be used as an argument,\n"
@@ -10985,7 +10985,7 @@ msgid ""
 "Specifying -a and an ignore count simultaneously is an error."
 msgstr ""
 
-#: infcmd.c:2989
+#: infcmd.c:2990
 msgid ""
 "Start debugged program.  You may specify arguments to give it.\n"
 "Args may include \"*\", or \"[...]\"; they are expanded using \"sh\".\n"
@@ -10997,18 +10997,18 @@ msgid ""
 "use \"set args\" without arguments."
 msgstr ""
 
-#: infcmd.c:3002
+#: infcmd.c:3003
 msgid "Start debugged program with no arguments."
 msgstr ""
 
-#: infcmd.c:3004
+#: infcmd.c:3005
 msgid ""
 "Run the debugged program until the beginning of the main procedure.\n"
 "You may specify arguments to give to your program, just as with the\n"
 "\"run\" command."
 msgstr ""
 
-#: infcmd.c:3011
+#: infcmd.c:3012
 msgid ""
 "Interrupt the execution of the debugged program.\n"
 "If non-stop mode is enabled, interrupt only the current thread,\n"
@@ -11016,27 +11016,27 @@ msgid ""
 "interrupt all running threads in non-stop mode, use the -a option."
 msgstr ""
 
-#: infcmd.c:3016 infcmd.c:3022
+#: infcmd.c:3017 infcmd.c:3023
 msgid ""
 "List of integer registers and their contents, for selected stack frame.\n"
 "Register name as argument means describe only that register."
 msgstr ""
 
-#: infcmd.c:3025
+#: infcmd.c:3026
 msgid ""
 "List of all registers and their contents, for selected stack frame.\n"
 "Register name as argument means describe only that register."
 msgstr ""
 
-#: infcmd.c:3030
+#: infcmd.c:3031
 msgid "Execution status of the program."
 msgstr ""
 
-#: infcmd.c:3033
+#: infcmd.c:3034
 msgid "Print the status of the floating point unit\n"
 msgstr ""
 
-#: infcmd.c:3036
+#: infcmd.c:3037
 msgid "Print the status of the vector unit\n"
 msgstr ""
 
@@ -15464,7 +15464,7 @@ msgstr ""
 msgid "monitor_supply_register (%d):  bad value from monitor: %s."
 msgstr ""
 
-#: monitor.c:1033 nto-procfs.c:693 remote.c:4850 remote-mips.c:2274
+#: monitor.c:1033 nto-procfs.c:693 remote.c:4866 remote-mips.c:2274
 msgid ""
 "Interrupted while waiting for the program.\n"
 "Give up (and stop debugging it)? "
@@ -16794,11 +16794,11 @@ msgstr ""
 msgid "print-psymbols takes an output file name and optional symbol file name"
 msgstr ""
 
-#: p-typeprint.c:300
+#: p-typeprint.c:299
 msgid "type not handled in pascal_type_print_varspec_prefix()"
 msgstr ""
 
-#: p-typeprint.c:419
+#: p-typeprint.c:418
 msgid "type not handled in pascal_type_print_varspec_suffix()"
 msgstr ""
 
@@ -17945,125 +17945,125 @@ msgstr ""
 
 #. malformed packet error
 #. general case:
-#: remote.c:425
+#: remote.c:429
 msgid "remote.c: error in outgoing packet."
 msgstr ""
 
-#: remote.c:427
+#: remote.c:431
 #, possible-c-format
 msgid "remote.c: error in outgoing packet at field #%ld."
 msgstr ""
 
-#: remote.c:430
+#: remote.c:434
 #, possible-c-format
 msgid "trace API error 0x%s."
 msgstr ""
 
-#: remote.c:432
+#: remote.c:436
 #, possible-c-format
 msgid "Target returns error code '%s'."
 msgstr ""
 
-#: remote.c:461
+#: remote.c:465
 #, possible-c-format
 msgid "invalid qRelocInsn packet: %s"
 msgstr ""
 
-#: remote.c:495
+#: remote.c:499
 msgid "warning: relocating instruction: "
 msgstr ""
 
-#: remote.c:761
+#: remote.c:765
 msgid ""
 "Send the ASCII ETX character (Ctrl-c) to the remote target to interrupt the "
 "execution of the program.\n"
 msgstr ""
 
-#: remote.c:766
+#: remote.c:770
 msgid ""
 "send a break signal to the remote target to interrupt the execution of the "
 "program.\n"
 msgstr ""
 
-#: remote.c:770
+#: remote.c:774
 msgid ""
 "Send a break signal and 'g' a.k.a. Magic SysRq g to the remote target to "
 "interrupt the execution of Linux kernel.\n"
 msgstr ""
 
-#: remote.c:775 remote.c:3148
+#: remote.c:779 remote.c:3152
 #, possible-c-format
 msgid "Invalid value for interrupt_sequence_mode: %s."
 msgstr ""
 
-#: remote.c:919
+#: remote.c:923
 msgid "Argument required (integer, `fixed' or `limited')."
 msgstr ""
 
-#: remote.c:932
+#: remote.c:936
 #, possible-c-format
 msgid "Invalid %s (bad syntax)."
 msgstr ""
 
-#: remote.c:939
+#: remote.c:943
 #, possible-c-format
 msgid "Invalid %s (too large)."
 msgstr ""
 
-#: remote.c:945
+#: remote.c:949
 #, possible-c-format
 msgid ""
 "The target may not be able to correctly handle a %s\n"
 "of %ld bytes. Change the packet size? "
 msgstr ""
 
-#: remote.c:948
+#: remote.c:952
 msgid "Packet size not changed."
 msgstr ""
 
-#: remote.c:958
+#: remote.c:962
 #, possible-c-format
 msgid "The %s is %ld. "
 msgstr ""
 
-#: remote.c:960
+#: remote.c:964
 #, possible-c-format
 msgid "Packets are fixed at %ld bytes.\n"
 msgstr ""
 
-#: remote.c:963
+#: remote.c:967
 #, possible-c-format
 msgid "Packets are limited to %ld bytes.\n"
 msgstr ""
 
-#: remote.c:1087
+#: remote.c:1091
 #, possible-c-format
 msgid "Support for the `%s' packet is auto-detected, currently %s.\n"
 msgstr ""
 
-#: remote.c:1093
+#: remote.c:1097
 #, possible-c-format
 msgid "Support for the `%s' packet is currently %s.\n"
 msgstr ""
 
-#: remote.c:1188
+#: remote.c:1192
 msgid "packet_ok: attempt to use a disabled packet"
 msgstr ""
 
 #. If the stub previously indicated that the packet was
 #. supported then there is a protocol error..
-#: remote.c:1202
+#: remote.c:1206
 #, possible-c-format
 msgid "Protocol error: %s (%s) conflicting enabled responses."
 msgstr ""
 
 #. The user set it wrong.
-#: remote.c:1206
+#: remote.c:1210
 #, possible-c-format
 msgid "Enabled packet %s (%s) not recognized by stub"
 msgstr ""
 
-#: remote.c:1295 remote.c:1316
+#: remote.c:1299 remote.c:1320
 #, possible-c-format
 msgid "Could not find config for %s"
 msgstr ""
@@ -18075,39 +18075,39 @@ msgstr ""
 #. Error of some sort.
 #. We're out of sync with the target now.  Did it continue or
 #. not?  Not is more likely, so report a stop.
-#: remote.c:1433 remote.c:2827 remote.c:2867 remote.c:2984 remote.c:3886
-#: remote.c:5464 remote.c:5563 remote.c:6783
+#: remote.c:1437 remote.c:2831 remote.c:2871 remote.c:2988 remote.c:3902
+#: remote.c:5480 remote.c:5579 remote.c:6799
 #, possible-c-format
 msgid "Remote failure reply: %s"
 msgstr ""
 
-#: remote.c:1912
+#: remote.c:1916
 #, possible-c-format
 msgid "invalid remote ptid: %s"
 msgstr ""
 
-#: remote.c:2243
+#: remote.c:2247
 msgid "Incomplete response to threadinfo request."
 msgstr ""
 
 #. This is an answer to a different request.
-#: remote.c:2246
+#: remote.c:2250
 msgid "ERROR RMT Thread info mismatch."
 msgstr ""
 
-#: remote.c:2260
+#: remote.c:2264
 msgid "ERROR RMT: threadinfo tag mismatch."
 msgstr ""
 
-#: remote.c:2268
+#: remote.c:2272
 msgid "ERROR RMT: length of threadid is not 16."
 msgstr ""
 
-#: remote.c:2283
+#: remote.c:2287
 msgid "ERROR RMT: 'exists' length too long."
 msgstr ""
 
-#: remote.c:2307
+#: remote.c:2311
 msgid "ERROR RMT: unknown thread info tag."
 msgstr ""
 
@@ -18119,740 +18119,740 @@ msgstr ""
 #. exit
 #. wait for packet, then exit
 #.
-#: remote.c:2411
+#: remote.c:2415
 msgid "HMM: threadlist did not echo arg thread, dropping it."
 msgstr ""
 
-#: remote.c:2418
+#: remote.c:2422
 msgid "RMT ERROR : failed to get remote thread list."
 msgstr ""
 
-#: remote.c:2426
+#: remote.c:2430
 msgid "RMT ERROR: threadlist response longer than requested."
 msgstr ""
 
-#: remote.c:2463
+#: remote.c:2467
 msgid "Remote fetch threadlist -infinite loop-."
 msgstr ""
 
 #. paranoia
-#: remote.c:2628
+#: remote.c:2632
 msgid "Command can only be used when connected to the remote target."
 msgstr ""
 
-#: remote.c:2645
+#: remote.c:2649
 msgid "threads"
 msgstr ""
 
-#: remote.c:2744
+#: remote.c:2748
 msgid "remote_threads_extra_info"
 msgstr ""
 
-#: remote.c:3019 remote.c:3046
+#: remote.c:3023 remote.c:3050
 #, possible-c-format
 msgid "Target reported unsupported offsets: %s"
 msgstr ""
 
-#: remote.c:3044
+#: remote.c:3048
 #, possible-c-format
 msgid "Malformed response to offset query, %s"
 msgstr ""
 
-#: remote.c:3092
+#: remote.c:3096
 msgid "Can not handle qOffsets TextSeg response with this symbol file"
 msgstr ""
 
-#: remote.c:3224
+#: remote.c:3232
 msgid "Non-stop mode requested, but remote does not support non-stop"
 msgstr ""
 
-#: remote.c:3231
+#: remote.c:3239
 #, possible-c-format
 msgid "Remote refused setting non-stop mode with: %s"
 msgstr ""
 
-#: remote.c:3247
+#: remote.c:3255
 #, possible-c-format
 msgid "Remote refused setting all-stop mode with: %s"
 msgstr ""
 
-#: remote.c:3259 remote.c:3365
+#: remote.c:3267 remote.c:3374
 msgid "The target is not running (try extended-remote?)"
 msgstr ""
 
-#: remote.c:3380
+#: remote.c:3390
 msgid "remote didn't report the current thread in non-stop mode"
 msgstr ""
 
-#: remote.c:3407
+#: remote.c:3417
 msgid "Trace is already running on the target.\n"
 msgstr ""
 
-#: remote.c:3532
+#: remote.c:3548
 msgid ""
 "The remote protocol may be unreliable over UDP.\n"
 "Some events may be lost, rendering further debugging impossible."
 msgstr ""
 
-#: remote.c:3568
+#: remote.c:3584
 #, possible-c-format
 msgid "Remote refused setting permissions with: %s"
 msgstr ""
 
-#: remote.c:3605
+#: remote.c:3621
 #, possible-c-format
 msgid "Remote qSupported response supplied an unexpected value for \"%s\"."
 msgstr ""
 
-#: remote.c:3629
+#: remote.c:3645
 #, possible-c-format
 msgid "Remote target reported \"%s\" without a size."
 msgstr ""
 
-#: remote.c:3638
+#: remote.c:3654
 #, possible-c-format
 msgid "Remote target reported \"%s\" with a bad size: \"%s\"."
 msgstr ""
 
-#: remote.c:3645
+#: remote.c:3661
 #, possible-c-format
 msgid "limiting remote suggested packet size (%d bytes) to %d"
 msgstr ""
 
-#: remote.c:3916
+#: remote.c:3932
 msgid "empty item in \"qSupported\" response"
 msgstr ""
 
-#: remote.c:3947
+#: remote.c:3963
 #, possible-c-format
 msgid "unrecognized item \"%s\" in \"qSupported\" response"
 msgstr ""
 
-#: remote.c:3995
+#: remote.c:4011
 msgid ""
 "To open a remote debug connection, you need to specify what\n"
 "serial device is attached to the remote system\n"
 "(e.g. /dev/ttyS0, /dev/ttya, COM1, etc.)."
 msgstr ""
 
-#: remote.c:4010
+#: remote.c:4026
 msgid "Already connected to a remote target.  Disconnect? "
 msgstr ""
 
-#: remote.c:4013
+#: remote.c:4029
 msgid "Still connected."
 msgstr ""
 
-#: remote.c:4167 remote-mips.c:1744
+#: remote.c:4183 remote-mips.c:1744
 msgid "Argument given to \"detach\" when remotely debugging."
 msgstr ""
 
-#: remote.c:4170
+#: remote.c:4186
 msgid "No process to detach from."
 msgstr ""
 
-#: remote.c:4184
+#: remote.c:4200
 msgid "Remote doesn't know how to detach"
 msgstr ""
 
-#: remote.c:4186
+#: remote.c:4202
 msgid "Can't detach process."
 msgstr ""
 
-#: remote.c:4191
+#: remote.c:4207
 #, possible-c-format
 msgid "Detached from remote %s.\n"
 msgstr ""
 
-#: remote.c:4196
+#: remote.c:4212
 msgid "Detached from remote process.\n"
 msgstr ""
 
-#: remote.c:4198
+#: remote.c:4214
 msgid "Ending remote debugging.\n"
 msgstr ""
 
-#: remote.c:4224
+#: remote.c:4240
 msgid "Argument given to \"disconnect\" when remotely debugging."
 msgstr ""
 
-#: remote.c:4251 remote.c:4276
+#: remote.c:4267 remote.c:4292
 msgid "This target does not support attaching to a process"
 msgstr ""
 
-#: remote.c:4261
+#: remote.c:4277
 #, possible-c-format
 msgid "Attached to %s\n"
 msgstr ""
 
-#: remote.c:4271
+#: remote.c:4287
 #, possible-c-format
 msgid "Attaching to %s failed with: %s"
 msgstr ""
 
-#: remote.c:4278
+#: remote.c:4294
 #, possible-c-format
 msgid "Attaching to %s failed"
 msgstr ""
 
-#: remote.c:4361
+#: remote.c:4377
 #, possible-c-format
 msgid "Reply contains invalid hex digit %d"
 msgstr ""
 
-#: remote.c:4577
+#: remote.c:4593
 #, possible-c-format
 msgid "Unexpected vCont reply in non-stop mode: %s"
 msgstr ""
 
-#: remote.c:4617
+#: remote.c:4633
 #, possible-c-format
 msgid " - Can't pass signal %d to target in reverse: ignored."
 msgstr ""
 
-#: remote.c:4622
+#: remote.c:4638
 msgid "Remote reverse-step not supported."
 msgstr ""
 
-#: remote.c:4625
+#: remote.c:4641
 msgid "Remote reverse-continue not supported."
 msgstr ""
 
-#: remote.c:4763
+#: remote.c:4779
 msgid "Remote server does not support stopping threads"
 msgstr ""
 
-#: remote.c:4796
+#: remote.c:4812
 #, possible-c-format
 msgid "Stopping %s failed: %s"
 msgstr ""
 
-#: remote.c:5153
+#: remote.c:5169
 #, possible-c-format
 msgid ""
 "Malformed packet(a) (missing colon): %s\n"
 "Packet: '%s'\n"
 msgstr ""
 
-#: remote.c:5209
+#: remote.c:5225
 #, possible-c-format
 msgid ""
 "Malformed packet(b) (missing colon): %s\n"
 "Packet: '%s'\n"
 msgstr ""
 
-#: remote.c:5215
+#: remote.c:5231
 #, possible-c-format
 msgid ""
 "Remote sent bad register number %s: %s\n"
 "Packet: '%s'\n"
 msgstr ""
 
-#: remote.c:5227
+#: remote.c:5243
 #, possible-c-format
 msgid "Remote reply is too short: %s"
 msgstr ""
 
-#: remote.c:5233
+#: remote.c:5249
 #, possible-c-format
 msgid ""
 "Remote register badly formatted: %s\n"
 "here: %s"
 msgstr ""
 
-#: remote.c:5295 remote.c:5298
+#: remote.c:5311 remote.c:5314
 #, possible-c-format
 msgid "unknown stop reply packet: %s"
 msgstr ""
 
-#: remote.c:5305
+#: remote.c:5321
 #, possible-c-format
 msgid "No process or thread specified in stop reply: %s"
 msgstr ""
 
-#: remote.c:5470 remote.c:5612
+#: remote.c:5486 remote.c:5628
 #, possible-c-format
 msgid "Invalid remote reply: %s"
 msgstr ""
 
-#: remote.c:5699
+#: remote.c:5715
 #, possible-c-format
 msgid "Could not fetch register \"%s\"; remote failure reply '%s'"
 msgstr ""
 
-#: remote.c:5718
+#: remote.c:5734
 msgid "fetch_register_using_p: early buf termination"
 msgstr ""
 
-#: remote.c:5756
+#: remote.c:5772
 #, possible-c-format
 msgid "Remote 'g' packet reply is of odd length: %s"
 msgstr ""
 
-#: remote.c:5775
+#: remote.c:5791
 #, possible-c-format
 msgid "Remote 'g' packet reply is too long: %s"
 msgstr ""
 
-#: remote.c:5818 remote.c:5836
+#: remote.c:5834 remote.c:5852
 msgid "unexpected end of 'g' packet reply"
 msgstr ""
 
-#: remote.c:5877
+#: remote.c:5893
 msgid "could not set remote traceframe"
 msgstr ""
 
-#: remote.c:5985
+#: remote.c:6001
 #, possible-c-format
 msgid "Could not write register \"%s\"; remote failure reply '%s'"
 msgstr ""
 
-#: remote.c:5990
+#: remote.c:6006
 msgid "Bad result from packet_ok"
 msgstr ""
 
-#: remote.c:6031
+#: remote.c:6047
 #, possible-c-format
 msgid "Could not write registers; remote failure reply '%s'"
 msgstr ""
 
-#: remote.c:6211
+#: remote.c:6227
 msgid "Received too much data from remote target; ignoring overflow."
 msgstr ""
 
-#: remote.c:6228
+#: remote.c:6244
 msgid "Unmatched escape character in target response."
 msgstr ""
 
-#: remote.c:6327
+#: remote.c:6343
 msgid "remote_write_bytes_aux: bad packet format"
 msgstr ""
 
-#: remote.c:6374
+#: remote.c:6390
 msgid "minimum packet size too small to write data"
 msgstr ""
 
-#: remote.c:6490
+#: remote.c:6506
 msgid "remote_write_bytes: bad internal state"
 msgstr ""
 
-#: remote.c:6640
+#: remote.c:6656
 msgid "Too long remote packet."
 msgstr ""
 
-#: remote.c:6643 remote.c:8556
+#: remote.c:6659 remote.c:8572
 msgid "Communication problem with target."
 msgstr ""
 
-#: remote.c:6682
+#: remote.c:6698
 msgid "Remote target does not support flash erase"
 msgstr ""
 
-#: remote.c:6684
+#: remote.c:6700
 msgid "Error erasing flash with vFlashErase packet"
 msgstr ""
 
-#: remote.c:6724
+#: remote.c:6740
 msgid "Remote target does not support vFlashDone"
 msgstr ""
 
-#: remote.c:6726
+#: remote.c:6742
 msgid "Error finishing flash operation"
 msgstr ""
 
-#: remote.c:6757 remote-m32r-sdi.c:725 remote-m32r-sdi.c:731
+#: remote.c:6773 remote-m32r-sdi.c:725 remote-m32r-sdi.c:731
 #: remote-m32r-sdi.c:747
 msgid "Remote connection closed"
 msgstr ""
 
-#: remote.c:6761
+#: remote.c:6777
 msgid "Remote communication error.  Target disconnected."
 msgstr ""
 
-#: remote.c:6850
+#: remote.c:6866
 msgid "Cannot execute this command while the target is running."
 msgstr ""
 
-#: remote.c:6890
+#: remote.c:6906
 msgid "putpkt: write failed"
 msgstr ""
 
-#: remote.c:7176
+#: remote.c:7192
 #, possible-c-format
 msgid "Invalid run length encoding: %s\n"
 msgstr ""
 
-#: remote.c:7282
+#: remote.c:7298
 msgid "Watchdog timeout has expired.  Target detached."
 msgstr ""
 
 #. We have tried hard enough, and just can't receive the
 #. packet/notification.  Give up.
-#: remote.c:7303
+#: remote.c:7319
 msgid "Ignoring packet error, continuing...\n"
 msgstr ""
 
-#: remote.c:7439
+#: remote.c:7455
 msgid "Can't kill process"
 msgstr ""
 
-#: remote.c:7547
+#: remote.c:7563
 msgid "Target does not support QDisableRandomization."
 msgstr ""
 
-#: remote.c:7549
+#: remote.c:7565
 #, possible-c-format
 msgid "Bogus QDisableRandomization reply from target: %s"
 msgstr ""
 
-#: remote.c:7567
+#: remote.c:7583
 msgid "Remote file name too long for run packet"
 msgstr ""
 
-#: remote.c:7582
+#: remote.c:7598
 msgid "Argument list too long for run packet"
 msgstr ""
 
-#: remote.c:7605
+#: remote.c:7621
 msgid ""
 "Running the default executable on the remote target failed; try \"set remote "
 "exec-file\"?"
 msgstr ""
 
-#: remote.c:7608
+#: remote.c:7624
 #, possible-c-format
 msgid "Running \"%s\" on the remote target failed"
 msgstr ""
 
-#: remote.c:7638
+#: remote.c:7654
 msgid "Remote target does not support \"set remote exec-file\""
 msgstr ""
 
-#: remote.c:7640
+#: remote.c:7656
 msgid "Remote target does not support \"set args\" or run <ARGS>"
 msgstr ""
 
-#: remote.c:7772
+#: remote.c:7788
 #, possible-c-format
 msgid "hw_bp_to_z: bad watchpoint type %d"
 msgstr ""
 
-#: remote.c:7806
+#: remote.c:7822
 msgid "remote_insert_watchpoint: reached end of function"
 msgstr ""
 
-#: remote.c:7838
+#: remote.c:7854
 msgid "remote_remove_watchpoint: reached end of function"
 msgstr ""
 
-#: remote.c:7946
+#: remote.c:7962
 msgid "remote_insert_hw_breakpoint: reached end of function"
 msgstr ""
 
-#: remote.c:7981
+#: remote.c:7997
 msgid "remote_remove_hw_breakpoint: reached end of function"
 msgstr ""
 
-#: remote.c:8038
+#: remote.c:8054
 msgid "remote target does not support this operation"
 msgstr ""
 
-#: remote.c:8066
+#: remote.c:8082
 msgid "command cannot be used without an exec file"
 msgstr ""
 
-#: remote.c:8091
+#: remote.c:8107
 #, possible-c-format
 msgid "target memory fault, section %s, range %s -- %s"
 msgstr ""
 
-#: remote.c:8109
+#: remote.c:8125
 msgid ""
 "One or more sections of the remote executable does not match\n"
 "the loaded file\n"
 msgstr ""
 
-#: remote.c:8112
+#: remote.c:8128
 #, possible-c-format
 msgid "No loaded section named '%s'.\n"
 msgstr ""
 
-#: remote.c:8212
+#: remote.c:8228
 #, possible-c-format
 msgid "Unknown remote qXfer reply: %s"
 msgstr ""
 
-#: remote.c:8218
+#: remote.c:8234
 msgid "Remote qXfer reply contained no data."
 msgstr ""
 
-#: remote.c:8407
+#: remote.c:8423
 msgid "remote query is only available after target open"
 msgstr ""
 
-#: remote.c:8498
+#: remote.c:8514
 msgid "Pattern is too large to transmit to remote target."
 msgstr ""
 
-#: remote.c:8520 remote.c:8525
+#: remote.c:8536 remote.c:8541
 #, possible-c-format
 msgid "Unknown qSearch:memory reply: %s"
 msgstr ""
 
-#: remote.c:8538
+#: remote.c:8554
 msgid "remote rcmd is only available after target open"
 msgstr ""
 
-#: remote.c:8550
+#: remote.c:8566
 #, possible-c-format
 msgid "\"monitor\" command ``%s'' is too long."
 msgstr ""
 
-#: remote.c:8568 remote.c:9811 remote.c:10084 remote.c:10174 remote.c:10274
-#: remote.c:10321 remote.c:10398 remote.c:10460 remote.c:10488
+#: remote.c:8584 remote.c:9827 remote.c:10110 remote.c:10200 remote.c:10300
+#: remote.c:10347 remote.c:10424 remote.c:10486 remote.c:10514
 msgid "Target does not support this command."
 msgstr ""
 
-#: remote.c:8579
+#: remote.c:8595
 msgid "Protocol error with Rcmd"
 msgstr ""
 
-#: remote.c:8615 remote.c:9514 remote.c:9602 remote.c:9653
+#: remote.c:8631 remote.c:9530 remote.c:9618 remote.c:9669
 msgid "command can only be used with remote target"
 msgstr ""
 
-#: remote.c:8618
+#: remote.c:8634
 msgid "remote-packet command requires packet text as argument"
 msgstr ""
 
-#: remote.c:8659
+#: remote.c:8675
 msgid "Remote threadset test\n"
 msgstr ""
 
-#: remote.c:8765
+#: remote.c:8781
 msgid "Fetch and print the remote list of thread identifiers, one pkt only"
 msgstr ""
 
-#: remote.c:8768
+#: remote.c:8784
 msgid "Fetch and display info about one thread"
 msgstr ""
 
-#: remote.c:8770
+#: remote.c:8786
 msgid "Test setting to a different thread"
 msgstr ""
 
-#: remote.c:8772
+#: remote.c:8788
 msgid "Iterate through updating all remote thread info"
 msgstr ""
 
-#: remote.c:8774
+#: remote.c:8790
 msgid " Remote thread alive test "
 msgstr ""
 
-#: remote.c:8859
+#: remote.c:8875
 msgid "Remote target doesn't support qGetTLSAddr packet"
 msgstr ""
 
-#: remote.c:8862
+#: remote.c:8878
 msgid "Remote target failed to process qGetTLSAddr request"
 msgstr ""
 
-#: remote.c:8866
+#: remote.c:8882
 msgid "TLS not supported or disabled on this target"
 msgstr ""
 
-#: remote.c:8903
+#: remote.c:8919
 msgid "Remote target doesn't support qGetTIBAddr packet"
 msgstr ""
 
-#: remote.c:8905
+#: remote.c:8921
 msgid "Remote target failed to process qGetTIBAddr request"
 msgstr ""
 
-#: remote.c:8908
+#: remote.c:8924
 msgid "qGetTIBAddr not supported or disabled on this target"
 msgstr ""
 
-#: remote.c:8956
+#: remote.c:8972
 #, possible-c-format
 msgid "Duplicate g packet description added for size %d"
 msgstr ""
 
-#: remote.c:9023 remote.c:9044 remote.c:9066
+#: remote.c:9039 remote.c:9060 remote.c:9082
 msgid "Packet too long for target."
 msgstr ""
 
-#: remote.c:9298
+#: remote.c:9314
 #, possible-c-format
 msgid "Read returned %d, but %d bytes."
 msgstr ""
 
-#: remote.c:9397
+#: remote.c:9413
 #, possible-c-format
 msgid "Unknown remote I/O error %d"
 msgstr ""
 
-#: remote.c:9399
+#: remote.c:9415
 #, possible-c-format
 msgid "Remote I/O error: %s"
 msgstr ""
 
-#: remote.c:9548
+#: remote.c:9564
 #, possible-c-format
 msgid "Error reading %s."
 msgstr ""
 
-#: remote.c:9571
+#: remote.c:9587
 #, possible-c-format
 msgid "Remote write of %d bytes returned 0!"
 msgstr ""
 
-#: remote.c:9588
+#: remote.c:9604
 #, possible-c-format
 msgid "Successfully sent file \"%s\".\n"
 msgstr ""
 
-#: remote.c:9643
+#: remote.c:9659
 #, possible-c-format
 msgid "Successfully fetched file \"%s\".\n"
 msgstr ""
 
-#: remote.c:9660
+#: remote.c:9676
 #, possible-c-format
 msgid "Successfully deleted file \"%s\".\n"
 msgstr ""
 
-#: remote.c:9670
+#: remote.c:9686
 msgid "file to put"
 msgstr ""
 
-#: remote.c:9675
+#: remote.c:9691
 msgid "Invalid parameters to remote put"
 msgstr ""
 
-#: remote.c:9689
+#: remote.c:9705
 msgid "file to get"
 msgstr ""
 
-#: remote.c:9694
+#: remote.c:9710
 msgid "Invalid parameters to remote get"
 msgstr ""
 
-#: remote.c:9708
+#: remote.c:9724
 msgid "file to delete"
 msgstr ""
 
-#: remote.c:9713
+#: remote.c:9729
 msgid "Invalid parameters to remote delete"
 msgstr ""
 
-#: remote.c:9856 remote.c:9871 remote.c:10030 remote.c:10041
+#: remote.c:9872 remote.c:9887 remote.c:10046 remote.c:10057
 msgid "Target does not support source download."
 msgstr ""
 
-#: remote.c:9923
+#: remote.c:9939
 msgid "Fast tracepoint not valid during download"
 msgstr ""
 
 #. Fast tracepoints are functionally identical to regular
 #. tracepoints, so don't take lack of support as a reason to
 #. give up on the trace run.
-#: remote.c:9930
+#: remote.c:9946
 #, possible-c-format
 msgid ""
 "Target does not support fast tracepoints, downloading %d as regular "
 "tracepoint"
 msgstr ""
 
-#: remote.c:9944
+#: remote.c:9960
 msgid "Static tracepoint not valid during download"
 msgstr ""
 
 #. Fast tracepoints are functionally identical to regular
 #. tracepoints, so don't take lack of support as a reason
 #. to give up on the trace run.
-#: remote.c:9950
+#: remote.c:9966
 msgid "Target does not support static tracepoints"
 msgstr ""
 
-#: remote.c:9970
+#: remote.c:9986
 #, possible-c-format
 msgid "Target does not support conditional tracepoints, ignoring tp %d cond"
 msgstr ""
 
-#: remote.c:9979
+#: remote.c:9995
 msgid "Target does not support tracepoints."
 msgstr ""
 
-#: remote.c:9996 remote.c:10013
+#: remote.c:10012 remote.c:10029
 msgid "Error on target while setting tracepoints."
 msgstr ""
 
-#: remote.c:10078
+#: remote.c:10104
 msgid "Trace state variable name too long for tsv definition packet"
 msgstr ""
 
-#: remote.c:10086
+#: remote.c:10112
 msgid "Error on target while downloading trace state variable."
 msgstr ""
 
-#: remote.c:10100
+#: remote.c:10126
 msgid ""
 "Target does not support enabling tracepoints while a trace run is ongoing."
 msgstr ""
 
-#: remote.c:10102
+#: remote.c:10128
 msgid "Error on target while enabling tracepoint."
 msgstr ""
 
-#: remote.c:10116
+#: remote.c:10142
 msgid ""
 "Target does not support disabling tracepoints while a trace run is ongoing."
 msgstr ""
 
-#: remote.c:10118
+#: remote.c:10144
 msgid "Error on target while disabling tracepoint."
 msgstr ""
 
-#: remote.c:10154
+#: remote.c:10180
 msgid "Too many sections for read-only sections definition packet."
 msgstr ""
 
-#: remote.c:10176 remote.c:10276 remote.c:10346 remote.c:10349 remote.c:10400
-#: remote.c:10462 remote.c:10490 remote.c:10579
+#: remote.c:10202 remote.c:10302 remote.c:10372 remote.c:10375 remote.c:10426
+#: remote.c:10488 remote.c:10516 remote.c:10605
 #, possible-c-format
 msgid "Bogus reply from target: %s"
 msgstr ""
 
-#: remote.c:10216
+#: remote.c:10242
 #, possible-c-format
 msgid "Bogus trace status reply from target: %s"
 msgstr ""
 
-#: remote.c:10315
+#: remote.c:10341
 #, possible-c-format
 msgid "Unknown trace find type %d"
 msgstr ""
 
-#: remote.c:10330
+#: remote.c:10356
 msgid "Unable to parse trace frame number"
 msgstr ""
 
-#: remote.c:10340
+#: remote.c:10366
 msgid "Unable to parse tracepoint number"
 msgstr ""
 
-#: remote.c:10392
+#: remote.c:10418
 msgid "Remote file name too long for trace save packet"
 msgstr ""
 
-#: remote.c:10465
+#: remote.c:10491
 msgid "Target does not support disconnected tracing."
 msgstr ""
 
 #. set/show remote ...
 #. allow-unknown
-#: remote.c:10918 remote.c:10924
+#: remote.c:10944 remote.c:10950
 msgid ""
 "Remote protocol specific variables\n"
 "Configure various remote-protocol specific variables such as\n"
@@ -18860,13 +18860,13 @@ msgid ""
 msgstr ""
 
 #. allow-unknown
-#: remote.c:10931
+#: remote.c:10957
 msgid ""
 "Compare section data on target to the exec file.\n"
 "Argument is a single section name (default: all loaded sections)."
 msgstr ""
 
-#: remote.c:10936
+#: remote.c:10962
 msgid ""
 "Send an arbitrary packet to a remote target.\n"
 "   maintenance packet TEXT\n"
@@ -18876,57 +18876,57 @@ msgid ""
 "terminating `#' character and checksum."
 msgstr ""
 
-#: remote.c:10945
+#: remote.c:10971
 msgid "Set whether to send break if interrupted."
 msgstr ""
 
-#: remote.c:10946
+#: remote.c:10972
 msgid "Show whether to send break if interrupted."
 msgstr ""
 
-#: remote.c:10947
+#: remote.c:10973
 msgid "If set, a break, instead of a cntrl-c, is sent to the remote target."
 msgstr ""
 
-#: remote.c:10960
+#: remote.c:10986
 msgid "Set interrupt sequence to remote target."
 msgstr ""
 
-#: remote.c:10961
+#: remote.c:10987
 msgid "Show interrupt sequence to remote target."
 msgstr ""
 
-#: remote.c:10962
+#: remote.c:10988
 msgid ""
 "Valid value is \"Ctrl-C\", \"BREAK\" or \"BREAK-g\". The default is \"Ctrl-C"
 "\"."
 msgstr ""
 
-#: remote.c:10969
+#: remote.c:10995
 msgid ""
 "Set whether interrupt-sequence is sent to remote target when gdb connects to."
 msgstr ""
 
-#: remote.c:10970
+#: remote.c:10996
 msgid ""
 "\t\tShow whether interrupt-sequence is sent to remote target when gdb "
 "connects to."
 msgstr ""
 
-#: remote.c:10971
+#: remote.c:10997
 msgid "\t\tIf set, interrupt sequence is sent to remote target."
 msgstr ""
 
 #. Install commands for configuring memory read/write packets.
-#: remote.c:10978
+#: remote.c:11004
 msgid "Set the maximum number of bytes per memory write packet (deprecated)."
 msgstr ""
 
-#: remote.c:10981
+#: remote.c:11007
 msgid "Show the maximum number of bytes per memory write packet (deprecated)."
 msgstr ""
 
-#: remote.c:10985
+#: remote.c:11011
 msgid ""
 "Set the maximum number of bytes per memory-write packet.\n"
 "Specify the number of bytes in a packet or 0 (zero) for the\n"
@@ -18935,7 +18935,7 @@ msgid ""
 "further restriction and ``limit'' to enable that restriction."
 msgstr ""
 
-#: remote.c:10993
+#: remote.c:11019
 msgid ""
 "Set the maximum number of bytes per memory-read packet.\n"
 "Specify the number of bytes in a packet or 0 (zero) for the\n"
@@ -18944,87 +18944,87 @@ msgid ""
 "further restriction and ``limit'' to enable that restriction."
 msgstr ""
 
-#: remote.c:11002
+#: remote.c:11028
 msgid "Show the maximum number of bytes per memory-write packet."
 msgstr ""
 
-#: remote.c:11006
+#: remote.c:11032
 msgid "Show the maximum number of bytes per memory-read packet."
 msgstr ""
 
-#: remote.c:11010
+#: remote.c:11036
 msgid "Set the maximum number of target hardware watchpoints."
 msgstr ""
 
-#: remote.c:11011
+#: remote.c:11037
 msgid "Show the maximum number of target hardware watchpoints."
 msgstr ""
 
-#: remote.c:11012 remote.c:11021 remote.c:11030
+#: remote.c:11038 remote.c:11047 remote.c:11056
 msgid "Specify a negative limit for unlimited."
 msgstr ""
 
-#: remote.c:11019
+#: remote.c:11045
 msgid "Set the maximum length (in bytes) of a target hardware watchpoint."
 msgstr ""
 
-#: remote.c:11020
+#: remote.c:11046
 msgid "Show the maximum length (in bytes) of a target hardware watchpoint."
 msgstr ""
 
-#: remote.c:11028
+#: remote.c:11054
 msgid "Set the maximum number of target hardware breakpoints."
 msgstr ""
 
-#: remote.c:11029
+#: remote.c:11055
 msgid "Show the maximum number of target hardware breakpoints."
 msgstr ""
 
-#: remote.c:11038
+#: remote.c:11064
 msgid "Set the maximum size of the address (in bits) in a memory packet."
 msgstr ""
 
-#: remote.c:11039
+#: remote.c:11065
 msgid "Show the maximum size of the address (in bits) in a memory packet."
 msgstr ""
 
-#: remote.c:11197
+#: remote.c:11223
 msgid "Set use of remote protocol `Z' packets"
 msgstr ""
 
-#: remote.c:11198
+#: remote.c:11224
 msgid "Show use of remote protocol `Z' packets "
 msgstr ""
 
-#: remote.c:11199
+#: remote.c:11225
 msgid ""
 "When set, GDB will attempt to use the remote breakpoint and watchpoint\n"
 "packets."
 msgstr ""
 
-#: remote.c:11208
+#: remote.c:11234
 msgid ""
 "Manipulate files on the remote system\n"
 "Transfer files to and from the remote target system."
 msgstr ""
 
-#: remote.c:11215
+#: remote.c:11241
 msgid "Copy a local file to the remote system."
 msgstr ""
 
-#: remote.c:11219
+#: remote.c:11245
 msgid "Copy a remote file to the local system."
 msgstr ""
 
-#: remote.c:11223
+#: remote.c:11249
 msgid "Delete a remote file."
 msgstr ""
 
-#: remote.c:11228
+#: remote.c:11254
 msgid "Set the remote pathname for \"run\""
 msgstr ""
 
-#: remote.c:11229
+#: remote.c:11255
 msgid "Show the remote pathname for \"run\""
 msgstr ""
 
